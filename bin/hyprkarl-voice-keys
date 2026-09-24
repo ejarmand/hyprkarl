@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Send a sequence of keys and text to the focused window, for voice commands.
+# Each argument is one step:
+#   CTRL+L      a key, with optional modifiers joined by + (Hyprland key names)
+#   type:TEXT   paste TEXT through the clipboard
+# Example: hyprkarl-voice-keys CTRL+L "type:linux voice control" Return
+
+if (($# == 0)); then
+  echo "Usage: hyprkarl-voice-keys <step>..."
+  exit 1
+fi
+
+for step in "$@"; do
+  if [[ $step == type:* ]]; then
+    printf '%s' "${step#type:}" | wl-copy
+    sleep 0.05
+    hyprctl dispatch sendshortcut "CTRL, V, activewindow" >/dev/null
+  else
+    key="${step##*+}"
+    mods=""
+    [[ $step == *+* ]] && mods="${step%+*}"
+    hyprctl dispatch sendshortcut "${mods//+/ }, $key, activewindow" >/dev/null
+  fi
+  # Give the app time to react (e.g. focus the address bar) before the next step.
+  sleep 0.1
+done

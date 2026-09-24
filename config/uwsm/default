@@ -7,3 +7,9 @@ export EDITOR=nvim
 
 # Use a custom directory for screenrecordings (remember to make the directory!)
 # export HYPRKARL_SCREENRECORD_DIR="$HOME/Videos/Screencasts"
+
+# Whisperflow command hooks
+export WISPR_TRANSCRIPT_HOOK=hyprkarl-voice-command
+
+# User-installed programs (e.g. the wispr-flow launcher) in ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
