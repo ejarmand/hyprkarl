@@ -14,6 +14,22 @@ if [[ $1 == --dry-run ]]; then
   shift
 fi
 
+# Tracks the window of the last dictation (for "join with") and any join mode
+# set by voice. Lives in the runtime dir, so a reboot starts fresh.
+STATE="${HYPRKARL_VOICE_STATE:-${XDG_RUNTIME_DIR:-/tmp}/hyprkarl-voice-state}"
+
+# --join-mode line|paragraph|off|config: change the join mode until the next
+# change ("config" goes back to the phrase file). Run by the "... mode" phrases.
+if [[ $1 == --join-mode ]]; then
+  if [[ $2 == config ]]; then
+    rm -f "$STATE.mode"
+  else
+    printf '%s\n' "$2" >"$STATE.mode"
+  fi
+  [[ -n $DRY_RUN ]] || hyprctl notify 1 2000 0 "Dictation join: $2" >/dev/null
+  exit 0
+fi
+
 if (($# == 0)); then
   echo "Usage: hyprkarl-voice-command [--dry-run] <transcript>"
   exit 1
@@ -133,9 +149,15 @@ if [[ -n $LEADER ]]; then
   fi
 fi
 
-# The focused app's window class, for [app ...] sections.
-# HYPRKARL_VOICE_CLASS overrides it (for testing with --dry-run).
-ACTIVE_CLASS="${HYPRKARL_VOICE_CLASS-$(hyprctl -j activewindow 2>/dev/null | jq -r '.class // empty')}"
+# The focused window's class (for [app ...] sections) and address (for joins).
+# HYPRKARL_VOICE_CLASS / HYPRKARL_VOICE_ADDR override them for --dry-run tests.
+if [[ -n ${HYPRKARL_VOICE_CLASS+set} ]]; then
+  ACTIVE_CLASS=$HYPRKARL_VOICE_CLASS
+  ACTIVE_ADDR=${HYPRKARL_VOICE_ADDR:-test}
+else
+  IFS=$'\t' read -r ACTIVE_CLASS ACTIVE_ADDR < <(hyprctl -j activewindow 2>/dev/null |
+    jq -r '[.class // "", .address // ""] | @tsv')
+fi
 
 # Sort command lines into the focused app's sections and the global ones, so an
 # app's command wins over a global command with the same phrase.
@@ -143,6 +165,8 @@ APP_LINES=()
 GLOBAL_LINES=()
 PASTE_KEY=""
 SUFFIXES=()
+JOIN_GLOBAL=""
+JOIN_APP=""
 section=global
 while IFS= read -r line; do
   [[ $line =~ ^[[:space:]]*(#|$) ]] && continue
@@ -163,6 +187,13 @@ while IFS= read -r line; do
     [[ $section == app ]] && PASTE_KEY="${line#* = }"
     continue
   fi
+  if [[ $(normalize "${line%% = *}") == 'join with' ]]; then
+    case $section in
+      global) JOIN_GLOBAL="${line#* = }" ;;
+      app) JOIN_APP="${line#* = }" ;;
+    esac
+    continue
+  fi
   if [[ $(normalize "${line%% = *}") == 'send suffix' ]]; then
     [[ $section == global ]] && SUFFIXES+=("$(normalize "${line#* = }")")
     continue
@@ -172,6 +203,39 @@ while IFS= read -r line; do
     global) GLOBAL_LINES+=("$line") ;;
   esac
 done <"$CONFIG"
+
+# How this dictation joins the previous one: the app's section wins (so
+# terminals stay off), then a mode set by voice, then the global setting.
+JOIN_MODE=${JOIN_APP:-$(cat "$STATE.mode" 2>/dev/null)}
+JOIN_MODE=${JOIN_MODE:-$JOIN_GLOBAL}
+case ${JOIN_MODE,,} in
+  line) JOIN_KEYS=(SHIFT+Return) ;;
+  paragraph) JOIN_KEYS=(SHIFT+Return SHIFT+Return) ;;
+  '' | off | space | none) JOIN_KEYS=() ;;
+  *) read -ra JOIN_KEYS <<<"$JOIN_MODE" ;;
+esac
+
+# Wispr trims leading whitespace off every transcript, so it cannot start a
+# dictation on a new line. Consecutive dictations into the same window get the
+# join keys (Shift+Enter: a new line without sending) before they are pasted;
+# another window or a voice command in between starts fresh.
+join_previous() {
+  ((${#JOIN_KEYS[@]} > 0)) && [[ -n $ACTIVE_ADDR ]] || return 0
+  [[ $(cat "$STATE.last" 2>/dev/null) == "$ACTIVE_ADDR" ]] || return 0
+  if [[ -n $DRY_RUN ]]; then
+    echo "join: ${JOIN_KEYS[*]}"
+  else
+    hyprkarl-voice-keys "${JOIN_KEYS[@]}"
+  fi
+}
+
+remember_dictation() {
+  printf '%s\n' "$ACTIVE_ADDR" >"$STATE.last"
+}
+
+start_fresh() {
+  rm -f "$STATE.last"
+}
 
 # A dictation ending in a send suffix ("Looks good, send it."): paste the rest,
 # then press Enter. A suffix said on its own falls through to the commands.
@@ -183,12 +247,14 @@ for suffix in "${SUFFIXES[@]}"; do
   if [[ $1 =~ ^(.*[^[:space:][:punct:]][[:punct:]]*)[[:space:][:punct:]]+${suffix// /[^[:alnum:]]+}[[:space:][:punct:]]*$ ]]; then
     shopt -u nocasematch
     body="${BASH_REMATCH[1]}"
+    join_previous
     paste_raw "${PASTE_KEY:-CTRL+V}" "${body%[,;:]}"
     if [[ -n $DRY_RUN ]]; then
       echo "then Return"
     else
       hyprkarl-voice-keys Return
     fi
+    start_fresh
     exit 0
   fi
   shopt -u nocasematch
@@ -200,6 +266,7 @@ for line in "${APP_LINES[@]}" "${GLOBAL_LINES[@]}"; do
   [[ $(normalize "$phrase") == leader ]] && continue
 
   if match_phrase "$phrase" "$TRANSCRIPT"; then
+    start_fresh
     run_command "$command"
     exit 0
   fi
@@ -207,6 +274,8 @@ done
 
 # Not a command. If the focused app pastes with another key (terminals use
 # Ctrl+Shift+V), paste the exact transcript here so the helper skips its Ctrl+V.
+join_previous
+remember_dictation
 if [[ -n $PASTE_KEY ]]; then
   paste_raw "$PASTE_KEY" "$1"
   exit 0
