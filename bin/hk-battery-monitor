@@ -1,0 +1,50 @@
+#!/bin/bash
+# hk-battery-monitor
+# Monitors battery level and fires actions at configured thresholds
+
+POLL_INTERVAL=30
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprkarl"
+FIRED_FILE="$RUNTIME_DIR/battery-fired"
+
+mkdir -p "$RUNTIME_DIR"
+
+BATTERY=$(hk-battery-find) || {
+    echo "No battery device found; battery monitor disabled." >&2
+    exit 0
+}
+
+at_battery() {
+    local threshold="$1"
+
+    [[ "$status" == "Charging" || "$status" == "Full" ]] && return 1
+    grep -qx "$threshold" "$FIRED_FILE" 2>/dev/null && return 1
+    [[ "$level" -le "$threshold" ]] || return 1
+
+    echo "$threshold" >> "$FIRED_FILE"
+    return 0
+}
+
+while true; do
+    level=$(< "/sys/class/power_supply/$BATTERY/capacity")
+    status=$(< "/sys/class/power_supply/$BATTERY/status")
+
+    echo "$status: $level%"
+
+    if [[ "$status" == "Charging" || "$status" == "Full" ]]; then
+        rm -f "$FIRED_FILE"
+    fi
+
+    if at_battery 20; then
+        hk-battery-notify "Battery Low: %p%"
+    fi
+
+    if at_battery 10; then
+        hk-battery-notify "Battery Low: %p%"
+    fi
+
+    if at_battery 5; then
+        hk-battery-notify -c "Battery Low: %p%"
+    fi
+
+    sleep "$POLL_INTERVAL"
+done

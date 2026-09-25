@@ -1,0 +1,34 @@
+#!/bin/bash
+# hk-wallpaper
+# Dispatch wallpaper operations to hk-wallpaper-<action>.
+#
+# Usage:
+#   hk-wallpaper add <path>
+#   hk-wallpaper cache [--regenerate|--single <filename>]
+#   hk-wallpaper cycle
+#   hk-wallpaper init
+#   hk-wallpaper remove <filename>
+#   hk-wallpaper select [highlight-color]
+#   hk-wallpaper set <filename>
+
+usage() {
+  cat <<'EOF'
+Usage:
+  hk-wallpaper add <path>
+  hk-wallpaper cache [--regenerate|--single <filename>]
+  hk-wallpaper cycle
+  hk-wallpaper init
+  hk-wallpaper remove <filename>
+  hk-wallpaper select [highlight-color]
+  hk-wallpaper set <filename>
+EOF
+}
+
+action=${1:-}
+shift || true
+
+case "$action" in
+  add|cache|cycle|init|remove|select|set) exec "hk-wallpaper-$action" "$@" ;;
+  ""|-h|--help|help) usage; exit 0 ;;
+  *) usage >&2; exit 1 ;;
+esac

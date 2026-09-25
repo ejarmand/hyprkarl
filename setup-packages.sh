@@ -1,56 +1,33 @@
 #!/bin/bash
 
 # This script installs packages for the hyprkarl setup.
-# NOTE: It also removes some packages that are replaced with alternatives
+# NOTE: It also removes some packages that are replaced with alternatives.
+# Use paru consistently for AUR-backed installs and queries.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+read_pkgs() {
+  grep -v '^[[:space:]]*#' "$1" | grep -v '^[[:space:]]*$' | sed 's/[[:space:]]*#.*//'
+}
 
 # Install packages
-sudo pacman -S --needed --noconfirm \
-	waybar \
-	hyprpaper \
-	hyprlock \
-	hypridle \
-	hyprsunset \
-	swayosd \
-	mako \
-	hyprpolkitagent \
-	brightnessctl \
-	nautilus \
-	rofi \
-	hyprshot \
-	hyprpicker \
-	satty \
-	stow \
-	neovim \
-	vscodium \
-	bluetui \
-	wiremix \
-	yazi \
-	ttf-jetbrains-mono-nerd \
-	ttf-iosevka-nerd \
-	xdg-desktop-portal-gtk \
-	mpv \
-	imv \
-	flatpak \
-	gum \
-	localsend \
-	yay-bin \
-	foot \
-	gpu-screen-recorder \
-	perl-image-exiftool \
-	ghostty \
-	kvantum \
-	kvantum-qt5 \
-	qt6ct \
-	qt5ct
+mapfile -t pacman_pkgs < <(read_pkgs "$SCRIPT_DIR/packages/pacman.txt")
+sudo pacman -S --needed --noconfirm "${pacman_pkgs[@]}" || exit 1
 
-paru -S --needed --noconfirm \
-	xdg-terminal-exec \
-	hyprshutdown \
-	wifitui-bin \
-	yaru-icon-theme \
-	dragon-drop
+mapfile -t aur_pkgs < <(read_pkgs "$SCRIPT_DIR/packages/aur.txt")
+paru -S --needed --noconfirm "${aur_pkgs[@]}" || exit 1
 
-# Remove packages
-sudo pacman -Rns --noconfirm \
-	wofi \
-	dolphin
+# Remove packages. Only pass installed ones to pacman — a single missing
+# target ("target not found") fails the whole transaction.
+mapfile -t remove_pkgs < <(read_pkgs "$SCRIPT_DIR/packages/remove.txt")
+installed_remove=()
+for pkg in "${remove_pkgs[@]}"; do
+  pacman -Q "$pkg" &>/dev/null && installed_remove+=("$pkg")
+done
+if [[ ${#installed_remove[@]} -gt 0 ]]; then
+  sudo pacman -Rns --noconfirm "${installed_remove[@]}"
+fi
+
+# Record installed commit for update tracking
+mkdir -p "$SCRIPT_DIR/config/hyprkarl/update"
+git -C "$SCRIPT_DIR" rev-parse HEAD > "$SCRIPT_DIR/config/hyprkarl/update/packages.commit"

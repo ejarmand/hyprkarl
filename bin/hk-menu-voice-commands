@@ -1,0 +1,14 @@
+#!/bin/bash
+# hk-menu-voice-commands
+# Voice command cheat sheet: the focused app's commands first, then the ones
+# that work everywhere (from hk-voice-command --list).
+
+ROFI_THEME="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/keybindings.rasi"
+
+hk-voice-command --list \
+    | rofi -dmenu \
+           -p "" \
+           -no-custom \
+           -i \
+           -mesg "Voice Commands" \
+           -theme "$ROFI_THEME"

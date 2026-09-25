@@ -1,0 +1,40 @@
+#!/bin/bash
+# hk-menu-utils
+# Menu for common utilities
+
+ROFI_THEME="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/custom-menu.rasi"
+
+CAFFEINE=" Caffeine"
+NIGHTLIGHT=" Nightlight"
+SCREEN_RECORD=" Screen Record"
+AGS=" AGS Bar"
+VOICE_COMMANDS="󰍬 Voice Commands"
+
+case "$(powerprofilesctl get)" in
+    "power-saver")    POWER_PROFILE_ICON="󰌪" ;;
+    "balanced")       POWER_PROFILE_ICON="󰗑" ;;
+    "performance")    POWER_PROFILE_ICON="󱐋" ;;
+    *)                POWER_PROFILE_ICON="󰗑" ;;
+esac
+POWER_PROFILE="$POWER_PROFILE_ICON Power Profile"
+
+relaunch_menu() { exec "$0"; }
+
+CHOICE=$(echo -e "$CAFFEINE\n$NIGHTLIGHT\n$SCREEN_RECORD\n$POWER_PROFILE\n$AGS\n$VOICE_COMMANDS" \
+    | rofi -dmenu \
+           -p "" \
+           -no-custom \
+           -mesg "Utilities" \
+           -theme "$ROFI_THEME")
+
+case "$CHOICE" in
+    "$CAFFEINE")      hk-caffeine ;;
+    "$NIGHTLIGHT")    hk-nightlight ;;
+    "$SCREEN_RECORD") sleep 0.5 && hk-screen-record ;;
+    "$POWER_PROFILE") hk-menu-power-profile || relaunch_menu ;;
+    "$AGS")           hk-menu-ags || relaunch_menu ;;
+    "$VOICE_COMMANDS") hk-menu-voice-commands || relaunch_menu ;;
+    "")               exit 1 ;;
+esac
+
+exit 0

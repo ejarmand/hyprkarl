@@ -1,0 +1,53 @@
+#!/bin/bash
+# hk-pkg
+# Dispatch explicit package operations.
+#
+# Usage:
+#   hk-pkg install [--aur|--flatpak] <package> [package...]
+#   hk-pkg remove [--flatpak] <package> [package...]
+#   hk-pkg missing [--flatpak] <package> [package...]
+#   hk-pkg present [--flatpak] <package> [package...]
+
+usage() {
+  cat <<'EOF'
+Usage:
+  hk-pkg install [--aur|--flatpak] <package> [package...]
+  hk-pkg remove [--flatpak] <package> [package...]
+  hk-pkg missing [--flatpak] <package> [package...]
+  hk-pkg present [--flatpak] <package> [package...]
+EOF
+}
+
+action=${1:-}
+shift || true
+
+case "$action" in
+  install|remove|missing|present) ;;
+  ""|-h|--help|help) usage; exit 0 ;;
+  *) usage >&2; exit 1 ;;
+esac
+
+# Translate --aur / --flatpak into a suffix on the action command.
+suffix=""
+args=()
+for arg in "$@"; do
+  case "$arg" in
+    --aur|--flatpak)
+      if [[ -n "$suffix" ]]; then
+        echo "Choose only one source flag." >&2
+        exit 1
+      fi
+      suffix="-${arg#--}"
+      ;;
+    *)
+      args+=("$arg")
+      ;;
+  esac
+done
+
+if [[ "$suffix" == "-aur" && "$action" != "install" ]]; then
+  echo "Unsupported flag for hk-pkg $action: --aur" >&2
+  exit 1
+fi
+
+exec "hk-pkg-${action}${suffix}" "${args[@]}"

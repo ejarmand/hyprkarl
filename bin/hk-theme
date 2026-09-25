@@ -1,0 +1,26 @@
+#!/bin/bash
+# hk-theme
+# Dispatch theme operations to hk-theme-<action>.
+#
+# Usage:
+#   hk-theme current
+#   hk-theme list
+#   hk-theme set <theme-name>
+
+usage() {
+  cat <<'EOF'
+Usage:
+  hk-theme current
+  hk-theme list
+  hk-theme set <theme-name>
+EOF
+}
+
+action=${1:-}
+shift || true
+
+case "$action" in
+  current|list|set) exec "hk-theme-$action" "$@" ;;
+  ""|-h|--help|help) usage; exit 0 ;;
+  *) usage >&2; exit 1 ;;
+esac

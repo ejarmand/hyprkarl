@@ -1,0 +1,4 @@
+#!/bin/bash
+# Reboot with hyprshutdown
+
+hyprshutdown -t 'Restarting...' --post-cmd 'reboot'

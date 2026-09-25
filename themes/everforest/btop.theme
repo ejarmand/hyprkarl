@@ -1,10 +1,10 @@
-theme[main_bg]       = "#2D353B"
-theme[title]         = "#7FBBB3"
-theme[hi_fg]         = "#527974"
+theme[main_bg]       = "#2d353b"
+theme[title]         = "#7fbbb3"
+theme[hi_fg]         = "#417a72"
 
 theme[selected_bg]   = "#3D484D"
-theme[selected_fg]   = "#D3C6AA"
-theme[inactive_fg]   = "#868D80"
+theme[selected_fg]   = "#d3c6aa"
+theme[inactive_fg]   = "#868d80"
 
 theme[cpu_box]       = "#56635F"
 theme[mem_box]       = "#56635F"
@@ -12,46 +12,46 @@ theme[net_box]       = "#56635F"
 theme[proc_box]      = "#56635F"
 theme[div_line]      = "#56635F"
 
-theme[graph_text]    = "#A7C080"
-theme[proc_misc]     = "#A7C080"
+theme[graph_text]    = "#dbbc7f"
+theme[proc_misc]     = "#dbbc7f"
 
-# temperature gradient
-theme[temp_start]    = "#2D353B"
-theme[temp_mid]      = "#DBBC7F"
-theme[temp_end]      = "#DBBC7F"
+# temperature gradient (semantic → keep warning scale)
+theme[temp_start]    = "#2d353b"
+theme[temp_mid]      = "#dbbc7f"
+theme[temp_end]      = "#a7c080"
 
-# cpu
-theme[cpu_start]     = "#E67E80"
-theme[cpu_mid]       = "#E67E80"
-theme[cpu_end]       = "#DBBC7F"
+# cpu (hot → critical)
+theme[cpu_start]     = "#e67e80"
+theme[cpu_mid]       = "#e67e80"
+theme[cpu_end]       = "#a7c080"
 
-# memory
-theme[free_start]    = "#343F44"
-theme[free_mid]      = "#A7C080"
-theme[free_end]      = "#A7C080"
+# memory (capacity / availability → calm/positive)
+theme[free_start]        = "#343F44"
+theme[free_mid]          = "#dbbc7f"
+theme[free_end]          = "#dbbc7f"
 
-theme[cached_start]  = "#343F44"
-theme[cached_mid]    = "#A7C080"
-theme[cached_end]    = "#A7C080"
+theme[cached_start]      = "#343F44"
+theme[cached_mid]        = "#dbbc7f"
+theme[cached_end]        = "#dbbc7f"
 
-theme[available_start] = "#343F44"
-theme[available_mid]   = "#A7C080"
-theme[available_end]   = "#A7C080"
+theme[available_start]   = "#343F44"
+theme[available_mid]     = "#dbbc7f"
+theme[available_end]     = "#dbbc7f"
 
-theme[used_start]    = "#7FBBB3"
-theme[used_mid]      = "#7FBBB3"
-theme[used_end]      = "#83C092"
+theme[used_start]        = "#417a72"
+theme[used_mid]          = "#7fbbb3"
+theme[used_end]          = "#7fbbb3"
 
-# network
-theme[download_start] = "#7FBBB3"
-theme[download_mid]   = "#7FBBB3"
-theme[download_end]   = "#DBBC7F"
+# network (distinct but not semantic-danger)
+theme[download_start]    = "#417a72"
+theme[download_mid]      = "#7fbbb3"
+theme[download_end]      = "#a7c080"
 
-theme[upload_start]   = "#D699B6"
-theme[upload_mid]     = "#83C092"
-theme[upload_end]     = "#DBBC7F"
+theme[upload_start]      = "#ab8130"
+theme[upload_mid]        = "#dbbc7f"
+theme[upload_end]        = "#a7c080"
 
-# process
-theme[process_start]  = "#7FBBB3"
-theme[process_mid]    = "#7FBBB3"
-theme[process_end]    = "#83C092"
+# process (neutral activity → use secondary)
+theme[process_start]     = "#417a72"
+theme[process_mid]       = "#7fbbb3"
+theme[process_end]       = "#7fbbb3"

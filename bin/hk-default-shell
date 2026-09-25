@@ -1,0 +1,49 @@
+#!/bin/bash
+# hk-default-shell
+# Set a shell as the user's default shell
+#
+# Usage:
+#   hk-default-shell <shell>
+#
+#   shell   One of: fish, zsh, bash
+
+info()  { gum log --level info  "$*"; }
+error() { gum log --level error "$*"; }
+
+if (($# == 0)); then
+  echo "Usage: hk-default-shell [fish|zsh|bash]" >&2
+  exit 1
+fi
+
+shell="$1"
+
+# Map shell name to binary path
+case "$shell" in
+fish) shell_path="/usr/bin/fish" ;;
+zsh)  shell_path="/usr/bin/zsh" ;;
+bash) shell_path="/usr/bin/bash" ;;
+*)
+  error "Unknown shell: $shell. Valid options: fish, zsh, bash"
+  exit 1
+  ;;
+esac
+
+# Install shell if not present
+if ! pacman -Q "$shell" &>/dev/null; then
+  info "Installing $shell..."
+  if ! hk-pkg install "$shell"; then
+    error "Failed to install $shell."
+    hk-show-done && exit 1
+  fi
+fi
+
+# Change default shell
+info "Changing default shell to $shell..."
+if chsh -s "$shell_path"; then
+  info "Default shell changed to $shell. This will take effect on next login."
+else
+  error "Failed to change default shell."
+  hk-show-done && exit 1
+fi
+
+hk-show-done

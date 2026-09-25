@@ -1,0 +1,310 @@
+#!/bin/bash
+# Start and stop a screenrecording, which will be saved to ~/Videos by default.
+# Alternative location can be set via HYPRKARL_SCREENRECORD_DIR or XDG_VIDEOS_DIR ENVs.
+#
+# By default uses slurp + the kms backend: click a monitor or drag a region to
+# capture it. Set HYPRKARL_SCREENRECORD_USE_PORTAL=true to use the xdg-desktop-portal
+# backend instead — enables HDR, external-GPU monitors, and window capture, but can
+# fail EGL DMA-BUF modifier import on some configurations.
+#
+# Resolution is capped to 4K for monitors above 4K, native otherwise.
+# Override via --resolution= (e.g. --resolution=1920x1080, --resolution=0x0 for native).
+
+[[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
+
+OUTPUT_DIR="${HYPRKARL_SCREENRECORD_DIR:-${XDG_VIDEOS_DIR:-$HOME/Videos}}"
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprkarl"
+PID_FILE="$RUNTIME_DIR/screenrecording.pid"
+RECORDING_FILE="$RUNTIME_DIR/screenrecording.path"
+WEBCAM_PID_FILE="$RUNTIME_DIR/screenrecording-webcam.pid"
+
+if [[ ! -d $OUTPUT_DIR ]]; then
+  notify-send "Screen recording directory does not exist: $OUTPUT_DIR" -u critical -t 3000
+  exit 1
+fi
+
+mkdir -p "$RUNTIME_DIR"
+
+DESKTOP_AUDIO="false"
+MICROPHONE_AUDIO="false"
+WEBCAM="false"
+WEBCAM_DEVICE=""
+RESOLUTION=""
+STOP_RECORDING="false"
+
+for arg in "$@"; do
+  case "$arg" in
+  --with-desktop-audio) DESKTOP_AUDIO="true" ;;
+  --with-microphone-audio) MICROPHONE_AUDIO="true" ;;
+  --with-webcam) WEBCAM="true" ;;
+  --webcam-device=*) WEBCAM_DEVICE="${arg#*=}" ;;
+  --resolution=*) RESOLUTION="${arg#*=}" ;;
+  --stop-recording) STOP_RECORDING="true" ;;
+  esac
+done
+
+read_pid_file() {
+  local pid_file="$1"
+  local pid=""
+
+  [[ -f "$pid_file" ]] || return 1
+
+  pid=$(< "$pid_file")
+  [[ "$pid" =~ ^[0-9]+$ ]] || return 1
+
+  printf '%s\n' "$pid"
+}
+
+recording_pid() {
+  local pid
+  pid=$(read_pid_file "$PID_FILE") || return 1
+  kill -0 "$pid" 2>/dev/null || return 1
+  printf '%s\n' "$pid"
+}
+
+screenrecording_active() {
+  recording_pid >/dev/null || {
+    rm -f "$PID_FILE"
+    return 1
+  }
+
+  return 0
+}
+
+find_webcam_device() {
+  v4l2-ctl --list-devices 2>/dev/null \
+    | awk '/^[[:space:]]*\/dev\/video/ { gsub(/\t/, "", $0); print; exit }'
+}
+
+start_webcam_overlay() {
+  cleanup_webcam
+
+  if [[ -z $WEBCAM_DEVICE ]]; then
+    WEBCAM_DEVICE=$(find_webcam_device)
+    if [[ -z $WEBCAM_DEVICE ]]; then
+      notify-send "No webcam devices found" -u critical -t 3000
+      return 1
+    fi
+  fi
+
+  local scale=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .scale')
+  local target_width=$(awk "BEGIN {printf \"%.0f\", 360 * $scale}")
+
+  local preferred_resolutions=("640x360" "1280x720" "1920x1080")
+  local ffplay_args=(-f v4l2)
+  local available_formats=$(v4l2-ctl --list-formats-ext -d "$WEBCAM_DEVICE" 2>/dev/null)
+
+  for resolution in "${preferred_resolutions[@]}"; do
+    if echo "$available_formats" | grep -q "$resolution"; then
+      ffplay_args+=(-video_size "$resolution")
+      break
+    fi
+  done
+
+  ffplay "${ffplay_args[@]}" -framerate 30 "$WEBCAM_DEVICE" \
+    -vf "scale=${target_width}:-1" \
+    -window_title "WebcamOverlay" \
+    -noborder \
+    -fflags nobuffer -flags low_delay \
+    -probesize 32 -analyzeduration 0 \
+    -loglevel quiet &
+  echo "$!" >"$WEBCAM_PID_FILE"
+  sleep 1
+}
+
+cleanup_webcam() {
+  local webcam_pid
+  webcam_pid=$(read_pid_file "$WEBCAM_PID_FILE") || {
+    rm -f "$WEBCAM_PID_FILE"
+    return 0
+  }
+
+  kill "$webcam_pid" 2>/dev/null || true
+  rm -f "$WEBCAM_PID_FILE"
+}
+
+default_resolution() {
+  local width height
+  read -r width height < <(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | "\(.width) \(.height)"')
+  if ((width > 3840 || height > 2160)); then
+    echo "3840x2160"
+  else
+    echo "0x0"
+  fi
+}
+
+# Monitor + window rectangles on the focused workspace, in slurp's "X,Y WxH" format.
+get_rectangles() {
+  local monitors_json
+  monitors_json=$(hyprctl monitors -j)
+  local active_workspace
+  active_workspace=$(echo "$monitors_json" | jq -r '.[] | select(.focused == true) | .activeWorkspace.id')
+  echo "$monitors_json" | jq -r --arg ws "$active_workspace" '
+    .[] | select(.activeWorkspace.id == ($ws | tonumber)) |
+    "\(.x),\(.y) \(.width / .scale | floor)x\(.height / .scale | floor)"'
+  hyprctl clients -j | jq -r --arg ws "$active_workspace" '
+    .[] | select(.workspace.id == ($ws | tonumber)) |
+    "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
+}
+
+# Echoes "monitor:NAME" when the selection matches a full monitor, otherwise
+# "region:WxH+X+Y". Returns non-zero if the user cancelled.
+select_capture_target() {
+  local rects=$(get_rectangles)
+  hyprpicker -r -z >/dev/null 2>&1 &
+  local picker_pid=$!
+  sleep .1
+  local selection=$(echo "$rects" | slurp 2>/dev/null)
+  kill $picker_pid 2>/dev/null
+
+  [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || return 1
+  local sx=${BASH_REMATCH[1]} sy=${BASH_REMATCH[2]}
+  local sw=${BASH_REMATCH[3]} sh=${BASH_REMATCH[4]}
+
+  # A bare click snaps to the rectangle that contains it
+  if ((sw * sh < 20)); then
+    while IFS= read -r rect; do
+      [[ $rect =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || continue
+      local rx=${BASH_REMATCH[1]} ry=${BASH_REMATCH[2]}
+      local rw=${BASH_REMATCH[3]} rh=${BASH_REMATCH[4]}
+      if ((sx >= rx && sx < rx + rw && sy >= ry && sy < ry + rh)); then
+        sx=$rx sy=$ry sw=$rw sh=$rh
+        break
+      fi
+    done <<<"$rects"
+  fi
+
+  local monitor=$(hyprctl monitors -j | jq -r --argjson x "$sx" --argjson y "$sy" --argjson w "$sw" --argjson h "$sh" '
+    .[] | select(.x == $x and .y == $y and (.width / .scale | floor) == $w and (.height / .scale | floor) == $h) | .name' | head -1)
+
+  if [[ -n $monitor ]]; then
+    echo "monitor:$monitor"
+    return
+  fi
+
+  echo "region:${sw}x${sh}+${sx}+${sy}"
+}
+
+start_screenrecording() {
+  local capture_args=()
+
+  if [[ ${HYPRKARL_SCREENRECORD_USE_PORTAL:-false} == "true" ]]; then
+    capture_args=(-w portal -s "${RESOLUTION:-$(default_resolution)}")
+  else
+    local target
+    target=$(select_capture_target) || return 1
+
+    case $target in
+    monitor:*)
+      capture_args=(-w "${target#monitor:}" -s "${RESOLUTION:-$(default_resolution)}")
+      ;;
+    region:*)
+      capture_args=(-w "${target#region:}")
+      [[ -n $RESOLUTION ]] && capture_args+=(-s "$RESOLUTION")
+      ;;
+    esac
+  fi
+
+  [[ $WEBCAM == "true" ]] && start_webcam_overlay
+
+  local filename="$OUTPUT_DIR/screenrecording-$(date +'%Y-%m-%d_%H-%M-%S').mp4"
+  local audio_devices=""
+  local audio_args=()
+
+  [[ $DESKTOP_AUDIO == "true" ]] && audio_devices+="default_output"
+
+  if [[ $MICROPHONE_AUDIO == "true" ]]; then
+    [[ -n $audio_devices ]] && audio_devices+="|"
+    audio_devices+="default_input"
+  fi
+
+  [[ -n $audio_devices ]] && audio_args+=(-a "$audio_devices" -ac aac)
+
+  gpu-screen-recorder "${capture_args[@]}" -k auto -f 60 -fm cfr -fallback-cpu-encoding yes -o "$filename" "${audio_args[@]}" &
+  local pid=$!
+  echo "$pid" >"$PID_FILE"
+
+  while kill -0 $pid 2>/dev/null && [[ ! -f $filename ]]; do
+    sleep 0.2
+  done
+
+  if kill -0 $pid 2>/dev/null; then
+    echo "$filename" >"$RECORDING_FILE"
+    timeout 5 ags request recording-sync || true
+    return 0
+  fi
+
+  rm -f "$PID_FILE" "$RECORDING_FILE"
+  return 1
+}
+
+stop_screenrecording() {
+  local pid
+  pid=$(recording_pid) || return 1
+
+  kill -SIGINT "$pid" 2>/dev/null || true
+
+  local count=0
+  while kill -0 "$pid" 2>/dev/null && ((count < 50)); do
+    sleep 0.1
+    count=$((count + 1))
+  done
+
+  timeout 5 ags request recording-sync || true
+  cleanup_webcam
+
+  if kill -0 "$pid" 2>/dev/null; then
+    kill -9 "$pid" 2>/dev/null || true
+    notify-send "Screen recording error" "Recording process had to be force-killed. Video may be corrupted." -u critical -t 5000
+  else
+    finalize_recording
+    notify-send "Screen recording saved to $OUTPUT_DIR" -t 2000
+  fi
+
+  rm -f "$PID_FILE" "$RECORDING_FILE"
+}
+
+finalize_recording() {
+  local latest
+  latest=$(cat "$RECORDING_FILE" 2>/dev/null)
+  [[ -f $latest ]] || return
+
+  # Re-encode only when the first GOP contains discardable warmup packets — stream
+  # copy can't trim those (it rewinds to the keyframe). Clean recordings stay on
+  # the fast stream-copy path.
+  local video_codec=(-c:v copy)
+  if ffprobe -v error -select_streams v:0 -read_intervals %+0.2 -show_entries packet=flags -of csv=p=0 "$latest" 2>/dev/null | grep -q D; then
+    video_codec=(-c:v libx264 -preset veryfast -crf 20)
+  fi
+
+  local args=(-y -ss 0.1 -i "$latest" "${video_codec[@]}")
+  if ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 "$latest" 2>/dev/null | grep -q audio; then
+    # Hard-mute the first 400ms to drop the PipeWire capture-open pop, then fade in
+    args+=(-af "volume=enable='lt(t,0.4)':volume=0,afade=t=in:st=0.4:d=0.05,loudnorm=I=-14:TP=-1.5:LRA=11")
+  fi
+
+  local processed="${latest%.mp4}-processed.mp4"
+  if ffmpeg "${args[@]}" "$processed" -loglevel quiet 2>/dev/null; then
+    mv "$processed" "$latest"
+  else
+    rm -f "$processed"
+  fi
+}
+
+if [[ "$WEBCAM" == "true" ]] && ! command -v v4l2-ctl >/dev/null 2>&1; then
+  notify-send "Screen recording error" "v4l2-ctl is required for webcam overlays." -u critical -t 5000
+  exit 1
+fi
+
+if ! command -v gpu-screen-recorder >/dev/null 2>&1; then
+  notify-send "Screen recording error" "gpu-screen-recorder is not installed." -u critical -t 5000
+  exit 1
+fi
+
+if screenrecording_active >/dev/null; then
+  stop_screenrecording
+elif [[ $STOP_RECORDING == "true" ]]; then
+  exit 1
+else
+  start_screenrecording || cleanup_webcam
+fi

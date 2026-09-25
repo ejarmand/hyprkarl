@@ -9,7 +9,7 @@ export HYPRKARL_SCREENSHOT_DIR="$HOME/Pictures/screenshots"
 export HYPRKARL_SCREENRECORD_DIR="$HOME/Videos/screenrecord"
 
 # Whisperflow command hooks
-export WISPR_TRANSCRIPT_HOOK=hyprkarl-voice-command
+export WISPR_TRANSCRIPT_HOOK=hk-voice-command
 
 # User-installed programs (e.g. the wispr-flow launcher) in ~/.local/bin
 export PATH="$HOME/.local/bin:$PATH"
