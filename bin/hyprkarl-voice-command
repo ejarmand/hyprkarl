@@ -14,6 +14,14 @@ if [[ $1 == --dry-run ]]; then
   shift
 fi
 
+# --list: print the phrases for the focused app and everywhere, labelled by the
+# "## Title" above each group (the cheat sheet, hyprkarl-menu-voice-commands).
+LIST=""
+if [[ $1 == --list ]]; then
+  LIST=1
+  set -- ""
+fi
+
 # Tracks the window of the last dictation (for "join with") and any join mode
 # set by voice. Lives in the runtime dir, so a reboot starts fresh.
 STATE="${HYPRKARL_VOICE_STATE:-${XDG_RUNTIME_DIR:-/tmp}/hyprkarl-voice-state}"
@@ -31,7 +39,7 @@ if [[ $1 == --join-mode ]]; then
 fi
 
 if (($# == 0)); then
-  echo "Usage: hyprkarl-voice-command [--dry-run] <transcript>"
+  echo "Usage: hyprkarl-voice-command [--dry-run] <transcript> | --list"
   exit 1
 fi
 
@@ -40,14 +48,21 @@ CONFIG="${HYPRKARL_VOICE_COMMANDS:-${HYPRKARL_PATH:-$HOME/.local/share/hyprkarl}
 
 declare -A CAPTURES
 
-# Lowercase, drop apostrophes, turn other punctuation into spaces, squeeze spaces.
-normalize() {
+# Lowercase, drop apostrophes, turn other punctuation into spaces, squeeze
+# spaces. Sets REPLY instead of printing: it runs for every line of the phrase
+# file, and a $(...) subshell per call cost about a second per dictation.
+normalize_reply() {
   local text="${1,,}"
   text="${text//[\'’]/}"
   text="${text//[^a-z0-9]/ }"
   local -a words
   read -ra words <<<"$text"
-  echo "${words[*]}"
+  REPLY="${words[*]}"
+}
+
+normalize() {
+  normalize_reply "$1"
+  echo "$REPLY"
 }
 
 # Print a spoken or written number as digits. Includes the usual mishearings.
@@ -167,8 +182,16 @@ PASTE_KEY=""
 SUFFIXES=()
 JOIN_GLOBAL=""
 JOIN_APP=""
+declare -A COMPLETIONS
+LIST_APP=()
+LIST_GLOBAL=()
+title=""
 section=global
 while IFS= read -r line; do
+  if [[ $line =~ ^##[[:space:]]+(.*) ]]; then
+    title=${BASH_REMATCH[1]}
+    continue
+  fi
   [[ $line =~ ^[[:space:]]*(#|$) ]] && continue
   if [[ $line =~ ^[[:space:]]*\[(.*)\][[:space:]]*$ ]]; then
     header="${BASH_REMATCH[1]}"
@@ -183,18 +206,38 @@ while IFS= read -r line; do
     continue
   fi
   [[ $line == *' = '* ]] || continue
-  if [[ $(normalize "${line%% = *}") == 'paste with' ]]; then
+  normalize_reply "${line%% = *}"
+  key=$REPLY
+  if [[ -n $LIST ]]; then
+    case $key in
+      leader | 'paste with' | 'join with') shown="" ;;
+      'send suffix') shown="... ${line#* = }" ;;
+      'complete '*) shown="... ${key#complete } <name> ..." ;;
+      *) shown=${line%% = *} ;;
+    esac
+    printf -v shown '%-30s %s' "$shown" "$title"
+    case $section in
+      app) [[ $shown != ' '* ]] && LIST_APP+=("$shown") ;;
+      global) [[ $shown != ' '* ]] && LIST_GLOBAL+=("$shown") ;;
+    esac
+  fi
+  if [[ $key == 'paste with' ]]; then
     [[ $section == app ]] && PASTE_KEY="${line#* = }"
     continue
   fi
-  if [[ $(normalize "${line%% = *}") == 'join with' ]]; then
+  if [[ $key == 'join with' ]]; then
     case $section in
       global) JOIN_GLOBAL="${line#* = }" ;;
       app) JOIN_APP="${line#* = }" ;;
     esac
     continue
   fi
-  if [[ $(normalize "${line%% = *}") == 'send suffix' ]]; then
+  # "complete <word> = <trigger> <accept keys>", e.g. "complete mention = @ Tab"
+  if [[ $key == 'complete '* ]]; then
+    [[ $section == app ]] && COMPLETIONS[${key#complete }]="${line#* = }"
+    continue
+  fi
+  if [[ $key == 'send suffix' ]]; then
     [[ $section == global ]] && SUFFIXES+=("$(normalize "${line#* = }")")
     continue
   fi
@@ -203,6 +246,16 @@ while IFS= read -r line; do
     global) GLOBAL_LINES+=("$line") ;;
   esac
 done <"$CONFIG"
+
+if [[ -n $LIST ]]; then
+  if ((${#LIST_APP[@]})); then
+    echo "── In this app ──"
+    printf '%s\n' "${LIST_APP[@]}"
+    echo "── Everywhere ──"
+  fi
+  printf '%s\n' "${LIST_GLOBAL[@]}"
+  exit 0
+fi
 
 # How this dictation joins the previous one: the app's section wins (so
 # terminals stay off), then a mode set by voice, then the global setting.
@@ -237,6 +290,75 @@ start_fresh() {
   rm -f "$STATE.last"
 }
 
+# Paste text, turning each "<word> <name>" (e.g. "mention alice") into the
+# app's picker: the trigger and the name go in as their own pieces, the name's
+# last character as a real key press so the picker opens, then the accept key.
+# Wispr does the same for Cursor file tags (it pastes "@", then the name, then
+# presses Tab). Takes about a second per picker, longer than the helper and
+# Wispr wait for a paste (2 s and 3 s), so callers run it in the background.
+has_completions() {
+  local words
+  ((${#COMPLETIONS[@]} > 0)) || return 1
+  words=$(printf '%s|' "${!COMPLETIONS[@]}")
+  shopt -s nocasematch
+  [[ $1 =~ (^|[^[:alnum:]])(${words%|})[[:space:][:punct:]]+[[:alnum:]] ]]
+  local found=$?
+  shopt -u nocasematch
+  return $found
+}
+
+paste_with_completions() {
+  local keys=$1 rest=$2 words spec trigger accept before name last
+  words=$(printf '%s|' "${!COMPLETIONS[@]}")
+  words=${words%|}
+  shopt -s nocasematch
+  while [[ $rest =~ (^|[^[:alnum:]])($words)[[:space:][:punct:]]+([[:alnum:]_-]+) ]]; do
+    before="${rest%%"${BASH_REMATCH[0]}"*}${BASH_REMATCH[1]}"
+    rest="${rest#*"${BASH_REMATCH[0]}"}"
+    # Wispr sentence-cases "Skill review." -- a full stop straight after the
+    # name is its artifact, not the user's.
+    [[ $rest == .* ]] && rest=${rest#.}
+    spec=${COMPLETIONS[${BASH_REMATCH[2],,}]}
+    trigger=${spec%% *}
+    accept=${spec#"$trigger"}
+    name=${BASH_REMATCH[3]}
+    last=${name: -1}
+    [[ -n $before ]] && paste_raw "$keys" "$before"
+    paste_raw "$keys" "$trigger"
+    [[ ${#name} -gt 1 ]] && paste_raw "$keys" "${name%?}"
+    if [[ -n $DRY_RUN ]]; then
+      echo "key: ${last,,}${accept:+ | then:$accept}"
+    else
+      hyprkarl-voice-keys "${last,,}"
+      sleep 0.3
+      # shellcheck disable=SC2086 # accept is a list of key steps
+      [[ -n ${accept// /} ]] && hyprkarl-voice-keys $accept
+    fi
+  done
+  shopt -u nocasematch
+  [[ -n $rest ]] && paste_raw "$keys" "$rest"
+  return 0
+}
+
+paste_and_send() {
+  paste_with_completions "$1" "$2" || true
+  if [[ -n $DRY_RUN ]]; then
+    echo "then Return"
+  else
+    hyprkarl-voice-keys Return
+  fi
+}
+
+# Run a picker paste after this script has answered the helper (see above).
+in_background() {
+  if [[ -n $DRY_RUN ]]; then
+    "$@"
+  else
+    ("$@") </dev/null >/dev/null 2>&1 &
+    disown
+  fi
+}
+
 # A dictation ending in a send suffix ("Looks good, send it."): paste the rest,
 # then press Enter. A suffix said on its own falls through to the commands.
 FULL=$(normalize "$1")
@@ -248,13 +370,12 @@ for suffix in "${SUFFIXES[@]}"; do
     shopt -u nocasematch
     body="${BASH_REMATCH[1]}"
     join_previous
-    paste_raw "${PASTE_KEY:-CTRL+V}" "${body%[,;:]}"
-    if [[ -n $DRY_RUN ]]; then
-      echo "then Return"
-    else
-      hyprkarl-voice-keys Return
-    fi
     start_fresh
+    if has_completions "$body"; then
+      in_background paste_and_send "${PASTE_KEY:-CTRL+V}" "${body%[,;:]}"
+    else
+      paste_and_send "${PASTE_KEY:-CTRL+V}" "${body%[,;:]}"
+    fi
     exit 0
   fi
   shopt -u nocasematch
@@ -263,7 +384,7 @@ done
 for line in "${APP_LINES[@]}" "${GLOBAL_LINES[@]}"; do
   phrase="${line%% = *}"
   command="${line#* = }"
-  [[ $(normalize "$phrase") == leader ]] && continue
+  [[ ${phrase,,} == leader ]] && continue
 
   if match_phrase "$phrase" "$TRANSCRIPT"; then
     start_fresh
@@ -276,6 +397,10 @@ done
 # Ctrl+Shift+V), paste the exact transcript here so the helper skips its Ctrl+V.
 join_previous
 remember_dictation
+if has_completions "$1"; then
+  in_background paste_with_completions "${PASTE_KEY:-CTRL+V}" "$1"
+  exit 0
+fi
 if [[ -n $PASTE_KEY ]]; then
   paste_raw "$PASTE_KEY" "$1"
   exit 0

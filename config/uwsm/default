@@ -1,12 +1,12 @@
 # Changes require a restart to take effect.
-export TERMINAL=kitty
+export TERMINAL=ghostty
 export EDITOR=nvim
 
 # Use a custom directory for screenshots (remember to make the directory!)
-# export HYPRKARL_SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
+export HYPRKARL_SCREENSHOT_DIR="$HOME/Pictures/screenshots"
 
 # Use a custom directory for screenrecordings (remember to make the directory!)
-# export HYPRKARL_SCREENRECORD_DIR="$HOME/Videos/Screencasts"
+export HYPRKARL_SCREENRECORD_DIR="$HOME/Videos/screenrecord"
 
 # Whisperflow command hooks
 export WISPR_TRANSCRIPT_HOOK=hyprkarl-voice-command

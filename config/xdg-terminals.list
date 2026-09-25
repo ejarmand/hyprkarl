@@ -2,9 +2,9 @@
 # The first found and valid terminal will be used
 
 # Recommended options:
+# kitty.desktop
 # foot.desktop
 # com.mitchellh.ghostty.desktop
 # Alacritty.desktop
-# kitty.desktop
 
-kitty.desktop
+com.mitchellh.ghostty.desktop

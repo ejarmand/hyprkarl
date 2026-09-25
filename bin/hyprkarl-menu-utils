@@ -15,8 +15,9 @@ back_cmd="${1:-}"
 CAFFEINE=" Caffeine"
 NIGHTLIGHT=" Nightlight"
 SCREEN_RECORD=" Screen Record"
+VOICE_COMMANDS="󰍬 Voice Commands"
 
-CHOICE=$(echo -e "$CAFFEINE\n$NIGHTLIGHT\n$SCREEN_RECORD" \
+CHOICE=$(echo -e "$CAFFEINE\n$NIGHTLIGHT\n$SCREEN_RECORD\n$VOICE_COMMANDS" \
     | rofi -dmenu \
            -p "" \
            -no-custom \
@@ -28,5 +29,6 @@ case "$CHOICE" in
     "$CAFFEINE")      hyprkarl-caffeine ;;
     "$NIGHTLIGHT")    hyprkarl-nightlight ;;
     "$SCREEN_RECORD") hyprkarl-record-screen ;;
+    "$VOICE_COMMANDS") hyprkarl-menu-voice-commands "hyprkarl-menu-utils${back_cmd:+ $back_cmd}" ;;
     "")               [[ -n "$back_cmd" ]] && $back_cmd ;;
 esac
