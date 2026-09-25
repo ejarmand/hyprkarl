@@ -19,7 +19,7 @@ for arg in "$@"; do
 done
 
 if [[ "$force" -eq 1 ]]; then
-  dirty=$(git -C "$HYPRKARL_PATH" diff --name-only HEAD -- config/ applications/)
+  dirty=$(git -C "$HYPRKARL_PATH" diff --name-only HEAD -- config/ applications/ themes/)
   if [[ -n "$dirty" ]]; then
     printf 'Cannot force update — uncommitted changes would be overwritten:\n%s\n' "$dirty" >&2
     printf 'Commit your changes first.\n' >&2

@@ -35,8 +35,14 @@ if [[ -z "$baseline" ]]; then
   mapfile -t pacman_pkgs < <(grep -v '^[[:space:]]*#' "$PACKAGES_DIR/pacman.txt" | grep -v '^[[:space:]]*$' | sed 's/[[:space:]]*#.*//')
   mapfile -t aur_pkgs    < <(grep -v '^[[:space:]]*#' "$PACKAGES_DIR/aur.txt"    | grep -v '^[[:space:]]*$' | sed 's/[[:space:]]*#.*//')
 
-  [[ ${#pacman_pkgs[@]} -gt 0 ]] && hk-pkg-install     "${pacman_pkgs[@]}"
-  [[ ${#aur_pkgs[@]} -gt 0 ]]    && hk-pkg-install-aur "${aur_pkgs[@]}"
+  # Stop before recording the baseline if an install fails, or later runs would
+  # think these packages were handled and never retry them.
+  if [[ ${#pacman_pkgs[@]} -gt 0 ]]; then
+    hk-pkg-install "${pacman_pkgs[@]}" || exit 1
+  fi
+  if [[ ${#aur_pkgs[@]} -gt 0 ]]; then
+    hk-pkg-install-aur "${aur_pkgs[@]}" || exit 1
+  fi
 
   update_write_commit packages
   exit 0
