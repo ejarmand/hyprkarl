@@ -56,7 +56,8 @@ export default function WorkspaceButton({
       hexpand={orientation === "vertical"}
       halign={orientation === "vertical" ? Gtk.Align.FILL : Gtk.Align.CENTER}
       tooltipText={tooltipText}
-      execPrimary={() => hyprland.dispatch("workspace", `${id}`)}
+      // Hyprland's Lua config takes dispatch arguments as Lua expressions
+      execPrimary={() => hyprland.dispatch(`hl.dsp.focus({ workspace = ${id} })`, "")}
     >
       <box
         class="widget-workspace-content"

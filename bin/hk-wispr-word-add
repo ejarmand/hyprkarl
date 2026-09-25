@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-# Open Wispr Flow's "Add to vocabulary" dialog set up as a correction
-# (Misspelling -> correct word), with the cursor in the Misspelling field.
+# Open Wispr Flow's "Add to vocabulary" dialog with the cursor in its first
+# field: a plain new word by default, or with --correction set up as a
+# correction (Misspelling -> correct word).
 # Wispr has no API for its dictionary, so this presses its own buttons through
 # AT-SPI. That needs Wispr started with --force-renderer-accessibility.
 
@@ -136,7 +137,34 @@ def misspelling_field():
     return find(dlg, "entry", "Misspelling") if dlg else None
 
 
+def new_word_field():
+    """The dialog's word field. Its accessible name follows the placeholder
+    ("Add a new word", or "Correct spelling" after the correction box was
+    ticked), so take the entry that is not the Misspelling field."""
+    dlg = dialog()
+    if not dlg:
+        return None
+    return [e for e in find(dlg, "entry") if e.get_name() != "Misspelling"][:1] or None
+
+
+def set_correction(on):
+    """Tick or untick "Correct a misspelling": the checkbox that reveals the
+    Misspelling field. Which box it is is found by trying them."""
+    if bool(misspelling_field()) == on:
+        return
+    for index in range(len(find(dialog(), "check box"))):
+        press(find(dialog(), "check box")[index])
+        deadline = time.monotonic() + 2.5
+        while time.monotonic() < deadline and bool(misspelling_field()) != on:
+            time.sleep(0.1)
+        if bool(misspelling_field()) == on:
+            return
+        press(find(dialog(), "check box")[index])  # wrong box, undo it
+    fail("Could not find the Correct a misspelling checkbox.")
+
+
 def main():
+    correction = "--correction" in sys.argv[1:]
     # A hidden Hub still shows up over AT-SPI, but Chromium stalls its updates,
     # so it has to be on screen first.
     if not hub_on_screen():
@@ -152,21 +180,12 @@ def main():
                        lambda: in_hub("button", "Add new"))[0])
         wait_for("the Add to vocabulary dialog", dialog)
 
-    # Tick "Correct a misspelling": the checkbox that reveals the Misspelling field.
-    if not misspelling_field():
-        for index in range(len(find(dialog(), "check box"))):
-            press(find(dialog(), "check box")[index])
-            deadline = time.monotonic() + 2.5
-            while time.monotonic() < deadline and not misspelling_field():
-                time.sleep(0.1)
-            if misspelling_field():
-                break
-            press(find(dialog(), "check box")[index])  # wrong box, untick it
-        else:
-            fail("Could not find the Correct a misspelling checkbox.")
-
+    set_correction(correction)
+    field = misspelling_field() if correction else new_word_field()
+    if not field:
+        fail("Could not find the word field in the dialog.")
     focus_hub()
-    misspelling_field()[0].get_component_iface().grab_focus()
+    field[0].get_component_iface().grab_focus()
 
 
 if __name__ == "__main__":

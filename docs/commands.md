@@ -28,8 +28,8 @@ does not try to document every internal script.
   Adopt conflicting `~/.config/` files into the repo without overwriting them,
   then report what differs so you can review and commit or discard.
 - `hk-update remove-stale`
-  Remove stale hyprkarl symlinks and empty directories from `~/.config/` and
-  related directories without restowing. Useful when cleaning up after removing
+  Remove stale hyprkarl symlinks from `~/.config/` and related directories,
+  and the directories they leave empty, without restowing. Useful when cleaning up after removing
   files from the repo.
 - `hk-update packages`
   Install packages newly added to the required lists, prompt to remove packages
@@ -308,8 +308,15 @@ does not try to document every internal script.
   window. `--list` prints the phrases for the focused app and everywhere.
 - `hk-voice-keys <step>...`
   Send keys (`CTRL+L`, `Return`) and text (`type:TEXT`) to the focused window.
-- `hk-wispr-word-add`
-  Open Wispr's "Add to vocabulary" dialog as a correction, through AT-SPI.
+- `hk-wispr-word-add [--correction]`
+  Open Wispr's "Add to vocabulary" dialog through AT-SPI, cursor in the word
+  field; `--correction` sets it up as misspelling -> correct word.
+- `hk-wispr-dictionary [output.csv|-]`
+  Back up Wispr's personal dictionary as a CSV in Wispr's import format
+  (default: `config/hyprkarl/wispr-dictionary.csv`).
+- `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
+  Export Wispr's dictation history (raw ASR, cleaned and pasted text, audio)
+  to `~/Documents/wispr-exports/` for review.
 
 ## Internal Helpers
 

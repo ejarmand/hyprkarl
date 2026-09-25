@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+
+# Export Wispr Flow's dictation history for review: every transcript with the
+# raw speech recognition next to what was pasted, plus the recordings as WAV.
+# Reads a copy of Wispr's local database (kept under the macOS path
+# ~/Library/Application Support even on Linux), never the live file.
+#
+# Usage: hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]
+#   Default DIR: ~/Documents/wispr-exports/<date-time>/
+
+import argparse
+import datetime
+import json
+import os
+import shutil
+import sqlite3
+import subprocess
+import tempfile
+from pathlib import Path
+
+DB_DIR = Path.home() / "Library/Application Support/Wispr Flow"
+
+FIELDS = [
+    ("transcriptEntityId", "id"),
+    ("timestamp", "time_utc"),
+    ("app", "app"),
+    ("duration", "duration_s"),
+    ("language", "language"),
+    ("averageLogProb", "asr_avg_log_prob"),
+    ("asrText", "asr_raw"),
+    ("formattedText", "formatted"),
+    ("pastedText", "pasted"),
+    ("editedText", "edited_after_paste"),
+    ("status", "status"),
+]
+
+README = """# Wispr Flow dictation export
+
+Exported {now} from {count} dictations{since}.
+
+- `transcripts.jsonl`: one dictation per line.
+  - `asr_raw`: speech recognition before Wispr's AI cleanup. Mishearings show here.
+  - `formatted`: after cleanup. `pasted`: what was typed into the app.
+  - `edited_after_paste`: the text after the user edited it, when Wispr saw it.
+  - `asr_avg_log_prob`: recognition confidence (closer to 0 is more confident).
+  - `audio`: the matching file in `audio/` (WAV), or null.
+- `audio/`: the recordings, named `<time>_<id>.wav`.
+
+## Suggested review
+
+Compare `asr_raw`, `formatted` and `pasted` (and the audio, if you can listen)
+to find words and names that are repeatedly misrecognized. Write the fixes as a
+CSV in Wispr's dictionary import format, no header, one entry per line:
+
+    Hyprland
+    hyperland,Hyprland
+
+A single word adds it to the vocabulary; `misheard,correct` adds a correction.
+Import it in Wispr: Hub -> Dictionary -> Import.
+"""
+
+
+def notify(icon, text):
+    subprocess.run(["hyprctl", "notify", str(icon), "5000", "0", f"Wispr export: {text}"],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Export Wispr Flow dictation history.")
+    parser.add_argument("dir", nargs="?", help="output directory")
+    parser.add_argument("--no-audio", action="store_true", help="skip the recordings")
+    parser.add_argument("--since", help="only dictations on or after YYYY-MM-DD (UTC)")
+    args = parser.parse_args()
+
+    if not (DB_DIR / "flow.sqlite").exists():
+        notify(3, "no database found")
+        raise SystemExit(f"No Wispr database in {DB_DIR}")
+
+    stamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
+    out = Path(args.dir) if args.dir else Path.home() / "Documents/wispr-exports" / stamp
+    audio_dir = out / "audio"
+    audio_dir.mkdir(parents=True, exist_ok=True)
+
+    with tempfile.TemporaryDirectory() as snapshot:
+        for f in DB_DIR.glob("flow.sqlite*"):
+            shutil.copy2(f, snapshot)
+        con = sqlite3.connect(os.path.join(snapshot, "flow.sqlite"))
+        con.row_factory = sqlite3.Row
+        query = "SELECT {}, audio FROM History".format(", ".join(c for c, _ in FIELDS))
+        params = []
+        if args.since:
+            query += " WHERE timestamp >= ?"
+            params.append(args.since)
+        query += " ORDER BY timestamp"
+
+        count = with_audio = 0
+        with open(out / "transcripts.jsonl", "w") as jsonl:
+            for row in con.execute(query, params):
+                record = {name: row[col] for col, name in FIELDS}
+                record["audio"] = None
+                if row["audio"] and not args.no_audio:
+                    name = "{}_{}.wav".format(
+                        str(row["timestamp"])[:19].replace(" ", "T").replace(":", "-"),
+                        (row["transcriptEntityId"] or "noid")[:8])
+                    (audio_dir / name).write_bytes(row["audio"])
+                    record["audio"] = f"audio/{name}"
+                    with_audio += 1
+                jsonl.write(json.dumps(record, ensure_ascii=False) + "\n")
+                count += 1
+        con.close()
+
+    if not with_audio:
+        audio_dir.rmdir()
+    (out / "README.md").write_text(README.format(
+        now=datetime.datetime.now().isoformat(timespec="minutes"), count=count,
+        since=f" since {args.since}" if args.since else ""))
+    print(f"Exported {count} dictations ({with_audio} recordings) to {out}")
+    notify(1, f"{count} dictations to {out}")
+
+
+if __name__ == "__main__":
+    main()

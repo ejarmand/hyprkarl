@@ -18,7 +18,7 @@
 #   stow_adopt_config                    Adopt conflicting files into the repo (--adopt)
 #   stow_restow_config                   Re-stow config without conflicts
 #   remove_stale_symlinks                Remove broken symlinks pointing into hyprkarl
-#   remove_empty_dirs                    Remove empty directories left behind after stow
+#   remove_empty_dirs                    Remove directories emptied by remove_stale_symlinks
 
 HYPRKARL_PATH="${HYPRKARL_PATH:-$HOME/.local/share/hyprkarl}"
 UPDATE_STATE_DIR="$HYPRKARL_PATH/config/hyprkarl/update"
@@ -125,18 +125,32 @@ stow_restow_config() {
   _stow_gtk_theme 0
 }
 
+STOW_TARGETS=("$HOME/.config" "$HOME/.local/share/applications" "$HOME/.local/share/themes/hyprkarl")
+STALE_LINK_DIRS=()
+
 remove_stale_symlinks() {
   while IFS= read -r link; do
     if [[ ! -e "$link" ]]; then
       target=$(readlink "$link")
       if [[ "$target" == *"hyprkarl"* ]]; then
         rm "$link"
+        STALE_LINK_DIRS+=("$(dirname "$link")")
       fi
     fi
-  done < <(find "$HOME/.config" "$HOME/.local/share/applications" "$HOME/.local/share/themes/hyprkarl" -type l 2>/dev/null)
+  done < <(find "${STOW_TARGETS[@]}" -type l 2>/dev/null)
 }
 
+# Only prune directories that held a removed stale link (and their parents):
+# ~/.config is shared with other apps, and their empty directories aren't ours.
 remove_empty_dirs() {
-  find "$HOME/.config" "$HOME/.local/share/applications" "$HOME/.local/share/themes/hyprkarl" \
-    -mindepth 1 -depth -type d -empty -delete 2>/dev/null
+  local dir root
+  for dir in "${STALE_LINK_DIRS[@]}"; do
+    while true; do
+      for root in "${STOW_TARGETS[@]}"; do
+        [[ "$dir" == "$root" ]] && continue 3
+      done
+      rmdir "$dir" 2>/dev/null || continue 2
+      dir=$(dirname "$dir")
+    done
+  done
 }

@@ -9,3 +9,7 @@
 
 # Machine-local Claude Code state — belongs to the repo checkout, not ~/.config
 \.claude
+
+# ~/.config/nvim is the user's own Neovim config (a link into ~/.config/configs),
+# not hyprkarl's; stowing over it aborts every restow/adopt
+^/nvim

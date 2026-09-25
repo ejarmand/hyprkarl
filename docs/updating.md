@@ -125,8 +125,9 @@ files, it will refuse and tell you to commit first.
 hk-update remove-stale
 ```
 
-Removes broken symlinks that point into the hyprkarl repo, then prunes any
-empty directories left behind. Useful after deleting or renaming files in the
+Removes broken symlinks that point into the hyprkarl repo, then removes the
+directories those links leave empty. Other empty directories under `~/.config/`
+(ones other apps own) are left alone. Useful after deleting or renaming files in the
 repo when you don't need to restow everything — `hk-update dotfiles` also
 removes stale symlinks as part of its normal run, so use `remove-stale` only
 when you want that cleanup step in isolation.

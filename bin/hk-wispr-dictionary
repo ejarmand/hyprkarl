@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Back up Wispr Flow's personal dictionary as a CSV that Wispr's own import
+# reads back (Hub -> Dictionary -> Import): one "word" or "phrase,replacement"
+# (a correction) per line, no header. Importing skips words already there, so
+# edit the file and re-import it to add words in bulk.
+#
+# Reads a copy of Wispr's local database (it keeps it under the macOS path
+# ~/Library/Application Support even on Linux), never the live file.
+# Snippets and deleted words are left out.
+#
+# Usage: hk-wispr-dictionary [output.csv]
+#   Default output: $HYPRKARL_PATH/config/hyprkarl/wispr-dictionary.csv
+#   "-" writes to stdout.
+
+DB_DIR="$HOME/Library/Application Support/Wispr Flow"
+OUTPUT="${1:-${HYPRKARL_PATH:-$HOME/.local/share/hyprkarl}/config/hyprkarl/wispr-dictionary.csv}"
+# Personal words carry the all-zero team id; shared team words carry the team's.
+PERSONAL="00000000-0000-0000-0000-000000000000"
+
+notify() {
+  hyprctl notify "$1" 5000 0 "Wispr dictionary: $2" >/dev/null 2>&1
+}
+
+if [[ ! -f $DB_DIR/flow.sqlite ]]; then
+  echo "No Wispr database at $DB_DIR" >&2
+  notify 3 "no database found"
+  exit 1
+fi
+
+snapshot=$(mktemp -d)
+trap 'rm -rf "$snapshot"' EXIT
+cp "$DB_DIR"/flow.sqlite* "$snapshot"/
+
+# NULL replacements print as an empty second column, which Wispr's parser
+# drops, so plain words round-trip as one-column rows.
+csv=$(sqlite3 -csv "$snapshot/flow.sqlite" "
+  SELECT phrase, replacement FROM Dictionary
+  WHERE ifnull(isDeleted, 0) = 0
+    AND ifnull(isSnippet, 0) = 0
+    AND ifnull(teamDictionaryId, '$PERSONAL') = '$PERSONAL'
+  ORDER BY lower(phrase);") || {
+  notify 3 "could not read the database"
+  exit 1
+}
+
+if [[ $OUTPUT == - ]]; then
+  printf '%s\n' "$csv" | sed 's/\r$//; s/,$//'
+  exit 0
+fi
+
+printf '%s\n' "$csv" | sed 's/\r$//; s/,$//' >"$OUTPUT" || exit 1
+count=$(grep -c . "$OUTPUT")
+echo "Saved $count words to $OUTPUT"
+notify 1 "saved $count words"
