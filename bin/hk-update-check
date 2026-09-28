@@ -163,3 +163,6 @@ check_packages
 
 printf '\n=== System ===\n'
 check_system
+
+printf '\n=== Apps ===\n'
+hk-app-status | sed 's/^/  /'

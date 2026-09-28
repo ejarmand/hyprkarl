@@ -8,10 +8,19 @@ PACMAN="󰣇 Pacman"
 AUR=" AUR"
 FLATPAK="󰏖 Flatpak"
 DOCKER="󰡨 Docker"
+APPIMAGE="󰀻 AppImage"
 
 relaunch_menu() { exec "$0"; }
 
-CHOICE=$(echo -e "$PACMAN\n$AUR\n$FLATPAK\n$DOCKER" \
+# Prompt for a GitHub owner/repo or AppImage URL, then install it in a terminal.
+install_appimage() {
+  local source
+  source=$(rofi -dmenu -p "" -mesg "owner/repo or AppImage URL" -theme "$ROFI_THEME" </dev/null)
+  [[ -z "$source" ]] && return 1
+  hk-tui-launch bash -c 'hk-app-install "$1"; hk-show-done' _ "$source"
+}
+
+CHOICE=$(echo -e "$PACMAN\n$AUR\n$FLATPAK\n$DOCKER\n$APPIMAGE" \
     | rofi -dmenu \
            -p "" \
            -no-custom \
@@ -23,6 +32,7 @@ case "$CHOICE" in
     "$AUR")     hk-tui-launch hk-pkg-install-tui --aur ;;
     "$FLATPAK") hk-tui-launch hk-pkg-install-tui --flatpak ;;
     "$DOCKER")  hk-menu-docker-install || relaunch_menu ;;
+    "$APPIMAGE") install_appimage || relaunch_menu ;;
     "")         exit 1 ;;
 esac
 

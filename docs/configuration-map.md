@@ -8,7 +8,7 @@ would edit.
 - `bin/`
   Commands meant to be run directly. Dispatchers (`hk-theme`, `hk-pkg`, …) route to top-level `hk-<noun>-<action>` commands.
 - `bin/lib/`
-  Shared sourced helpers (`docker.sh`, `update.sh`). Reserved for utilities used by more than one command, not single-use implementations.
+  Shared sourced helpers (`app.sh`, `docker.sh`, `update.sh`). Reserved for utilities used by more than one command, not single-use implementations.
 - `config/`
   Application config and session behavior
 - `packages/`
@@ -46,6 +46,11 @@ If theme or wallpaper behavior looks wrong, check this directory first.
 These files are machine-local and gitignored. They are written by `hk-update`
 and the setup scripts. Delete one to force `hk-update` to re-run that category
 regardless of whether anything changed.
+
+`config/hyprkarl/apps/<id>.conf` is the tracked config for each AppImage
+installed with `hk-app`: release source, channel, launcher args, desktop-entry
+overrides, and an optional `post_install` command. The installed releases
+themselves live under `~/.local/opt/<id>/`.
 
 ## Hyprland
 

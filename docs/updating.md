@@ -55,8 +55,8 @@ git merge origin/main        # or rebase, depending on your branch setup
 hk-update all
 ```
 
-`hk-update all` runs dotfiles → packages → system in sequence and stops at the
-first failure. Pass `--force` or `--adopt` to have that flag applied to the
+`hk-update all` runs dotfiles → packages → system → apps in sequence and stops
+at the first failure. Pass `--force` or `--adopt` to have that flag applied to the
 dotfiles step. Run categories individually if you only want specific ones or
 need to handle them separately.
 
@@ -68,7 +68,7 @@ hk-update check
 
 Prints a summary of what each category would do without touching anything:
 changed config files, packages to install or remove, whether system setup files
-changed. Useful for reviewing a merge before applying it.
+changed, and which apps have a newer release (this part queries GitHub). Useful for reviewing a merge before applying it.
 
 ## Dotfiles Update
 
@@ -162,6 +162,18 @@ hk-update system
 
 Re-runs `setup-system.sh`. All operations in that script are idempotent, so
 re-running it is safe.
+
+## Apps Update
+
+```bash
+hk-update apps [--dry-run] [id...]
+```
+
+Updates AppImages installed with `hk-app` (see the Apps section of
+`docs/commands.md`). Unlike the other categories this has no commit baseline:
+it compares each app's installed release tag against GitHub and installs the
+newest matching release, keeping the previous one for `hk-app rollback`.
+Running apps are left alone and listed as needing a restart.
 
 ## Package Lists
 

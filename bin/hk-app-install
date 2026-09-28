@@ -1,0 +1,132 @@
+#!/bin/bash
+# hk-app-install
+# Install an AppImage into ~/.local/opt with a launcher and desktop entry, and
+# record it in config/hyprkarl/apps/<id>.conf so hk-app update tracks it.
+#
+# Usage:
+#   hk-app-install <id>                        Install from an existing config
+#   hk-app-install <owner/repo> [options] [-- launcher args...]
+#   hk-app-install <url> [options] [-- launcher args...]
+#
+# Options:
+#   --id ID          App id (default: the AppImage's desktop entry name)
+#   --channel REGEX  Track releases whose tag matches REGEX (e.g. nightly);
+#                    admits prereleases. Default: newest stable release.
+#   --asset REGEX    AppImage asset regex (default: <arch>\.AppImage$)
+#   --sha256 HEX     Expected checksum (URL installs only)
+#
+# Example:
+#   hk-app-install pingdotgg/t3code --channel nightly -- --no-sandbox
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "$SCRIPT_DIR/lib/app.sh"
+
+# --- Functions ---
+
+usage() {
+  sed -n '6,19p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+# Write a new app config from the command-line options.
+write_conf() {
+  local id="$1" file="$APP_CONF_DIR/$1.conf"
+  mkdir -p "$APP_CONF_DIR"
+  {
+    printf '# %s — installed by hk-app. Edit, then run: hk-app config-update %s\n' "$id" "$id"
+    if [[ -n "$opt_repo" ]]; then
+      printf 'repo=%q\n' "$opt_repo"
+      [[ -n "$opt_channel" ]] && printf 'tag_pattern=%q\n' "$opt_channel"
+    else
+      printf '# Manual install: hk-app update skips apps without a repo.\n'
+      printf 'url=%q\n' "$opt_url"
+      [[ -n "$opt_sha256" ]] && printf 'sha256=%q\n' "$opt_sha256"
+    fi
+    [[ -n "$opt_asset" ]] && printf 'asset_pattern=%q\n' "$opt_asset"
+    printf 'args=(%s)\n' "${opt_args[*]@Q}"
+    printf "# post_install='command'   # runs with APP_ID, APP_DIR, APP_TAG set\n"
+  } > "$file"
+  info "Wrote $file"
+}
+
+# --- Script Body ---
+
+source_arg="${1:-}"
+shift || true
+opt_id="" opt_repo="" opt_url="" opt_channel="" opt_asset="" opt_sha256=""
+opt_args=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --id)      opt_id="$2"; shift 2 ;;
+    --channel) opt_channel="$2"; shift 2 ;;
+    --asset)   opt_asset="$2"; shift 2 ;;
+    --sha256)  opt_sha256="$2"; shift 2 ;;
+    --)        shift; opt_args=("$@"); break ;;
+    *)         echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
+  esac
+done
+
+if [[ -z "$source_arg" || "$source_arg" == "-h" || "$source_arg" == "--help" ]]; then
+  usage
+  [[ -z "$source_arg" ]] && exit 1
+  exit 0
+fi
+
+app_lock
+
+if [[ -n "$opt_id" && -f "$APP_CONF_DIR/$opt_id.conf" ]]; then
+  error "$opt_id already has a config; edit $APP_CONF_DIR/$opt_id.conf and run hk-app install $opt_id"
+fi
+
+# An existing config is a recipe: install exactly what it describes.
+recipe=0
+if [[ "$source_arg" != */* && -f "$APP_CONF_DIR/$source_arg.conf" ]]; then
+  recipe=1
+  id="$source_arg"
+  app_load "$id"
+elif [[ "$source_arg" == *://* ]]; then
+  if [[ -n "$opt_sha256" && ! "$opt_sha256" =~ ^[0-9a-fA-F]{64}$ ]]; then
+    error "--sha256 must be 64 hex characters"
+  fi
+  url="$source_arg" sha256="$opt_sha256" opt_url="$source_arg"
+elif [[ "$source_arg" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+  repo="$source_arg" tag_pattern="$opt_channel" opt_repo="$source_arg"
+  asset_pattern="${opt_asset:-$(uname -m)\\.AppImage\$}"
+else
+  error "No config named $source_arg, and it is not an owner/repo or URL"
+fi
+
+if [[ -n "$repo" ]]; then
+  app_latest || exit 1
+  image=$(app_download "$asset_url" "$asset_name" "$asset_sha256") || exit 1
+  tag="$release_tag"
+else
+  image=$(app_download "$url" "$(basename "${url%%\?*}")" "$sha256") || exit 1
+  tag=""
+fi
+staged=$(app_stage "$image") || exit 1
+# Manual installs have no release tag; name the release by its bundled version.
+[[ -z "$tag" ]] && tag=$(sed -n 's/^X-AppImage-Version=//p' "$staged"/*.desktop | head -n1)
+
+if [[ "$recipe" -eq 0 ]]; then
+  id="$opt_id"
+  if [[ -z "$id" ]]; then
+    desktop=$(find "$staged/" -maxdepth 1 -name '*.desktop' | head -n1)
+    id=$(basename "${desktop:-}" .desktop)
+  fi
+  if [[ ! "$id" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+    rm -rf "$(dirname "$staged")"
+    error "Cannot derive an app id; pass --id"
+  fi
+  if [[ -f "$APP_CONF_DIR/$id.conf" ]]; then
+    rm -rf "$(dirname "$staged")"
+    error "$id already has a config; edit $APP_CONF_DIR/$id.conf and run hk-app install $id"
+  fi
+  write_conf "$id"
+  app_load "$id"
+fi
+
+app_commit "$id" "${tag:-manual}" "$staged"
+info "Launcher: $APP_BIN_DIR/$id"
+app_running "$id" && warn "$id is running: restart it to use this version"
+exit 0

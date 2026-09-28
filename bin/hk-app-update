@@ -1,0 +1,76 @@
+#!/bin/bash
+# hk-app-update
+# Update installed hk-app AppImages to their newest matching release.
+# Skips apps that are current, not installed, or manual (no repo).
+#
+# Usage: hk-app-update [--dry-run] [id...]
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "$SCRIPT_DIR/lib/app.sh"
+
+# --- Functions ---
+
+# Runs in a subshell per app, so an error exits only that app's update.
+update_app() {
+  local id="$1" current image staged=""
+  app_load "$id"
+  current=$(app_current_tag "$id")
+  if [[ -z "$current" ]]; then
+    info "$id: not installed (hk-app install $id)"
+    return 0
+  fi
+  if [[ -z "$repo" ]]; then
+    info "$id: manual install, skipping"
+    return 0
+  fi
+  app_latest || return 1
+  if [[ "$release_tag" == "$current" ]]; then
+    info "$id: up to date ($current)"
+    return 0
+  fi
+  if [[ "$dry_run" -eq 1 ]]; then
+    info "$id: $current → $release_tag (dry run)"
+    return 0
+  fi
+  info "$id: $current → $release_tag"
+  # A rollback leaves the newer release extracted as previous.
+  if [[ ! -d "$APP_OPT_DIR/$id/$release_tag" ]]; then
+    image=$(app_download "$asset_url" "$asset_name" "$asset_sha256") || return 1
+    staged=$(app_stage "$image") || return 1
+  fi
+  app_commit "$id" "$release_tag" "$staged"
+}
+
+# --- Script Body ---
+
+dry_run=0
+ids=()
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run) dry_run=1 ;;
+    -h|--help) echo "Usage: hk-app-update [--dry-run] [id...]"; exit 0 ;;
+    -*) echo "Unknown option: $arg" >&2; exit 1 ;;
+    *) ids+=("$arg") ;;
+  esac
+done
+[[ ${#ids[@]} -eq 0 ]] && mapfile -t ids < <(app_ids)
+
+[[ "$dry_run" -eq 0 ]] && app_lock
+failed=()
+restart=()
+for id in "${ids[@]}"; do
+  before=$(app_current_tag "$id")
+  ( update_app "$id" ) || failed+=("$id")
+  if [[ "$(app_current_tag "$id")" != "$before" ]] && app_running "$id"; then
+    restart+=("$id")
+  fi
+done
+
+if [[ ${#restart[@]} -gt 0 ]]; then
+  warn "Running, restart to use the new version: ${restart[*]}"
+fi
+if [[ ${#failed[@]} -gt 0 ]]; then
+  warn "Failed: ${failed[*]}"
+  exit 1
+fi
+exit 0

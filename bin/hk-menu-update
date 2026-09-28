@@ -6,8 +6,9 @@ ROFI_THEME="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/custom-menu.rasi"
 
 UPDATE_HK="󰚰 Update Hyprkarl"
 UPGRADE_PKGS="󰏕 Upgrade Packages"
+UPDATE_APPS="󰀻 Update Apps"
 
-CHOICE=$(echo -e "$UPDATE_HK\n$UPGRADE_PKGS" |
+CHOICE=$(echo -e "$UPDATE_HK\n$UPGRADE_PKGS\n$UPDATE_APPS" |
   rofi -dmenu \
     -p "" \
     -no-custom \
@@ -17,6 +18,7 @@ CHOICE=$(echo -e "$UPDATE_HK\n$UPGRADE_PKGS" |
 case "$CHOICE" in
 "$UPDATE_HK") hk-tui-launch hk-update-tui ;;
 "$UPGRADE_PKGS") hk-tui-launch hk-pkg-upgrade ;;
+"$UPDATE_APPS") hk-tui-launch bash -c 'hk-app-update; hk-show-done' ;;
 "") exit 1 ;;
 esac
 

@@ -8,19 +8,21 @@
 #   hk-update remove-stale
 #   hk-update packages
 #   hk-update system
+#   hk-update apps [--dry-run] [id...]
 #   hk-update all [--force|--adopt]
 
 usage() {
   cat <<'EOF'
 Usage:
-  hk-update check                Report what would change (no side effects)
+  hk-update check                Report what would change, including app updates (no side effects)
   hk-update dotfiles             Restow config files and remove stale symlinks
   hk-update dotfiles --force     Overwrite conflicting ~/.config files with repo versions
   hk-update dotfiles --adopt     Adopt conflicting ~/.config files into the repo for review
   hk-update remove-stale         Remove stale hyprkarl symlinks and empty directories
   hk-update packages             Install new required packages, prompt for dropped ones
   hk-update system               Re-run system-level setup
-  hk-update all [--force|--adopt]  Run dotfiles, packages, and system in sequence
+  hk-update apps [--dry-run] [id...]  Update AppImages installed with hk-app
+  hk-update all [--force|--adopt]  Run dotfiles, packages, system, and apps in sequence
   hk-update tui                  Interactive guided update (sync, review, apply)
 EOF
 }
@@ -40,9 +42,12 @@ case "$action" in
     hk-update-dotfiles "${dotfiles_flags[@]}" || exit 1
     hk-update-packages || exit 1
     hk-update-system   || exit 1
+    hk-app-update      || exit 1
     ;;
   check|dotfiles|packages|system|remove-stale|tui)
     exec "hk-update-$action" "$@" ;;
+  apps)
+    exec hk-app-update "$@" ;;
   ""|-h|--help|help)
     usage; exit 0 ;;
   *)

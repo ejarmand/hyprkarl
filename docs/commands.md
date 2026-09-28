@@ -6,11 +6,13 @@ does not try to document every internal script.
 ## Update
 
 - `hk-update check`
-  Report what would change across dotfiles, packages, and system without
-  making any changes.
+  Report what would change across dotfiles, packages, and system, and which
+  `hk-app` AppImages have a newer release, without making any changes.
 - `hk-update all [--force|--adopt]`
-  Run dotfiles, packages, and system updates in sequence. `--force` and
+  Run dotfiles, packages, system, and app updates in sequence. `--force` and
   `--adopt` are passed through to the dotfiles step.
+- `hk-update apps [--dry-run] [id...]`
+  Update AppImages installed with `hk-app` (same as `hk-app update`).
 - `hk-update tui`
   Interactive guided update in a terminal: fetch and merge upstream (safe on a
   dirty working tree, with conflict resolution), review pending dotfile,
@@ -51,12 +53,14 @@ does not try to document every internal script.
   Pick a default editor, shell, or terminal directly without going through the
   defaults menu.
 - `hk-menu-install`
-  Open the install menu for packages and Docker services.
+  Open the install menu for packages, Docker services, and AppImages
+  ("AppImage" prompts for an `owner/repo` or URL and runs `hk-app install`).
 - `hk-menu-uninstall`
   Open the uninstall menu for packages and Docker services.
 - `hk-menu-update`
   Open the update menu: "Update Hyprkarl" launches the guided `hk-update tui`,
-  "Upgrade Packages" runs the system package upgrade (`hk-pkg-upgrade`).
+  "Upgrade Packages" runs the system package upgrade (`hk-pkg-upgrade`),
+  "Update Apps" runs `hk-app update`.
 - `hk-menu-utils`
   Open the utilities submenu (toggles, screen recording, and other actions).
 - `hk-menu-voice-commands`
@@ -208,6 +212,34 @@ does not try to document every internal script.
 - `hk-pkg present --flatpak <app-id>...`
   Return success if all named Flatpaks are installed.
 
+## Apps (AppImages)
+
+AppImages installed outside the package manager. Each app has a tracked config
+at `config/hyprkarl/apps/<id>.conf` (key reference at the top of
+`bin/lib/app.sh`) and installs to `~/.local/opt/<id>/<tag>/`, with `current`
+and `previous` symlinks, a launcher at `~/.local/bin/<id>`, and a desktop entry.
+
+- `hk-app install <owner/repo> [--channel REGEX] [--asset REGEX] [--id ID] [-- args...]`
+  Install the newest GitHub release and write its config. `--channel` tracks
+  tags matching a regex (e.g. `nightly`) and admits prereleases; the default is
+  the newest stable release. Arguments after `--` are added to the launcher.
+- `hk-app install <url> [--sha256 HEX] [--id ID] [-- args...]`
+  Install a direct AppImage URL. Manual installs are not updated.
+- `hk-app install <id>`
+  Install from an existing config (e.g. on a new machine).
+- `hk-app update [--dry-run] [id...]`
+  Update installed apps to their newest matching release, verifying GitHub's
+  SHA-256 digest. Keeps the previous release and reports apps that are running
+  and need a restart.
+- `hk-app config-update [id...]`
+  Re-apply configs to the installed release without downloading: rewrite the
+  launcher and desktop entry and re-run the `post_install` command. Run after
+  editing a config or whatever `post_install` builds.
+- `hk-app status [id...]`
+  Show installed and latest release per app.
+- `hk-app rollback <id>`
+  Swap to the previous release.
+
 ## Docker
 
 - `hk-menu-docker-install`
@@ -325,6 +357,11 @@ does not try to document every internal script.
   Back up Wispr's personal dictionary as a CSV in Wispr's import format
   (default: `config/hyprkarl/wispr-dictionary.csv`, which is gitignored so
   personal words stay out of the repo).
+- `hk-wispr-helper-install [release-dir]`
+  The `post_install` hook in `config/hyprkarl/apps/wispr-flow.conf`: builds
+  `wispr-flow-linux-helper` from the checkout at `WISPR_HELPER_SRC` and swaps
+  it into the release (shipped helper kept as `.orig`). Rebuild and reinstall
+  it with `hk-app config-update wispr-flow`.
 - `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
   Export Wispr's dictation history (raw ASR, cleaned and pasted text, audio)
   to `~/Documents/wispr-exports/` for review.
