@@ -146,7 +146,15 @@ if [[ "$recipe" -eq 0 ]]; then
   app_load "$id"
 fi
 
-app_commit "$id" "${tag:-manual}" "$staged"
+# app_commit exits via error, so run it in a subshell to clean up after it.
+if ! ( app_commit "$id" "${tag:-manual}" "$staged" ); then
+  # A new install's config goes with it, so retrying the same source works.
+  if [[ "$recipe" -eq 0 ]]; then
+    rm -f "$APP_CONF_DIR/$id.conf"
+    info "Removed $APP_CONF_DIR/$id.conf"
+  fi
+  exit 1
+fi
 info "Launcher: $APP_BIN_DIR/$id"
 app_running "$id" && warn "$id is running: restart it to use this version"
 exit 0
