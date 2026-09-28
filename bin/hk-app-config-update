@@ -23,7 +23,10 @@ reconfigure_app() {
     warn "$id: post-install failed; launcher and desktop entry left as they were"
     return 1
   fi
-  app_integrate "$id"
+  if ! app_integrate "$id"; then
+    warn "$id: cannot update the launcher or desktop entry"
+    return 1
+  fi
   info "$id: reconfigured ($tag)"
   app_running "$id" && warn "$id is running: restart it to pick up the change"
   return 0
