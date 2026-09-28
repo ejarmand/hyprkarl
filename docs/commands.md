@@ -228,7 +228,8 @@ and `previous` symlinks, a launcher at `~/.local/bin/<id>`, and a desktop entry.
 - `hk-app install <url> [--sha256 HEX] [--id ID] [-- args...]`
   Install a direct AppImage URL. Manual installs are not updated.
 - `hk-app install <id>`
-  Install from an existing config (e.g. on a new machine).
+  Install from an existing config (e.g. on a new machine). Takes no options:
+  edit the config instead.
 - `hk-app update [--dry-run] [id...]`
   Update installed apps to their newest matching release, verifying GitHub's
   SHA-256 digest. Keeps the previous release and reports apps that are running
