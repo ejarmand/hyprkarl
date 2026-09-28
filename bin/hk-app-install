@@ -13,7 +13,8 @@
 #   --channel REGEX  Track releases whose tag matches REGEX (e.g. nightly);
 #                    admits prereleases. Default: newest stable release.
 #   --asset REGEX    AppImage asset regex (default: <arch>\.AppImage$)
-#   --sha256 HEX     Expected checksum (URL installs only)
+#   --sha256 HEX     Expected checksum (URL installs only; GitHub releases
+#                    are checked against the asset's published digest)
 #
 # Example:
 #   hk-app-install pingdotgg/t3code --channel nightly -- --no-sandbox
@@ -24,7 +25,7 @@ source "$SCRIPT_DIR/lib/app.sh"
 # --- Functions ---
 
 usage() {
-  sed -n '6,19p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '6,20p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 # Exit if option $1 has no value after it (shift 2 would fail and loop forever).
@@ -92,13 +93,19 @@ recipe=0
 if [[ "$source_arg" != */* && -f "$APP_CONF_DIR/$source_arg.conf" ]]; then
   recipe=1
   id="$source_arg"
+  if [[ -n "$opt_sha256" ]]; then
+    error "The --sha256 option is for new URL installs; set sha256= in $APP_CONF_DIR/$id.conf instead"
+  fi
   app_load "$id"
 elif [[ "$source_arg" == *://* ]]; then
   if [[ -n "$opt_sha256" && ! "$opt_sha256" =~ ^[0-9a-fA-F]{64}$ ]]; then
-    error "--sha256 must be 64 hex characters"
+    error "The --sha256 value must be 64 hex characters"
   fi
   url="$source_arg" sha256="$opt_sha256" opt_url="$source_arg"
 elif [[ "$source_arg" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+  if [[ -n "$opt_sha256" ]]; then
+    error "The --sha256 option is for URL installs; $source_arg releases are checked against GitHub's asset digest"
+  fi
   repo="$source_arg" tag_pattern="$opt_channel" opt_repo="$source_arg"
   asset_pattern="${opt_asset:-$(uname -m)\\.AppImage\$}"
 else

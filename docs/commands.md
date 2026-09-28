@@ -223,6 +223,8 @@ and `previous` symlinks, a launcher at `~/.local/bin/<id>`, and a desktop entry.
   Install the newest GitHub release and write its config. `--channel` tracks
   tags matching a regex (e.g. `nightly`) and admits prereleases; the default is
   the newest stable release. Arguments after `--` are added to the launcher.
+  The download is checked against GitHub's SHA-256 digest when the release
+  publishes one; `--sha256` is rejected here, as it is for URL installs only.
 - `hk-app install <url> [--sha256 HEX] [--id ID] [-- args...]`
   Install a direct AppImage URL. Manual installs are not updated.
 - `hk-app install <id>`
