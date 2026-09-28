@@ -27,6 +27,15 @@ usage() {
   sed -n '6,19p' "$0" | sed 's/^# \{0,1\}//'
 }
 
+# Exit if option $1 has no value after it (shift 2 would fail and loop forever).
+need_value() {
+  if [[ $# -lt 2 ]]; then
+    echo "Missing value for $1" >&2
+    usage >&2
+    exit 1
+  fi
+}
+
 # Write a new app config from the command-line options.
 write_conf() {
   local id="$1" file="$APP_CONF_DIR/$1.conf"
@@ -57,10 +66,10 @@ opt_args=()
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --id)      opt_id="$2"; shift 2 ;;
-    --channel) opt_channel="$2"; shift 2 ;;
-    --asset)   opt_asset="$2"; shift 2 ;;
-    --sha256)  opt_sha256="$2"; shift 2 ;;
+    --id)      need_value "$@"; opt_id="$2"; shift 2 ;;
+    --channel) need_value "$@"; opt_channel="$2"; shift 2 ;;
+    --asset)   need_value "$@"; opt_asset="$2"; shift 2 ;;
+    --sha256)  need_value "$@"; opt_sha256="$2"; shift 2 ;;
     --)        shift; opt_args=("$@"); break ;;
     *)         echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
   esac
