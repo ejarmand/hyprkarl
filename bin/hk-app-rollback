@@ -21,9 +21,16 @@ if [[ -z "$current" || -z "$previous" || ! -d "$APP_OPT_DIR/$id/$previous" ]]; t
   error "$id has no previous release to roll back to"
 fi
 
-app_relink "$previous" "$APP_OPT_DIR/$id/current"
-app_relink "$current" "$APP_OPT_DIR/$id/previous"
-app_integrate "$id"
+root="$APP_OPT_DIR/$id"
+# Raw link targets (relative or absolute), to put back if the swap fails.
+current_link=$(readlink "$root/current")
+previous_link=$(readlink "$root/previous")
+if ! app_relink "$previous" "$root/current" || ! app_relink "$current" "$root/previous" || ! app_integrate "$id"; then
+  if ! app_restore "$id" "$current_link" "$previous_link"; then
+    error "Cannot roll $id back, nor restore the current and previous links in $root"
+  fi
+  error "Cannot roll $id back; it is still on $current"
+fi
 info "Rolled $id back to $previous ($current is now previous)"
 app_running "$id" && warn "$id is running: restart it to use this version"
 exit 0
