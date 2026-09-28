@@ -80,14 +80,16 @@ git merge origin/main   # or rebase onto your personal branch
 hk-update all
 ```
 
-`hk-update all` runs dotfiles, packages, and system in sequence. You can also
-run each individually:
+`hk-update all` runs dotfiles, packages, system, and apps in sequence, stopping
+at the first failure; the apps step updates AppImages installed with `hk-app`.
+You can also run each individually:
 
 ```bash
 hk-update dotfiles    # re-stow config files, remove stale symlinks
 hk-update remove-stale  # remove stale symlinks and empty dirs (no restow)
 hk-update packages    # install new required packages, prompt to remove dropped ones
 hk-update system      # re-run system-level setup
+hk-update apps        # update AppImages installed with hk-app
 hk-update check       # preview what would change without doing anything
 ```
 
