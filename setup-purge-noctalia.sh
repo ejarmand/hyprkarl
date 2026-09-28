@@ -23,8 +23,7 @@ PURGE_PKGS=(cachyos-hypr-noctalia noctalia)
 # Marked explicit so recursive removal skips them.
 #
 # Only uwsm qualifies. Deliberately absent: grim and slurp are also swept, but
-# hyprshot (pacman.txt) depends on both and pulls them back as proper deps.
-# Pinning them here would leave them explicit forever, masquerading as orphans.
+# pacman.txt lists both (hk-screenshot), so setup-packages.sh brings them back.
 KEEP_PKGS=(uwsm)
 
 # Noctalia / CachyOS shell configs with no Hyprkarl counterpart. Stow's --adopt

@@ -264,6 +264,16 @@ does not try to document every internal script.
 
 ## Media, Hardware, and Utilities
 
+- `hk-screenshot [smart|region|window|output] [edit|save|copy]`
+  Freeze the screen and take a screenshot. `smart` (the default) lets you drag
+  a region or click a window or display to capture all of it; `region` only
+  drags, `window` only snaps to windows and displays, and `output` takes the
+  focused display. `edit` (the default) opens the capture in satty, where
+  Enter copies and saves, Ctrl+C copies, Ctrl+S saves, and Esc discards.
+  `save` copies and saves straight away (click the notification to edit);
+  `copy` only copies. Run it again while picking to cancel. Saves to
+  `HYPRKARL_SCREENSHOT_DIR`, falling back to `XDG_PICTURES_DIR`. Bound to
+  `Print` (edit), `Shift+Print` (save), and `Super+Print` (display, edit).
 - `hk-screen-record`
   Start or stop screen recording. Supports desktop audio, microphone audio,
   webcam overlays, and explicit resolution arguments.

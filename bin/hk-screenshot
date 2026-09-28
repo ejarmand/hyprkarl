@@ -1,0 +1,173 @@
+#!/bin/bash
+# hk-screenshot
+# Freeze the screen, pick what to capture, then annotate it in satty.
+#
+# Usage: hk-screenshot [smart|region|window|output] [edit|save|copy]
+#   smart  - (default) drag a region, or click a window or display to take all of it
+#   region - drag a region only
+#   window - click a window or display
+#   output - the focused display, no picking
+#
+#   edit   - (default) open in satty: Enter copies and saves, Ctrl+C copies,
+#            Ctrl+S saves, Esc discards
+#   save   - save and copy straight away; click the notification to edit
+#   copy   - copy to the clipboard only
+#
+# Running it again while the picker is open cancels. Screenshots are saved to
+# HYPRKARL_SCREENSHOT_DIR, falling back to XDG_PICTURES_DIR.
+
+# --- Constants ---
+[[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
+OUTPUT_DIR="${HYPRKARL_SCREENSHOT_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures}}"
+FILENAME_FORMAT="screenshot-%Y-%m-%d_%H-%M-%S.png"
+RECT_PATTERN='^(-?[0-9]+),(-?[0-9]+) ([0-9]+)x([0-9]+)$'
+
+# Monitor rects in layout (logical) coordinates, the space slurp and grim use.
+# Rotated displays swap width and height.
+JQ_MONITOR_RECT='
+  def rect:
+    (.width / .scale | floor) as $w | (.height / .scale | floor) as $h |
+    if .transform % 2 == 1 then "\(.x),\(.y) \($h)x\($w)" else "\(.x),\(.y) \($w)x\($h)" end;
+'
+
+# --- Functions ---
+monitor_rects() {
+  hyprctl monitors -j | jq -r "$JQ_MONITOR_RECT .[] | rect"
+}
+
+focused_monitor_rect() {
+  hyprctl monitors -j | jq -r "$JQ_MONITOR_RECT .[] | select(.focused) | rect"
+}
+
+# Windows on every visible workspace, not just the focused monitor's. Hidden
+# group members share their group's rect, so they are skipped.
+window_rects() {
+  local visible
+  visible=$(hyprctl monitors -j | jq -c '[.[].activeWorkspace.id]')
+  hyprctl clients -j | jq -r --argjson visible "$visible" \
+    '[.[] | select((.workspace.id | IN($visible[])) and .hidden != true) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"] | unique[]'
+}
+
+# The smallest rect containing the point, so a floating window wins over the
+# tiled window and the display underneath it.
+rect_at() {
+  local x="$1" y="$2"
+  local rect area best="" best_area=0
+
+  while IFS= read -r rect; do
+    [[ "$rect" =~ $RECT_PATTERN ]] || continue
+    (( x >= BASH_REMATCH[1] && x < BASH_REMATCH[1] + BASH_REMATCH[3] )) || continue
+    (( y >= BASH_REMATCH[2] && y < BASH_REMATCH[2] + BASH_REMATCH[4] )) || continue
+
+    area=$(( BASH_REMATCH[3] * BASH_REMATCH[4] ))
+    if [[ -z "$best" ]] || (( area < best_area )); then
+      best="$rect"
+      best_area=$area
+    fi
+  done
+
+  echo "$best"
+}
+
+# hyprpicker -r draws a still frame over every display, so nothing moves
+# while picking and grim captures exactly what was on screen at the keypress.
+freeze_screen() {
+  hyprpicker -r -z >/dev/null 2>&1 &
+  FREEZE_PID=$!
+  sleep 0.1
+}
+
+unfreeze_screen() {
+  [[ -n "$FREEZE_PID" ]] && kill "$FREEZE_PID" 2>/dev/null
+  FREEZE_PID=""
+}
+
+# Reads the window and display rects from RECTS, gathered before the freeze.
+pick_selection() {
+  local selection
+
+  case "$MODE" in
+    output)
+      focused_monitor_rect
+      ;;
+    window)
+      slurp -r <<< "$RECTS" 2>/dev/null
+      ;;
+    region)
+      slurp 2>/dev/null
+      ;;
+    smart)
+      selection=$(slurp <<< "$RECTS" 2>/dev/null)
+
+      # A bare click comes back as a near-empty region: snap it to the window
+      # or display it landed on instead of saving a 1px capture.
+      if [[ "$selection" =~ $RECT_PATTERN ]] && (( BASH_REMATCH[3] * BASH_REMATCH[4] < 20 )); then
+        selection=$(rect_at "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" <<< "$RECTS")
+      fi
+
+      echo "$selection"
+      ;;
+  esac
+}
+
+open_editor() {
+  satty --filename "$1" \
+        --output-filename "$OUTPUT_DIR/$FILENAME_FORMAT" \
+        --copy-command wl-copy \
+        --actions-on-enter save-to-clipboard,save-to-file \
+        --early-exit
+}
+
+# --- Script Body ---
+MODE="${1:-smart}"
+ACTION="${2:-edit}"
+
+if [[ ! "$MODE" =~ ^(smart|region|window|output)$ || ! "$ACTION" =~ ^(edit|save|copy)$ ]]; then
+  echo "Usage: hk-screenshot [smart|region|window|output] [edit|save|copy]" >&2
+  exit 1
+fi
+
+pkill -x slurp && exit 0
+
+mkdir -p "$OUTPUT_DIR"
+trap unfreeze_screen EXIT
+
+if [[ "$MODE" != "output" ]]; then
+  RECTS="$(monitor_rects; window_rects)"
+  freeze_screen
+fi
+
+selection=$(pick_selection)
+
+if [[ -z "$selection" ]]; then
+  exit 0
+fi
+
+capture=$(mktemp --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" hk-screenshot.XXXXXX.png)
+trap 'unfreeze_screen; rm -f "$capture"' EXIT
+
+if ! grim -g "$selection" "$capture"; then
+  notify-send "Screenshot failed" "grim could not capture $selection" -u critical
+  exit 1
+fi
+
+# The freeze covers every window, so it has to go before satty opens.
+unfreeze_screen
+
+case "$ACTION" in
+  edit)
+    open_editor "$capture"
+    ;;
+  copy)
+    wl-copy --type image/png < "$capture"
+    ;;
+  save)
+    filepath="$OUTPUT_DIR/$(date +"$FILENAME_FORMAT")"
+    cp "$capture" "$filepath"
+    wl-copy --type image/png < "$filepath"
+    echo "$filepath"
+
+    choice=$(notify-send "Screenshot copied & saved" "Click to edit" -i "$filepath" -A default=Edit)
+    [[ "$choice" == "default" ]] && open_editor "$filepath"
+    ;;
+esac
