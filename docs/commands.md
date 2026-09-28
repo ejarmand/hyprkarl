@@ -323,7 +323,8 @@ does not try to document every internal script.
   field; `--correction` sets it up as misspelling -> correct word.
 - `hk-wispr-dictionary [output.csv|-]`
   Back up Wispr's personal dictionary as a CSV in Wispr's import format
-  (default: `config/hyprkarl/wispr-dictionary.csv`).
+  (default: `config/hyprkarl/wispr-dictionary.csv`, which is gitignored so
+  personal words stay out of the repo).
 - `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
   Export Wispr's dictation history (raw ASR, cleaned and pasted text, audio)
   to `~/Documents/wispr-exports/` for review.

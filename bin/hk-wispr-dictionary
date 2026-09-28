@@ -11,6 +11,7 @@
 #
 # Usage: hk-wispr-dictionary [output.csv]
 #   Default output: $HYPRKARL_PATH/config/hyprkarl/wispr-dictionary.csv
+#   (gitignored: personal words stay local)
 #   "-" writes to stdout.
 
 DB_DIR="$HOME/Library/Application Support/Wispr Flow"

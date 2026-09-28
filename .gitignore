@@ -3,6 +3,9 @@ config/yazi/package.toml
 config/hyprkarl/update/
 config/uwsm/env.local
 
+# Personal data (the Wispr dictionary backup) stays local: the fork is public
+config/hyprkarl/wispr-dictionary.csv
+
 # Machine-local Claude Code state (settings, hooks, worktrees) — never tracked
 .claude/
 
