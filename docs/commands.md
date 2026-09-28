@@ -317,6 +317,15 @@ does not try to document every internal script.
 - `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
   Export Wispr's dictation history (raw ASR, cleaned and pasted text, audio)
   to `~/Documents/wispr-exports/` for review.
+- `hk-wispr-switch [run|on|off|toggle|status]`
+  Make a USB mic's hardware mute switch drive Wispr hands-free: unmuting starts
+  it, muting stops it (by pressing Ctrl+Super+Space on a virtual keyboard). It
+  hears the switch as exact digital silence, stays out of the way while another
+  app records from the mic, and ignores software mutes. Autostart runs it
+  before Wispr, whose helper only finds keyboards at launch; restart Wispr after
+  restarting it. `off`/`toggle` (`Super+Alt+D`) pause it until the next login.
+  The mic is `$HK_WISPR_SWITCH_SOURCE` (default: the Jounivo JV601); it logs to
+  `journalctl --user -t hk-wispr-switch`.
 
 ## Internal Helpers
 

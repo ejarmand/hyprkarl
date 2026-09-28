@@ -12,6 +12,10 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd --all")
     hl.exec_cmd("/usr/bin/gnome-keyring-daemon --start --components=secrets")
 
+    -- Mic mute switch -> Wispr hands-free. Before Wispr: its helper only
+    -- finds keyboards (this one's virtual keyboard) when it starts.
+    hl.exec_cmd("uwsm app -- hk-wispr-switch")
+
     -- Wispr Flow in the tray (the launcher adds the accessibility flag that
     -- hk-wispr-word-add needs)
     hl.exec_cmd("uwsm app -- ~/.local/bin/wispr-flow --hidden")

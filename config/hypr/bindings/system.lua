@@ -5,7 +5,8 @@ hl.bind("SUPER + ALT + SPACE", hl.dsp.exec_cmd("hk-menu || pkill rofi"), { descr
 hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("hk-menu-launcher || pkill rofi"), { description = "Launch apps" })
 hl.bind("SUPER + ESCAPE", hl.dsp.exec_cmd("hk-menu-power || pkill rofi"), { description = "Power menu" })
 hl.bind("SUPER + K", hl.dsp.exec_cmd("hk-menu-keybindings || pkill rofi"), { description = "View keybinds" })
-hl.bind("SUPER + CTRL + SPACE", hl.dsp.exec_cmd("hk-menu-ags || pkill rofi"), { description = "AGS bar menu" })
+-- SUPER + CTRL + SPACE is left free: it is Wispr Flow's hands-free shortcut
+hl.bind("SUPER + SHIFT + SPACE", hl.dsp.exec_cmd("hk-menu-ags || pkill rofi"), { description = "AGS bar menu" })
 hl.bind("SUPER + CTRL + C", hl.dsp.exec_cmd("hk-menu-calculator || pkill rofi"), { description = "Calculator" })
 
 -- Notifications
@@ -17,6 +18,9 @@ hl.bind("SUPER + SHIFT + ALT + COMMA", hl.dsp.exec_cmd("makoctl restore"), { des
 
 -- Toggle nightlight
 hl.bind("SUPER + CTRL + N", hl.dsp.exec_cmd("hk-nightlight"), { description = "Toggle nightlight" })
+
+-- Pause or resume the mic mute switch starting Wispr hands-free (hk-wispr-switch)
+hl.bind("SUPER + ALT + D", hl.dsp.exec_cmd("hk-wispr-switch toggle"), { description = "Toggle Wispr mic switch" })
 
 -- Control panels
 hl.bind("SUPER + CTRL + A", hl.dsp.exec_cmd("hk-audio-launch"), { description = "Audio controls" })
