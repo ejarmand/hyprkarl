@@ -319,7 +319,7 @@ app_write() {
 }
 
 app_integrate() {
-  local id="$1" dir="$APP_OPT_DIR/$1/current" launcher="$APP_BIN_DIR/$1" desktop icon
+  local id="$1" dir="$APP_OPT_DIR/$1/current" launcher="$APP_BIN_DIR/$1" desktop icon entry
   mkdir -p "$APP_BIN_DIR" "$APP_DESKTOP_DIR" || return 1
 
   # Extra args go after the caller's so AppRun still sees its own flags
@@ -340,12 +340,17 @@ app_integrate() {
   fi
   icon=$(app_icon_path "$dir" "$desktop")
   # Replace the first word of every Exec (main entry and actions), keeping
-  # bundled flags and field codes like %U.
-  sed -E \
-    -e "s#^Exec=(\"[^\"]*\"|[^ ]+)#Exec=$launcher#" \
-    -e "s#^TryExec=.*#TryExec=$launcher#" \
-    -e "s#^Icon=.*#Icon=$icon#" \
-    "$desktop" | app_desktop_override | app_write "$APP_DESKTOP_DIR/$id.desktop" || return 1
+  # bundled flags and field codes like %U. Rendered in checked steps before
+  # writing, so a failed read cannot replace the entry with an empty one.
+  if ! entry=$(sed -E \
+      -e "s#^Exec=(\"[^\"]*\"|[^ ]+)#Exec=$launcher#" \
+      -e "s#^TryExec=.*#TryExec=$launcher#" \
+      -e "s#^Icon=.*#Icon=$icon#" \
+      "$desktop") || ! entry=$(app_desktop_override <<<"$entry") || [[ -z "$entry" ]]; then
+    warn "Cannot read the desktop entry $desktop"
+    return 1
+  fi
+  printf '%s\n' "$entry" | app_write "$APP_DESKTOP_DIR/$id.desktop" || return 1
   update-desktop-database "$APP_DESKTOP_DIR" &>/dev/null
   return 0
 }
