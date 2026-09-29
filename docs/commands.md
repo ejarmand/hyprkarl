@@ -227,6 +227,7 @@ and `previous` symlinks, a launcher at `~/.local/bin/<id>`, and a desktop entry.
   publishes one; `--sha256` is rejected here, as it is for URL installs only.
 - `hk-app install <url> [--sha256 HEX] [--id ID] [-- args...]`
   Install a direct AppImage URL. Manual installs are not updated.
+  `--channel` and `--asset` are rejected here, as they select GitHub releases.
 - `hk-app install <id>`
   Install from an existing config (e.g. on a new machine). Takes no options:
   edit the config instead.

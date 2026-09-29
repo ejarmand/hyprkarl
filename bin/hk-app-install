@@ -13,7 +13,8 @@
 #   --channel REGEX  Track releases whose tag matches REGEX (e.g. nightly);
 #                    admits prereleases. Default: newest stable release.
 #                    owner/repo installs only.
-#   --asset REGEX    AppImage asset regex (default: <arch>\.AppImage$)
+#   --asset REGEX    AppImage asset regex (default: <arch>\.AppImage$);
+#                    owner/repo installs only.
 #   --sha256 HEX     Expected checksum (URL installs only; GitHub releases
 #                    are checked against the asset's published digest)
 #
@@ -26,7 +27,7 @@ source "$SCRIPT_DIR/lib/app.sh"
 # --- Functions ---
 
 usage() {
-  sed -n '6,21p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '6,22p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 # Exit if option $1 has no value after it (shift 2 would fail and loop forever).
@@ -104,6 +105,9 @@ elif [[ "$source_arg" == *://* ]]; then
   fi
   if [[ -n "$opt_channel" ]]; then
     error "The --channel option is for owner/repo installs; a URL install has no releases to track"
+  fi
+  if [[ -n "$opt_asset" ]]; then
+    error "The --asset option is for owner/repo installs; a URL already names its AppImage"
   fi
   url="$source_arg" sha256="$opt_sha256" opt_url="$source_arg"
 elif [[ "$source_arg" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
