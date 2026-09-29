@@ -89,36 +89,43 @@ app_previous_tag() {
 
 # --- releases ---
 
+# Print one page (100 releases, newest first) of REPO's releases.
 app_github_releases() {
+  local path="repos/$1/releases?per_page=100&page=$2"
   # gh is authenticated (5000 req/h); anonymous curl gets 60.
   if gh auth token &>/dev/null; then
-    gh api "repos/$1/releases?per_page=50"
+    gh api "$path"
   else
-    curl -fsSL "https://api.github.com/repos/$1/releases?per_page=50"
+    curl -fsSL "https://api.github.com/$path"
   fi
 }
 
 app_latest() {
-  local json
+  local json page
   release_tag="" asset_name="" asset_url="" asset_sha256=""
-  json=$(app_github_releases "$repo")
-  if [[ -z "$json" ]]; then
-    warn "Cannot reach GitHub releases for $repo"
-    return 1
-  fi
-  # Newest non-draft release whose tag matches (or newest stable if no
-  # pattern), then its first asset matching asset_pattern.
-  IFS=$'\t' read -r release_tag asset_name asset_url asset_sha256 < <(
-    jq -r --arg tp "$tag_pattern" --arg ap "$asset_pattern" '
-      [ .[] | select(.draft | not)
-            | select(if $tp == "" then (.prerelease | not) else (.tag_name | test($tp)) end)
-            | . as $r | .assets[] | select(.name | test($ap))
-            | [$r.tag_name, .name, .browser_download_url, ((.digest // "") | sub("^sha256:"; ""))] ]
-      | first // empty | @tsv' <<<"$json")
-  if [[ -z "$release_tag" ]]; then
-    warn "No release in $repo matches tag '${tag_pattern:-<stable>}' and asset '$asset_pattern'"
-    return 1
-  fi
+  # Pages run newest first, so stop at the first page with a match. Capped
+  # at 5 pages to spare the anonymous rate limit.
+  for page in 1 2 3 4 5; do
+    json=$(app_github_releases "$repo" "$page")
+    if [[ -z "$json" ]]; then
+      warn "Cannot reach GitHub releases for $repo"
+      return 1
+    fi
+    # Newest non-draft release whose tag matches (or newest stable if no
+    # pattern), then its first asset matching asset_pattern.
+    IFS=$'\t' read -r release_tag asset_name asset_url asset_sha256 < <(
+      jq -r --arg tp "$tag_pattern" --arg ap "$asset_pattern" '
+        [ .[] | select(.draft | not)
+              | select(if $tp == "" then (.prerelease | not) else (.tag_name | test($tp)) end)
+              | . as $r | .assets[] | select(.name | test($ap))
+              | [$r.tag_name, .name, .browser_download_url, ((.digest // "") | sub("^sha256:"; ""))] ]
+        | first // empty | @tsv' <<<"$json")
+    [[ -n "$release_tag" ]] && return 0
+    # A short page is the last one.
+    [[ "$(jq length <<<"$json")" -lt 100 ]] && break
+  done
+  warn "No release in $repo matches tag '${tag_pattern:-<stable>}' and asset '$asset_pattern'"
+  return 1
 }
 
 # --- install steps ---
