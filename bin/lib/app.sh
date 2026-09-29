@@ -33,6 +33,7 @@
 #   app_dir_tag TAG                  Print TAG as a release dir name
 #   app_current_tag ID               Print the active release tag
 #   app_previous_tag ID              Print the rollback release tag
+#   app_valid_regex RE               Return 0 if RE is a valid jq regex
 #   app_latest                       Resolve the newest matching release; sets
 #                                    release_tag asset_name asset_url asset_sha256
 #   app_download URL NAME SHA256     Download into the cache; prints the file path
@@ -114,12 +115,25 @@ app_github_releases() {
   fi
 }
 
+app_valid_regex() {
+  jq -n --arg re "$1" '"" | test($re)' &>/dev/null
+}
+
 app_latest() {
-  local json page
+  local json page max_pages=5
   release_tag="" asset_name="" asset_url="" asset_sha256=""
+  # A bad pattern would fail jq on every page and read as "no match".
+  if [[ -n "$tag_pattern" ]] && ! app_valid_regex "$tag_pattern"; then
+    warn "Invalid tag_pattern regex for $repo: $tag_pattern"
+    return 1
+  fi
+  if ! app_valid_regex "$asset_pattern"; then
+    warn "Invalid asset_pattern regex for $repo: $asset_pattern"
+    return 1
+  fi
   # Pages run newest first, so stop at the first page with a match. Capped
-  # at 5 pages to spare the anonymous rate limit.
-  for page in 1 2 3 4 5; do
+  # to spare the anonymous rate limit.
+  for ((page = 1; page <= max_pages; page++)); do
     json=$(app_github_releases "$repo" "$page")
     if [[ -z "$json" ]]; then
       warn "Cannot reach GitHub releases for $repo"
@@ -138,7 +152,11 @@ app_latest() {
     # A short page is the last one.
     [[ "$(jq length <<<"$json")" -lt 100 ]] && break
   done
-  warn "No release in $repo matches tag '${tag_pattern:-<stable>}' and asset '$asset_pattern'"
+  if [[ "$page" -gt "$max_pages" ]]; then
+    warn "No release in the newest $((max_pages * 100)) of $repo matches tag '${tag_pattern:-<stable>}' and asset '$asset_pattern'"
+  else
+    warn "No release in $repo matches tag '${tag_pattern:-<stable>}' and asset '$asset_pattern'"
+  fi
   return 1
 }
 

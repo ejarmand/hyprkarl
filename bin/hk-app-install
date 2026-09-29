@@ -114,6 +114,12 @@ elif [[ "$source_arg" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
   if [[ -n "$opt_sha256" ]]; then
     error "The --sha256 option is for URL installs; $source_arg releases are checked against GitHub's asset digest"
   fi
+  if [[ -n "$opt_channel" ]] && ! app_valid_regex "$opt_channel"; then
+    error "The --channel value is not a valid regex: $opt_channel"
+  fi
+  if [[ -n "$opt_asset" ]] && ! app_valid_regex "$opt_asset"; then
+    error "The --asset value is not a valid regex: $opt_asset"
+  fi
   repo="$source_arg" tag_pattern="$opt_channel" opt_repo="$source_arg"
   asset_pattern="${opt_asset:-$(uname -m)\\.AppImage\$}"
 else
