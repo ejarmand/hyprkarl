@@ -18,7 +18,7 @@ CHOICE=$(echo -e "$UPDATE_HK\n$UPGRADE_PKGS\n$UPDATE_APPS" |
 case "$CHOICE" in
 "$UPDATE_HK") hk-tui-launch hk-update-tui ;;
 "$UPGRADE_PKGS") hk-tui-launch hk-pkg-upgrade ;;
-"$UPDATE_APPS") hk-tui-launch bash -c 'hk-app-update; hk-show-done' ;;
+"$UPDATE_APPS") hk-tui-launch bash -c 'if hk-app-update; then hk-show-done; else hk-show-done "Update failed. Press any key to close..."; fi' ;;
 "") exit 1 ;;
 esac
 
