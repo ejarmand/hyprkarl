@@ -20,7 +20,8 @@
 #                            A failure aborts the install.
 #
 # Layout per app:
-#   ~/.local/opt/<id>/<tag>/        extracted AppImage
+#   ~/.local/opt/<id>/<tag>/        extracted AppImage (tag made a single path
+#                                   component by app_dir_tag)
 #   ~/.local/opt/<id>/current       symlink to the active release
 #   ~/.local/opt/<id>/previous      symlink to the one before it (rollback)
 #   ~/.local/bin/<id>               launcher: runs current/AppRun
@@ -29,6 +30,7 @@
 # Functions:
 #   app_ids                          Print the id of every app config
 #   app_load ID                      Source ID's config into repo/url/args/...
+#   app_dir_tag TAG                  Print TAG as a release dir name
 #   app_current_tag ID               Print the active release tag
 #   app_previous_tag ID              Print the rollback release tag
 #   app_latest                       Resolve the newest matching release; sets
@@ -73,6 +75,18 @@ app_load() {
   fi
   source "$app_conf"
   asset_pattern="${asset_pattern:-$(uname -m)\\.AppImage\$}"
+}
+
+# Release tags become dir names under ~/.local/opt/<id>/, so make each a
+# single path component: "/" becomes "_", and a leading "." or "-" (which
+# covers . and ..) or a clash with the current/previous links gets a "_"
+# prefix.
+app_dir_tag() {
+  local tag="${1//\//_}"
+  if [[ "$tag" == [.-]* || "$tag" == current || "$tag" == previous ]]; then
+    tag="_$tag"
+  fi
+  printf '%s\n' "$tag"
 }
 
 app_current_tag() {
@@ -187,7 +201,8 @@ app_run_hook() {
 }
 
 app_commit() {
-  local id="$1" tag="$2" staged="$3" root="$APP_OPT_DIR/$1" dest fresh=0 old_cur old_prev
+  local id="$1" tag staged="$3" root="$APP_OPT_DIR/$1" dest fresh=0 old_cur old_prev
+  tag=$(app_dir_tag "$2")
   dest="$root/$tag"
   mkdir -p "$root"
   if [[ -d "$dest" ]]; then

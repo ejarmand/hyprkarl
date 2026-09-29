@@ -24,7 +24,8 @@ for id in "${ids[@]}"; do
     if [[ -z "$repo" ]]; then
       state="manual"
     elif app_latest 2>/dev/null; then
-      latest="$release_tag"
+      # The installed tag is a dir name, so compare against the latest one's.
+      latest=$(app_dir_tag "$release_tag")
       if [[ -z "$current" ]]; then
         state="not installed"
       elif [[ "$current" == "$latest" ]]; then

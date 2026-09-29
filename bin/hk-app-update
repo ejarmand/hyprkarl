@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/lib/app.sh"
 
 # Runs in a subshell per app, so an error exits only that app's update.
 update_app() {
-  local id="$1" current image staged=""
+  local id="$1" current latest image staged=""
   app_load "$id"
   current=$(app_current_tag "$id")
   if [[ -z "$current" ]]; then
@@ -24,17 +24,19 @@ update_app() {
     return 0
   fi
   app_latest || return 1
-  if [[ "$release_tag" == "$current" ]]; then
+  # The installed tag is a dir name, so compare against the latest one's.
+  latest=$(app_dir_tag "$release_tag")
+  if [[ "$latest" == "$current" ]]; then
     info "$id: up to date ($current)"
     return 0
   fi
   if [[ "$dry_run" -eq 1 ]]; then
-    info "$id: $current → $release_tag (dry run)"
+    info "$id: $current → $latest (dry run)"
     return 0
   fi
-  info "$id: $current → $release_tag"
+  info "$id: $current → $latest"
   # A rollback leaves the newer release extracted as previous.
-  if [[ ! -d "$APP_OPT_DIR/$id/$release_tag" ]]; then
+  if [[ ! -d "$APP_OPT_DIR/$id/$latest" ]]; then
     image=$(app_download "$asset_url" "$asset_name" "$asset_sha256") || return 1
     staged=$(app_stage "$image") || return 1
   fi
