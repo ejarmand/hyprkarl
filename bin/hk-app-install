@@ -126,11 +126,18 @@ if [[ -n "$repo" ]]; then
   tag="$release_tag"
 else
   image=$(app_download "$url" "$(basename "${url%%\?*}")" "$sha256") || exit 1
-  tag=""
+  # app_download already verified a given checksum; hash only when there was none.
+  image_sha="${sha256,,}"
+  [[ -z "$image_sha" ]] && image_sha=$(sha256sum "$image" | cut -d' ' -f1)
 fi
 staged=$(app_stage "$image") || exit 1
-# Manual installs have no release tag; name the release by its bundled version.
-[[ -z "$tag" ]] && tag=$(sed -n 's/^X-AppImage-Version=//p' "$staged"/*.desktop | head -n1)
+# URL installs have no release tag. Name the release by its bundled version
+# plus a content hash, so a new image under the same (or no) version gets its
+# own dir and a working rollback, while identical bytes reuse theirs.
+if [[ -z "$repo" ]]; then
+  version=$(sed -n 's/^X-AppImage-Version=//p' "$staged"/*.desktop | head -n1)
+  tag="${version:-manual}-${image_sha:0:12}"
+fi
 
 if [[ "$recipe" -eq 0 ]]; then
   id="$opt_id"
@@ -151,7 +158,7 @@ if [[ "$recipe" -eq 0 ]]; then
 fi
 
 # app_commit exits via error, so run it in a subshell to clean up after it.
-if ! ( app_commit "$id" "${tag:-manual}" "$staged" ); then
+if ! ( app_commit "$id" "$tag" "$staged" ); then
   # A new install's config goes with it, so retrying the same source works.
   if [[ "$recipe" -eq 0 ]]; then
     rm -f "$APP_CONF_DIR/$id.conf"
