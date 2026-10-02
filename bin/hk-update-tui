@@ -167,6 +167,8 @@ do_merge() {
   local upstream="$1"
   if gum spin --title "Merging $upstream..." -- git -C "$HK" merge --no-edit "$upstream"; then
     info "Merged $upstream."
+    # Check out the submodule commits the merge pinned.
+    git -C "$HK" submodule update --init || warn "Cannot update submodules; run: git submodule update --init"
     return 0
   fi
   if [[ -z "$(git -C "$HK" diff --name-only --diff-filter=U)" ]]; then

@@ -48,6 +48,7 @@ qt6ct
 resvg
 rofi
 rofi-calc
+rust
 satty
 slurp
 stow

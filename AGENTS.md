@@ -55,6 +55,8 @@ minor versions may include breaking changes — call them out in the changelog.
 - `applications/` → `~/.local/share/applications/`
 
 `bin/` is not stowed; it is added to `$PATH` directly via `config/uwsm/env`.
+`vendor/wispr-flow-helper` is a git submodule (the Wispr Flow helper fork,
+built by `hk-wispr-helper-install`); it is not stowed either.
 
 Editing files in this repo edits the live running config directly. Renaming or
 deleting a config file leaves a **stale symlink** (a live link pointing at a

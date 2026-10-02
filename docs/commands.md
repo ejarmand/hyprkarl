@@ -366,9 +366,14 @@ and `previous` symlinks, a launcher at `~/.local/bin/<id>`, and a desktop entry.
   personal words stay out of the repo).
 - `hk-wispr-helper-install [release-dir]`
   The `post_install` hook in `config/hyprkarl/apps/wispr-flow.conf`: builds
-  `wispr-flow-linux-helper` from the checkout at `WISPR_HELPER_SRC` and swaps
-  it into the release (shipped helper kept as `.orig`). Rebuild and reinstall
-  it with `hk-app config-update wispr-flow`.
+  `wispr-flow-linux-helper` from the `vendor/wispr-flow-helper` submodule
+  (the `local` branch of
+  [ejarmand/wisprflow-linux-helper](https://github.com/ejarmand/wisprflow-linux-helper),
+  fetched on first use; set `WISPR_HELPER_SRC` to build another checkout) and
+  swaps it into the release (shipped helper kept as `.orig`). Rebuild and
+  reinstall it with `hk-app config-update wispr-flow`; to pick up new helper
+  commits, run `git submodule update --remote vendor/wispr-flow-helper` and
+  commit the new pin.
 - `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
   Export Wispr's dictation history (raw ASR, cleaned and pasted text, audio)
   to `~/Documents/wispr-exports/` for review.

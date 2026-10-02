@@ -23,6 +23,9 @@ would edit.
   Files copied or rendered by setup and install commands
 - `applications/`
   Desktop files exposed under `~/.local/share/applications/`
+- `vendor/wispr-flow-helper/`
+  Git submodule: the Wispr Flow helper fork that `hk-wispr-helper-install`
+  builds (`git submodule update --init` after cloning)
 
 ## Stateful Runtime Files
 
