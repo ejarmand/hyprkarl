@@ -1,0 +1,202 @@
+#!/bin/bash
+# hk-app-install
+# Install an AppImage into ~/.local/opt with a launcher and desktop entry, and
+# record it in config/hyprkarl/apps/<id>.conf so hk-app update tracks it.
+#
+# Usage:
+#   hk-app-install <id>                        Install from an existing config (no options)
+#   hk-app-install <owner/repo> [options] [-- launcher args...]
+#   hk-app-install <url> [options] [-- launcher args...]
+#
+# Options:
+#   --id ID          App id (default: the AppImage's desktop entry name)
+#   --channel REGEX  Track releases whose tag matches REGEX (e.g. nightly);
+#                    admits prereleases. Default: newest stable release.
+#                    owner/repo installs only.
+#   --asset REGEX    AppImage asset regex (default: <arch>\.AppImage$);
+#                    owner/repo installs only.
+#   --sha256 HEX     Expected checksum (URL installs only; GitHub releases
+#                    are checked against the asset's published digest)
+#
+# Example:
+#   hk-app-install pingdotgg/t3code --channel nightly -- --no-sandbox
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "$SCRIPT_DIR/lib/app.sh"
+
+# --- Functions ---
+
+usage() {
+  cat <<'EOF'
+Usage:
+  hk-app-install <id>                        Install from an existing config (no options)
+  hk-app-install <owner/repo> [options] [-- launcher args...]
+  hk-app-install <url> [options] [-- launcher args...]
+
+Options:
+  --id ID          App id (default: the AppImage's desktop entry name)
+  --channel REGEX  Track releases whose tag matches REGEX (e.g. nightly);
+                   admits prereleases. Default: newest stable release.
+                   owner/repo installs only.
+  --asset REGEX    AppImage asset regex (default: <arch>\.AppImage$);
+                   owner/repo installs only.
+  --sha256 HEX     Expected checksum (URL installs only; GitHub releases
+                   are checked against the asset's published digest)
+
+Example:
+  hk-app-install pingdotgg/t3code --channel nightly -- --no-sandbox
+EOF
+}
+
+# Exit if option $1 has no value after it (shift 2 would fail and loop forever).
+need_value() {
+  if [[ $# -lt 2 ]]; then
+    echo "Missing value for $1" >&2
+    usage >&2
+    exit 1
+  fi
+}
+
+# Write a new app config from the command-line options.
+write_conf() {
+  local id="$1" file="$APP_CONF_DIR/$1.conf"
+  mkdir -p "$APP_CONF_DIR"
+  {
+    printf '# %s — installed by hk-app. Edit, then run: hk-app config-update %s\n' "$id" "$id"
+    if [[ -n "$opt_repo" ]]; then
+      printf 'repo=%q\n' "$opt_repo"
+      [[ -n "$opt_channel" ]] && printf 'tag_pattern=%q\n' "$opt_channel"
+    else
+      printf '# Manual install: hk-app update skips apps without a repo.\n'
+      printf 'url=%q\n' "$opt_url"
+      [[ -n "$opt_sha256" ]] && printf 'sha256=%q\n' "$opt_sha256"
+    fi
+    [[ -n "$opt_asset" ]] && printf 'asset_pattern=%q\n' "$opt_asset"
+    printf 'args=(%s)\n' "${opt_args[*]@Q}"
+    printf "# post_install='command'   # runs with APP_ID, APP_DIR, APP_TAG set\n"
+  } > "$file"
+  info "Wrote $file"
+}
+
+# --- Script Body ---
+
+source_arg="${1:-}"
+shift || true
+opt_id="" opt_repo="" opt_url="" opt_channel="" opt_asset="" opt_sha256=""
+opt_args=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --id)      need_value "$@"; opt_id="$2"; shift 2 ;;
+    --channel) need_value "$@"; opt_channel="$2"; shift 2 ;;
+    --asset)   need_value "$@"; opt_asset="$2"; shift 2 ;;
+    --sha256)  need_value "$@"; opt_sha256="$2"; shift 2 ;;
+    --)        shift; opt_args=("$@"); break ;;
+    *)         echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
+  esac
+done
+
+if [[ "$source_arg" == "-h" || "$source_arg" == "--help" ]]; then
+  usage
+  exit 0
+fi
+if [[ -z "$source_arg" ]]; then
+  usage >&2
+  exit 1
+fi
+# Check --id before any download, so a typo fails fast.
+if [[ -n "$opt_id" && ! "$opt_id" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+  error "Invalid --id $opt_id: use letters, digits, '.', '_' or '-', starting with a letter or digit"
+fi
+
+app_lock
+
+if [[ -n "$opt_id" && -f "$APP_CONF_DIR/$opt_id.conf" ]]; then
+  error "$opt_id already has a config; edit $APP_CONF_DIR/$opt_id.conf and run hk-app install $opt_id"
+fi
+
+# An existing config is a recipe: install exactly what it describes.
+recipe=0
+if [[ "$source_arg" != */* && -f "$APP_CONF_DIR/$source_arg.conf" ]]; then
+  recipe=1
+  id="$source_arg"
+  if [[ -n "$opt_id$opt_channel$opt_asset$opt_sha256" || ${#opt_args[@]} -gt 0 ]]; then
+    error "Install options do not apply to an existing config; edit $APP_CONF_DIR/$id.conf, then run hk-app config-update $id or hk-app update $id (hk-app install $id if not installed yet)"
+  fi
+  app_load "$id"
+elif [[ "$source_arg" == *://* ]]; then
+  if [[ -n "$opt_sha256" && ! "$opt_sha256" =~ ^[0-9a-fA-F]{64}$ ]]; then
+    error "The --sha256 value must be 64 hex characters"
+  fi
+  if [[ -n "$opt_channel" ]]; then
+    error "The --channel option is for owner/repo installs; a URL install has no releases to track"
+  fi
+  if [[ -n "$opt_asset" ]]; then
+    error "The --asset option is for owner/repo installs; a URL already names its AppImage"
+  fi
+  url="$source_arg" sha256="$opt_sha256" opt_url="$source_arg"
+elif [[ "$source_arg" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+  if [[ -n "$opt_sha256" ]]; then
+    error "The --sha256 option is for URL installs; $source_arg releases are checked against GitHub's asset digest"
+  fi
+  if [[ -n "$opt_channel" ]] && ! app_valid_regex "$opt_channel"; then
+    error "The --channel value is not a valid regex: $opt_channel"
+  fi
+  if [[ -n "$opt_asset" ]] && ! app_valid_regex "$opt_asset"; then
+    error "The --asset value is not a valid regex: $opt_asset"
+  fi
+  repo="$source_arg" tag_pattern="$opt_channel" opt_repo="$source_arg"
+  asset_pattern="${opt_asset:-$(uname -m)\\.AppImage\$}"
+else
+  error "No config named $source_arg, and it is not an owner/repo or URL"
+fi
+
+if [[ -n "$repo" ]]; then
+  app_latest || exit 1
+  image=$(app_download "$asset_url" "$asset_name" "$asset_sha256") || exit 1
+  tag="$release_tag"
+else
+  image=$(app_download "$url" "$(basename "${url%%\?*}")" "$sha256") || exit 1
+  # app_download already verified a given checksum; hash only when there was none.
+  image_sha="${sha256,,}"
+  [[ -z "$image_sha" ]] && image_sha=$(sha256sum "$image" | cut -d' ' -f1)
+fi
+staged=$(app_stage "$image") || exit 1
+# URL installs have no release tag. Name the release by its bundled version
+# plus a content hash, so a new image under the same (or no) version gets its
+# own dir and a working rollback, while identical bytes reuse theirs.
+if [[ -z "$repo" ]]; then
+  version=$(sed -n 's/^X-AppImage-Version=//p' "$staged"/*.desktop | head -n1)
+  tag="${version:-manual}-${image_sha:0:12}"
+fi
+
+if [[ "$recipe" -eq 0 ]]; then
+  id="$opt_id"
+  if [[ -z "$id" ]]; then
+    desktop=$(find "$staged/" -maxdepth 1 -name '*.desktop' | head -n1)
+    id=$(basename "${desktop:-}" .desktop)
+  fi
+  if [[ ! "$id" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+    rm -rf "$(dirname "$staged")"
+    error "Cannot derive an app id from the AppImage's desktop entry; pass --id"
+  fi
+  if [[ -f "$APP_CONF_DIR/$id.conf" ]]; then
+    rm -rf "$(dirname "$staged")"
+    error "$id already has a config; edit $APP_CONF_DIR/$id.conf and run hk-app install $id"
+  fi
+  write_conf "$id"
+  app_load "$id"
+fi
+
+# app_commit exits via error, so run it in a subshell to clean up after it.
+if ! ( app_commit "$id" "$tag" "$staged" ); then
+  # A new install's config goes with it, so retrying the same source works.
+  if [[ "$recipe" -eq 0 ]]; then
+    rm -f "$APP_CONF_DIR/$id.conf"
+    info "Removed $APP_CONF_DIR/$id.conf"
+  fi
+  exit 1
+fi
+info "Launcher: $APP_BIN_DIR/$id"
+app_running "$id" && warn "$id is running: restart it to use this version"
+exit 0

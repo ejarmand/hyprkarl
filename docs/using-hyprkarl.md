@@ -19,7 +19,7 @@ Its top-level sections are:
 - `Launch`
   App launcher
 - `Install`
-  Package install menus
+  Package, Docker, and AppImage install menus
 - `Uninstall`
   Package uninstall menus
 - `Utilities`
@@ -121,6 +121,8 @@ Install sources are:
   `hk-pkg-install-tui --flatpak`
 - Docker services:
   `hk-menu-docker-install`
+- AppImages (GitHub owner/repo or URL):
+  `hk-app install <owner/repo|url>`
 
 The package menus use `fzf` to search available packages.
 

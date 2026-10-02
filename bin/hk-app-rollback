@@ -1,0 +1,36 @@
+#!/bin/bash
+# hk-app-rollback
+# Swap an app's current and previous releases.
+#
+# Usage: hk-app-rollback <id>
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "$SCRIPT_DIR/lib/app.sh"
+
+id="${1:-}"
+if [[ -z "$id" ]]; then
+  echo "Usage: hk-app-rollback <id>" >&2
+  exit 1
+fi
+
+app_load "$id"
+app_lock
+current=$(app_current_tag "$id")
+previous=$(app_previous_tag "$id")
+if [[ -z "$current" || -z "$previous" || ! -d "$APP_OPT_DIR/$id/$previous" ]]; then
+  error "$id has no previous release to roll back to"
+fi
+
+root="$APP_OPT_DIR/$id"
+# Raw link targets (relative or absolute), to put back if the swap fails.
+current_link=$(readlink "$root/current")
+previous_link=$(readlink "$root/previous")
+if ! app_relink "$previous" "$root/current" || ! app_relink "$current" "$root/previous" || ! app_integrate "$id"; then
+  if ! app_restore "$id" "$current_link" "$previous_link"; then
+    error "Cannot roll $id back, nor restore the current and previous links in $root"
+  fi
+  error "Cannot roll $id back; it is still on $current"
+fi
+info "Rolled $id back to $previous ($current is now previous)"
+app_running "$id" && warn "$id is running: restart it to use this version"
+exit 0

@@ -8,10 +8,10 @@ deploy step. Full command reference: `docs/commands.md`.
 
 - **Simple command** — one script, one action. The default.
 - **Dispatcher** — a command with three or more distinct actions (`hk-theme`,
-  `hk-wallpaper`, `hk-update`, `hk-pkg`, `hk-fingerprint`, `hk-docker`). Each
+  `hk-wallpaper`, `hk-update`, `hk-pkg`, `hk-fingerprint`, `hk-docker`, `hk-app`). Each
   subcommand lives as its own top-level command in the form
   `hk-<noun>-<action>`; the dispatcher is a thin router that `exec`s it.
-- **`bin/lib/`** — sourced helpers shared by two or more commands (`docker.sh`,
+- **`bin/lib/`** — sourced helpers shared by two or more commands (`app.sh`, `docker.sh`,
   `update.sh`). Not for single-use logic; keep that in the command itself.
 
 ## Naming
