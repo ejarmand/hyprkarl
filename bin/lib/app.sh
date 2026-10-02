@@ -9,6 +9,8 @@
 #   repo=owner/name          GitHub repo to install releases from (omit for a
 #                            manual URL install, which hk-app update skips)
 #   url=https://...          Direct AppImage URL (manual installs only)
+#   sha256=HEX               Expected checksum of the url download (GitHub
+#                            releases use the asset's published digest)
 #   tag_pattern='-nightly\.' Regex a release tag must match; this also admits
 #                            prereleases. Unset: newest non-prerelease.
 #   asset_pattern='...'      Regex for the AppImage asset (default: <arch>.AppImage)

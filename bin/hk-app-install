@@ -27,7 +27,25 @@ source "$SCRIPT_DIR/lib/app.sh"
 # --- Functions ---
 
 usage() {
-  sed -n '6,22p' "$0" | sed 's/^# \{0,1\}//'
+  cat <<'EOF'
+Usage:
+  hk-app-install <id>                        Install from an existing config (no options)
+  hk-app-install <owner/repo> [options] [-- launcher args...]
+  hk-app-install <url> [options] [-- launcher args...]
+
+Options:
+  --id ID          App id (default: the AppImage's desktop entry name)
+  --channel REGEX  Track releases whose tag matches REGEX (e.g. nightly);
+                   admits prereleases. Default: newest stable release.
+                   owner/repo installs only.
+  --asset REGEX    AppImage asset regex (default: <arch>\.AppImage$);
+                   owner/repo installs only.
+  --sha256 HEX     Expected checksum (URL installs only; GitHub releases
+                   are checked against the asset's published digest)
+
+Example:
+  hk-app-install pingdotgg/t3code --channel nightly -- --no-sandbox
+EOF
 }
 
 # Exit if option $1 has no value after it (shift 2 would fail and loop forever).
@@ -78,10 +96,17 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$source_arg" || "$source_arg" == "-h" || "$source_arg" == "--help" ]]; then
+if [[ "$source_arg" == "-h" || "$source_arg" == "--help" ]]; then
   usage
-  [[ -z "$source_arg" ]] && exit 1
   exit 0
+fi
+if [[ -z "$source_arg" ]]; then
+  usage >&2
+  exit 1
+fi
+# Check --id before any download, so a typo fails fast.
+if [[ -n "$opt_id" && ! "$opt_id" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+  error "Invalid --id $opt_id: use letters, digits, '.', '_' or '-', starting with a letter or digit"
 fi
 
 app_lock
@@ -153,7 +178,7 @@ if [[ "$recipe" -eq 0 ]]; then
   fi
   if [[ ! "$id" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
     rm -rf "$(dirname "$staged")"
-    error "Cannot derive an app id; pass --id"
+    error "Cannot derive an app id from the AppImage's desktop entry; pass --id"
   fi
   if [[ -f "$APP_CONF_DIR/$id.conf" ]]; then
     rm -rf "$(dirname "$staged")"

@@ -34,12 +34,14 @@ reconfigure_app() {
 
 # --- Script Body ---
 
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  echo "Usage: hk-app-config-update [id...]"
-  exit 0
-fi
-
-ids=("$@")
+ids=()
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help) echo "Usage: hk-app-config-update [id...]"; exit 0 ;;
+    -*) echo "Unknown option: $arg" >&2; exit 1 ;;
+    *) ids+=("$arg") ;;
+  esac
+done
 [[ ${#ids[@]} -eq 0 ]] && mapfile -t ids < <(app_ids)
 
 app_lock
