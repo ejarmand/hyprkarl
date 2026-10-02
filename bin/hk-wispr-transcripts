@@ -2,8 +2,8 @@
 
 # Export Wispr Flow's dictation history for review: every transcript with the
 # raw speech recognition next to what was pasted, plus the recordings as WAV.
-# Reads a copy of Wispr's local database (kept under the macOS path
-# ~/Library/Application Support even on Linux), never the live file.
+# Reads a copy of Wispr's local database (in $WISPR_APP_SUPPORT_DIR, which the
+# Linux build sets to ~/.config/Wispr Flow), never the live file.
 #
 # Usage: hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]
 #   Default DIR: ~/Documents/wispr-exports/<date-time>/
@@ -18,7 +18,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-DB_DIR = Path.home() / "Library/Application Support/Wispr Flow"
+DB_DIR = Path(os.environ.get("WISPR_APP_SUPPORT_DIR") or Path.home() / ".config/Wispr Flow")
 
 FIELDS = [
     ("transcriptEntityId", "id"),
