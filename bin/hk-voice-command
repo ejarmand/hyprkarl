@@ -182,7 +182,7 @@ PASTE_KEY=""
 SUFFIXES=()
 JOIN_GLOBAL=""
 JOIN_APP=""
-declare -A COMPLETIONS
+declare -A COMPLETIONS COMPLETION_DIRS
 LIST_APP=()
 LIST_GLOBAL=()
 title=""
@@ -212,6 +212,7 @@ while IFS= read -r line; do
     case $key in
       leader | 'paste with' | 'join with') shown="" ;;
       'send suffix') shown="... ${line#* = }" ;;
+      'complete '*' from') shown="" ;;
       'complete '*) shown="... ${key#complete } <name> ..." ;;
       *) shown=${line%% = *} ;;
     esac
@@ -230,6 +231,12 @@ while IFS= read -r line; do
       global) JOIN_GLOBAL="${line#* = }" ;;
       app) JOIN_APP="${line#* = }" ;;
     esac
+    continue
+  fi
+  # "complete <word> from = DIR...": the picker only takes names of DIRs' subdirectories
+  if [[ $key == 'complete '*' from' ]]; then
+    word=${key#complete }
+    [[ $section == app ]] && COMPLETION_DIRS[${word% from}]="${line#* = }"
     continue
   fi
   # "complete <word> = <trigger> <accept keys>", e.g. "complete mention = @ Tab"
@@ -290,58 +297,170 @@ start_fresh() {
   rm -f "$STATE.last"
 }
 
-# Paste text, turning each "<word> <name>" (e.g. "mention alice") into the
-# app's picker: the trigger and the name go in as their own pieces, the name's
-# last character as a real key press so the picker opens, then the accept key.
-# Wispr does the same for Cursor file tags (it pastes "@", then the name, then
-# presses Tab). Takes about a second per picker, longer than the helper and
-# Wispr wait for a paste (2 s and 3 s), so callers run it in the background.
-has_completions() {
-  local words
-  ((${#COMPLETIONS[@]} > 0)) || return 1
-  words=$(printf '%s|' "${!COMPLETIONS[@]}")
-  shopt -s nocasematch
-  [[ $1 =~ (^|[^[:alnum:]])(${words%|})[[:space:][:punct:]]+[[:alnum:]] ]]
-  local found=$?
-  shopt -u nocasematch
-  return $found
+# Pickers: "<word> <name>" (e.g. "mention alice", "skill pr ping pong") in a
+# dictation opens the app's picker. The trigger and the name are typed as key
+# presses, not pasted: a picker only opens on typed input, and Wispr restores
+# its clipboard right after this script answers, which clobbered pasted ones.
+# Wispr does the same for Cursor file tags (it types "@", the name, then Tab).
+
+# Print the names a word's picker may take: its "from" dirs' subdirectories.
+completion_names() {
+  local dir path
+  local -a dirs
+  read -ra dirs <<<"${COMPLETION_DIRS[$1]}"
+  for dir in "${dirs[@]}"; do
+    [[ $dir == '~/'* ]] && dir="$HOME/${dir#'~/'}"
+    for path in "$dir"/*/; do
+      [[ -d $path ]] && basename "$path"
+    done
+  done | sort -u
 }
 
-paste_with_completions() {
-  local keys=$1 rest=$2 words spec trigger accept before name last
-  words=$(printf '%s|' "${!COMPLETIONS[@]}")
-  words=${words%|}
-  shopt -s nocasematch
-  while [[ $rest =~ (^|[^[:alnum:]])($words)[[:space:][:punct:]]+([[:alnum:]_-]+) ]]; do
-    before="${rest%%"${BASH_REMATCH[0]}"*}${BASH_REMATCH[1]}"
-    rest="${rest#*"${BASH_REMATCH[0]}"}"
+# Print "<words used> <name>" for the name the spoken words ($2...) refer to:
+# the longest run of up to four words that, joined with "-", is a name, one
+# edit from a name (a mishearing such as "crilling"), or the start of names.
+# Without "from" dirs the picker takes the next word as is. Prints nothing when
+# no name fits, so "skill set" or "this skill is" stay plain text.
+pick_name() {
+  local word=$1
+  shift
+  (($# > 0)) || return 0
+  local -a spoken=("${@,,}")
+  spoken=("${spoken[@]//[\'’]/}")
+  if [[ -z ${COMPLETION_DIRS[$word]} ]]; then
+    echo "1 ${spoken[0]}"
+    return 0
+  fi
+  completion_names "$word" | awk -v words="${spoken[*]:0:4}" '
+    function dist(a, b,   i, j, la, lb, d, x) {
+      la = length(a); lb = length(b)
+      for (i = 0; i <= la; i++) d[i, 0] = i
+      for (j = 0; j <= lb; j++) d[0, j] = j
+      for (i = 1; i <= la; i++)
+        for (j = 1; j <= lb; j++) {
+          x = d[i - 1, j - 1] + (substr(a, i, 1) != substr(b, j, 1))
+          if (d[i - 1, j] + 1 < x) x = d[i - 1, j] + 1
+          if (d[i, j - 1] + 1 < x) x = d[i, j - 1] + 1
+          d[i, j] = x
+        }
+      return d[la, lb]
+    }
+    { names[++n] = $0 }
+    END {
+      m = split(words, w, " ")
+      for (k = m; k >= 1; k--) {
+        p = w[1]
+        for (i = 2; i <= k; i++) p = p "-" w[i]
+        for (i = 1; i <= n; i++) if (names[i] == p) { print k, p; exit }
+        if (length(p) >= 5)
+          for (i = 1; i <= n; i++) if (dist(names[i], p) <= 1) { print k, names[i]; exit }
+        if (length(p) >= 3) {
+          hits = 0
+          for (i = 1; i <= n; i++) if (index(names[i], p) == 1) { hits++; hit = names[i] }
+          if (hits) { print k, (hits == 1 ? hit : p); exit }
+        }
+      }
+    }'
+}
+
+# Split text into PLAN steps: "text:<raw text>" to paste and
+# "pick:<word>:<name>" to type into a picker. Returns 1 without any picker.
+plan_completions() {
+  local text=$1 pending="" lower word pick used next i
+  local -a seps=() toks=()
+  PLAN=()
+  ((${#COMPLETIONS[@]} > 0)) || return 1
+  while [[ $text =~ ^([^[:alnum:]]*)([[:alnum:]]+([\'’_-][[:alnum:]]+)*) ]]; do
+    seps+=("${BASH_REMATCH[1]}")
+    toks+=("${BASH_REMATCH[2]}")
+    text=${text:${#BASH_REMATCH[0]}}
+  done
+  seps+=("$text")
+  i=0
+  while ((i < ${#toks[@]})); do
+    lower=${toks[i],,}
+    word=""
+    if [[ -n ${COMPLETIONS[$lower]+set} ]]; then
+      word=$lower
+    elif [[ -n ${COMPLETIONS[${lower%s}]+set} ]]; then
+      word=${lower%s}
+    fi
+    pick=""
+    [[ -n $word ]] && pick=$(pick_name "$word" "${toks[@]:i+1}")
+    if [[ -z $pick ]]; then
+      pending+="${seps[i]}${toks[i]}"
+      ((i++))
+      continue
+    fi
+    used=${pick%% *}
+    PLAN+=("text:$pending${seps[i]}" "pick:$word:${pick#* }")
+    pending=""
+    next=$((i + 1 + used))
     # Wispr sentence-cases "Skill review." -- a full stop straight after the
     # name is its artifact, not the user's.
-    [[ $rest == .* ]] && rest=${rest#.}
-    spec=${COMPLETIONS[${BASH_REMATCH[2],,}]}
-    trigger=${spec%% *}
-    accept=${spec#"$trigger"}
-    name=${BASH_REMATCH[3]}
-    last=${name: -1}
-    [[ -n $before ]] && paste_raw "$keys" "$before"
-    paste_raw "$keys" "$trigger"
-    [[ ${#name} -gt 1 ]] && paste_raw "$keys" "${name%?}"
-    if [[ -n $DRY_RUN ]]; then
-      echo "key: ${last,,}${accept:+ | then:$accept}"
-    else
-      hk-voice-keys "${last,,}"
-      sleep 0.3
-      # shellcheck disable=SC2086 # accept is a list of key steps
-      [[ -n ${accept// /} ]] && hk-voice-keys $accept
-    fi
+    seps[next]=${seps[next]#.}
+    i=$next
   done
-  shopt -u nocasematch
-  [[ -n $rest ]] && paste_raw "$keys" "$rest"
+  PLAN+=("text:$pending${seps[${#toks[@]}]}")
+  [[ ${PLAN[*]} == *pick:* ]]
+}
+
+# Type text as key presses (letters, digits and the usual name punctuation).
+type_keys() {
+  local -a steps=()
+  local c i
+  for ((i = 0; i < ${#1}; i++)); do
+    c=${1:i:1}
+    case $c in
+      [a-z0-9]) steps+=("$c") ;;
+      [A-Z]) steps+=("SHIFT+${c,,}") ;;
+      -) steps+=(minus) ;;
+      _) steps+=(SHIFT+minus) ;;
+      .) steps+=(period) ;;
+      /) steps+=(slash) ;;
+      :) steps+=(SHIFT+semicolon) ;;
+      @) steps+=(SHIFT+2) ;;
+      '#') steps+=(SHIFT+3) ;;
+      '$') steps+=(SHIFT+4) ;;
+    esac
+  done
+  if [[ -n $DRY_RUN ]]; then
+    echo "type: $1"
+  else
+    hk-voice-keys "${steps[@]}"
+  fi
+}
+
+# Paste and type the PLAN. Takes a second or more, longer than the helper and
+# Wispr wait (2 s and 3 s), so callers run it in the background.
+run_plan() {
+  local keys=$1 step word spec trigger accept
+  for step in "${PLAN[@]}"; do
+    case $step in
+      text:) ;;
+      text:*) paste_raw "$keys" "${step#text:}" ;;
+      pick:*)
+        step=${step#pick:}
+        word=${step%%:*}
+        spec=${COMPLETIONS[$word]}
+        trigger=${spec%% *}
+        accept=${spec#"$trigger"}
+        type_keys "$trigger${step#*:}"
+        if [[ -n $DRY_RUN ]]; then
+          echo "then:${accept:- (none)}"
+        else
+          sleep 0.3
+          # shellcheck disable=SC2086 # accept is a list of key steps
+          [[ -n ${accept// /} ]] && hk-voice-keys $accept
+        fi
+        ;;
+    esac
+  done
   return 0
 }
 
 paste_and_send() {
-  paste_with_completions "$1" "$2" || true
+  run_plan "$1" || true
   if [[ -n $DRY_RUN ]]; then
     echo "then Return"
   else
@@ -354,7 +473,8 @@ in_background() {
   if [[ -n $DRY_RUN ]]; then
     "$@"
   else
-    ("$@") </dev/null >/dev/null 2>&1 &
+    # Let Wispr restore its clipboard first: it does so once this script answers.
+    (sleep 0.5; "$@") </dev/null >/dev/null 2>&1 &
     disown
   fi
 }
@@ -371,10 +491,11 @@ for suffix in "${SUFFIXES[@]}"; do
     body="${BASH_REMATCH[1]}"
     join_previous
     start_fresh
-    if has_completions "$body"; then
-      in_background paste_and_send "${PASTE_KEY:-CTRL+V}" "${body%[,;:]}"
+    if plan_completions "${body%[,;:]}"; then
+      in_background paste_and_send "${PASTE_KEY:-CTRL+V}"
     else
-      paste_and_send "${PASTE_KEY:-CTRL+V}" "${body%[,;:]}"
+      PLAN=("text:${body%[,;:]}")
+      paste_and_send "${PASTE_KEY:-CTRL+V}"
     fi
     exit 0
   fi
@@ -397,8 +518,8 @@ done
 # Ctrl+Shift+V), paste the exact transcript here so the helper skips its Ctrl+V.
 join_previous
 remember_dictation
-if has_completions "$1"; then
-  in_background paste_with_completions "${PASTE_KEY:-CTRL+V}" "$1"
+if plan_completions "$1"; then
+  in_background run_plan "${PASTE_KEY:-CTRL+V}"
   exit 0
 fi
 if [[ -n $PASTE_KEY ]]; then
