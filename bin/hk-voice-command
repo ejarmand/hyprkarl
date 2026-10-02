@@ -405,6 +405,9 @@ plan_completions() {
   [[ ${PLAN[*]} == *pick:* ]]
 }
 
+# Pause between typed keys, in seconds.
+TYPE_DELAY=0.015
+
 # Type text as key presses (letters, digits and the usual name punctuation).
 type_keys() {
   local -a steps=()
@@ -426,9 +429,18 @@ type_keys() {
   done
   if [[ -n $DRY_RUN ]]; then
     echo "type: $1"
-  else
-    hk-voice-keys "${steps[@]}"
+    return
   fi
+  # About 25 ms a key (hyprctl itself takes ~10): quick, but still visibly
+  # typed. hk-voice-keys pauses 100 ms after each step.
+  local step key mods
+  for step in "${steps[@]}"; do
+    key=${step##*+}
+    mods=""
+    [[ $step == *+* ]] && mods=${step%+*}
+    hyprctl dispatch "hl.dsp.send_shortcut({ mods = '${mods//+/ }', key = '$key' })" >/dev/null
+    sleep "$TYPE_DELAY"
+  done
 }
 
 # Paste and type the PLAN. Takes a second or more, longer than the helper and
