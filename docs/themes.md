@@ -27,6 +27,7 @@ Hyprkarl:
 - updates the wallpaper state
 - updates GNOME and QT themes
 - reloads Hyprland, mako, terminals, and `btop`
+- rebuilds the Starship prompt config (`hk-starship-reload`)
 - restarts AGS (picks up the new `bar.scss`)
 
 ## Switch the Active Theme
@@ -179,6 +180,41 @@ Optional theme files:
   switch and embedded in `gtk-theme/index.theme`.
 - `icons/`
   Theme-local icons used by Hyprkarl helpers and notifications.
+- `starship.toml`
+  A `[palettes.hyprkarl]` table for the Starship prompt. See
+  [Starship Prompt](#starship-prompt).
+
+## Starship Prompt
+
+Starship has no include mechanism, so Hyprkarl builds the prompt config.
+`hk-starship-reload` reads your layout from `~/.config/starship.toml`. If the
+active theme has a `starship.toml`, the command appends that file's
+`[palettes.hyprkarl]` table and selects it with `palette = 'hyprkarl'`, in
+place of the layout's own top-level `palette` line. Otherwise it copies the
+layout unchanged. The result goes to `~/.local/state/hyprkarl/starship.toml`,
+and `config/uwsm/env` points `STARSHIP_CONFIG` there. Open shells pick up the
+new colors at their next prompt.
+
+`hk-theme set` and login run the command. Run `hk-starship-reload` yourself
+after you edit `~/.config/starship.toml`. Edits to the generated file are lost.
+
+A layout uses the palette by referring to color names instead of hex values,
+for example `bg:color_blue fg:color_fg0`. The theme palettes define these
+keys:
+
+| Key | Use |
+| --- | --- |
+| `color_fg0` | Text on the colored segments |
+| `color_fg1` | Text on the `color_bg1` and `color_bg3` segments |
+| `color_bg1`, `color_bg3` | Surface segments at the end of the line |
+| `color_purple`, `color_orange`, `color_yellow`, `color_aqua`, `color_blue` | Segment backgrounds, in order along the prompt |
+| `color_green`, `color_red` | Success and error prompt characters |
+
+Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
+layout still works under themes without a `starship.toml` and on machines
+without Hyprkarl. Don't define `[palettes.hyprkarl]` in the layout, because the
+merged file would then contain the table twice. Only `vera-light` and
+`vera-dark` ship a Starship palette.
 
 ## Create a New Theme
 

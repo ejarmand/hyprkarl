@@ -100,7 +100,9 @@ hk-theme set <theme-name>    # hyprkarl, everforest, gruvbox, vera-light, vera-d
 ```
 
 When adding a new component that needs theming, add a corresponding file to
-each theme directory. Themes can also be generated from a single color palette
+each theme directory. The Starship prompt is the exception: a theme may ship a
+`starship.toml` palette, and `hk-starship-reload` merges it with the user's
+`~/.config/starship.toml` (see `docs/themes.md`). Themes can also be generated from a single color palette
 with the companion
 [theme generator](https://github.com/KarlJussila/hyprkarl-theme-generator)
 (locally at `../theme-generator/`).

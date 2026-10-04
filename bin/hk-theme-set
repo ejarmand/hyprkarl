@@ -50,3 +50,4 @@ hyprctl reload >/dev/null
 hk-mako-reload
 hk-terminal-reload
 hk-btop-reload
+hk-starship-reload

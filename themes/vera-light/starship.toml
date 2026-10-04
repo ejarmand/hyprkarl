@@ -1,0 +1,14 @@
+# Starship palette, merged into ~/.config/starship.toml by hk-starship-reload.
+# Deep segments carry cream text; the trailing surface segments carry dark blue.
+[palettes.hyprkarl]
+color_fg0 = '#f6f3e9'
+color_fg1 = '#253b4b'
+color_bg1 = '#e7eae7'
+color_bg3 = '#d4ddde'
+color_purple = '#6e4a82'
+color_orange = '#a12b51'
+color_yellow = '#805c21'
+color_aqua = '#226775'
+color_blue = '#275f89'
+color_green = '#1e6558'
+color_red = '#a12b51'

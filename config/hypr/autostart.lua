@@ -6,6 +6,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("uwsm app -- ags run")
     hl.exec_cmd("uwsm app -- hyprpaper")
     hl.exec_cmd("hk-wallpaper init || hk-wallpaper cycle")
+    hl.exec_cmd("hk-starship-reload")
 
     -- Slow app launch fix -- set systemd vars
     hl.exec_cmd("systemctl --user import-environment $(env | cut -d'=' -f 1)")

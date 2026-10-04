@@ -346,6 +346,10 @@ and `previous` symlinks, a launcher at `~/.local/bin/<id>`, and a desktop entry.
   Restart the PipeWire audio service.
 - `hk-btop-reload`
   Reload the running `btop` so it picks up theme changes.
+- `hk-starship-reload`
+  Rebuild the Starship prompt config from `~/.config/starship.toml` and the
+  active theme's palette. `hk-theme set` and login run it; run it yourself
+  after editing `~/.config/starship.toml`. See [Themes](themes.md#starship-prompt).
 
 ## Voice Commands (Wispr Flow)
 
