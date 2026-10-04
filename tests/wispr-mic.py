@@ -134,7 +134,9 @@ def clip_info(path):
 # --- Scoring ---
 
 def words(text):
-    return re.sub(r"[^a-z0-9' ]", " ", (text or "").lower().replace("-", " ")).split()
+    # Wispr formats some dictations as HTML lists (<ul><li>...): drop the tags
+    text = re.sub(r"<[^>]+>", " ", text or "")
+    return re.sub(r"[^a-z0-9' ]", " ", text.lower().replace("-", " ")).split()
 
 
 def edit_distance(ref, hyp):
@@ -422,6 +424,11 @@ def report(path=None):
             sys.exit("No results yet")
         path = runs[-1]
     records = [json.loads(line) for line in open(path)]
+    # Rescore from the stored text, so scoring fixes apply to old runs too
+    for r in records:
+        if r.get("asr") is not None:
+            r["wer"] = wer(r["reference"], r["asr"])
+            r["wer_formatted"] = wer(r["reference"], r["formatted"])
     profiles = list(dict.fromkeys(r["profile"] for r in records))
     clips = list(dict.fromkeys(r["clip"] for r in records))
 
