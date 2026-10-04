@@ -205,10 +205,11 @@ keys:
 | Key | Use |
 | --- | --- |
 | `color_fg0` | Text on the colored segments |
-| `color_fg1` | Text on the `color_bg1` and `color_bg3` segments |
+| `color_fg1` | Text on the time segment (`color_bg1`) |
+| `color_fg2` | Text on the Docker and Conda segments (`color_bg3`) |
 | `color_bg1`, `color_bg3` | Surface segments at the end of the line |
-| `color_purple`, `color_orange`, `color_yellow`, `color_aqua`, `color_blue` | Segment backgrounds, in order along the prompt |
-| `color_green`, `color_red` | Success and error prompt characters |
+| `color_magenta`, `color_orange`, `color_yellow`, `color_aqua`, `color_blue` | Segment backgrounds, in order along the prompt |
+| `color_green`, `color_red`, `color_purple` | Prompt character for success, error, and Vim replace mode |
 
 Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
 layout still works under themes without a `starship.toml` and on machines

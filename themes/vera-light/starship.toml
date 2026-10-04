@@ -3,8 +3,10 @@
 [palettes.hyprkarl]
 color_fg0 = '#f6f3e9'
 color_fg1 = '#253b4b'
+color_fg2 = '#275f89'
 color_bg1 = '#e7eae7'
 color_bg3 = '#d4ddde'
+color_magenta = '#6e4a82'
 color_purple = '#6e4a82'
 color_orange = '#a12b51'
 color_yellow = '#805c21'
