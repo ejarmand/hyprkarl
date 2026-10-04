@@ -164,7 +164,15 @@ tests/wispr-mic.py run                          # off and whisper, every clip
 tests/wispr-mic.py run -p off,whisper,whisper-bright -n 3 tirade
 tests/wispr-mic.py report                       # the table from the last run
 tests/wispr-mic.py restore                      # chain back on the mic, after a crash
+tests/wispr-mic.py chain start|stop|status      # this checkout's chain, in its own PipeWire process
 ```
+
+The harness runs this checkout's `hk-wispr-profile` and profiles, not the ones
+on `$PATH`, so it can test a worktree without touching the live config.
+`chain start` loads this checkout's `wispr-mic.conf` into a private `pipewire
+-c` process, a client of the PipeWire daemon like `filter-chain.service`: no
+stow and no `hk-audio-restart`, and `chain stop` removes it. Only one Wispr
+Mic can exist at a time, so it refuses while the live chain is loaded.
 
 `{a|b}` in a reference marks a span you're unsure of; the closer alternative is
 scored. Clips added from `hk-wispr-transcripts` are Wispr's own 16 kHz copies,
@@ -182,8 +190,8 @@ itself, which is what the chain sees live.
 - **Real dictations.** Each trial is a normal Wispr dictation: it lands in your
   history and counts toward any usage limits.
 - Wispr must be running with "Wispr Mic (virtual)" as its mic, and
-  `hk-wispr-switch` must be running. The run stops if Wispr records from
-  anything else.
+  `hk-wispr-switch` must be running a version with `press` (restart it, then
+  Wispr). The run stops if Wispr records from anything else.
 - Don't touch the mic's mute switch during a run: `hk-wispr-switch` would press
   the shortcut too.
 - The previous profile is restored at the end; if the harness dies mid-run,

@@ -20,12 +20,20 @@
 #                                                   replay and score
 #   tests/wispr-mic.py report [RESULTS.jsonl]       score table (default: last run)
 #   tests/wispr-mic.py restore                      reconnect the chain to the mic
+#   tests/wispr-mic.py chain start|stop|status      run this checkout's chain
+#                                                   in a private PipeWire process
 #
 # A reference may mark a span it is unsure of as {remove|retire}; the closer
 # alternative is scored.
 #
+# It uses this checkout's hk-wispr-profile and profiles, not the ones on $PATH,
+# so a worktree can be tested without touching the live config. `chain start`
+# likewise loads this checkout's chain into its own PipeWire process, leaving
+# the PipeWire daemon alone; only one Wispr Mic may exist at a time.
+#
 # Needs: Wispr running with "Wispr Mic (virtual)" picked as its mic,
-# hk-wispr-switch running, and a scratch text field focused (Wispr pastes every
+# hk-wispr-switch running (with `press`, so restart it and then Wispr after
+# updating it), and a scratch text field focused (Wispr pastes every
 # transcript). Don't touch the mic's mute switch during a run.
 
 import argparse
@@ -45,6 +53,9 @@ import wave
 from array import array
 from pathlib import Path
 
+REPO = Path(__file__).resolve().parent.parent
+CHAIN_CONF = REPO / "config/pipewire/pipewire.conf.d/wispr-mic.conf"
+CHAIN_DIR = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / "hk-wispr-mic-chain"
 DATA = Path(os.environ.get("HK_WISPR_MIC_DIR") or Path.home() / ".local/share/hk-wispr-mic")
 CLIPS = DATA / "clips"
 RESULTS = DATA / "results"
@@ -62,6 +73,13 @@ TRANSCRIPT_TIMEOUT = 45
 
 def sh(*cmd, check=True):
     return subprocess.run(cmd, capture_output=True, text=True, check=check).stdout
+
+
+def hk(*cmd):
+    """Run one of this checkout's hk-* commands against this checkout."""
+    env = {**os.environ, "HYPRKARL_PATH": str(REPO)}
+    return subprocess.run([str(REPO / "bin" / cmd[0]), *cmd[1:]], capture_output=True,
+                          text=True, check=True, env=env).stdout
 
 
 # --- Clips ---
@@ -185,7 +203,7 @@ class Replay:
                          f"sink_name={REPLAY_SINK}", "channel_map=mono",
                          "sink_properties=device.description=hk-wispr-replay"
                          " priority.session=0 priority.driver=0").strip()
-        sh("pactl", "move-source-output", str(stream["index"]), f"{REPLAY_SINK}.monitor")
+        move_chain(f"{REPLAY_SINK}.monitor")
         return self
 
     def play(self, wav):
@@ -196,10 +214,22 @@ class Replay:
         sh("pactl", "unload-module", self.module, check=False)
 
 
-def restore():
+def move_chain(source):
+    """Point the chain's input at `source` and wait for the move, which
+    WirePlumber makes asynchronously."""
     stream = chain_stream()
-    if stream:
-        sh("pactl", "move-source-output", str(stream["index"]), MIC, check=False)
+    sh("pactl", "move-source-output", str(stream["index"]), source, check=False)
+    target = source_index(source)
+    deadline = time.time() + 3
+    while (stream := chain_stream()) and str(stream["source"]) != target:
+        if time.time() > deadline:
+            sys.exit(f"Wispr Mic's input did not move to {source}")
+        time.sleep(0.1)
+
+
+def restore():
+    if chain_stream():
+        move_chain(MIC)
 
 
 # --- Wispr ---
@@ -229,7 +259,7 @@ def last_timestamp():
 
 
 def press():
-    sh("hk-wispr-switch", "press")
+    hk("hk-wispr-switch", "press")
 
 
 def dictate(replay, wav):
@@ -259,9 +289,53 @@ def dictate(replay, wav):
 
 def profile(name=None):
     if name is None:
-        return sh("hk-wispr-profile", "status").strip()
-    sh("hk-wispr-profile", name)
+        return hk("hk-wispr-profile", "status").strip()
+    hk("hk-wispr-profile", name)
     return name
+
+
+# --- Private chain ---
+
+def chain_pid():
+    try:
+        pid = int((CHAIN_DIR / "pid").read_text())
+        return pid if "pipewire" in Path(f"/proc/{pid}/cmdline").read_text() else None
+    except (OSError, ValueError):
+        return None
+
+
+def chain(action):
+    """Run CHAIN_CONF in its own `pipewire -c` (a client of the PipeWire
+    daemon, like filter-chain.service), so testing never restarts audio."""
+    pid = chain_pid()
+    if action == "status":
+        print(f"private chain running (pid {pid})" if pid else "no private chain")
+        return
+    if action == "stop":
+        if pid:
+            os.kill(pid, 15)
+        (CHAIN_DIR / "pid").unlink(missing_ok=True)
+        return
+    if pid:
+        sys.exit(f"private chain already running (pid {pid})")
+    if source_index(CHAIN_SOURCE):
+        sys.exit("Wispr Mic already exists (the live chain?): only one at a time")
+    conf_d = CHAIN_DIR / "daemon.conf.d"
+    conf_d.mkdir(parents=True, exist_ok=True)
+    shutil.copy("/usr/share/pipewire/filter-chain.conf", CHAIN_DIR / "daemon.conf")
+    shutil.copy(CHAIN_CONF, conf_d / "wispr-mic.conf")
+    log = open(CHAIN_DIR / "log.txt", "w")
+    proc = subprocess.Popen(["pipewire", "-c", "daemon.conf"], stdout=log, stderr=log,
+                            stdin=subprocess.DEVNULL, start_new_session=True,
+                            env={**os.environ, "PIPEWIRE_CONFIG_DIR": str(CHAIN_DIR)})
+    (CHAIN_DIR / "pid").write_text(str(proc.pid))
+    deadline = time.time() + 5
+    while not source_index(CHAIN_SOURCE) and time.time() < deadline:
+        time.sleep(0.2)
+    if not source_index(CHAIN_SOURCE):
+        chain("stop")
+        sys.exit(f"the chain did not load (lsp-plugins-ladspa installed? see {CHAIN_DIR}/log.txt)")
+    print(f"Wispr Mic running from {CHAIN_CONF} (pid {proc.pid})")
 
 
 # --- Commands ---
@@ -363,6 +437,8 @@ def main():
     p = sub.add_parser("report")
     p.add_argument("results", nargs="?")
     sub.add_parser("restore")
+    c = sub.add_parser("chain")
+    c.add_argument("action", choices=["start", "stop", "status"])
     args = parser.parse_args()
 
     if args.cmd == "add":
@@ -378,6 +454,8 @@ def main():
         report(args.results)
     elif args.cmd == "restore":
         restore()
+    elif args.cmd == "chain":
+        chain(args.action)
 
 
 if __name__ == "__main__":
