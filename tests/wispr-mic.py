@@ -22,6 +22,10 @@
 #   tests/wispr-mic.py restore                      reconnect the chain to the mic
 #   tests/wispr-mic.py chain start|stop|status      run this checkout's chain
 #                                                   in a private PipeWire process
+#   tests/wispr-mic.py mine [--since YYYY-MM-DD]    find dictations sent through
+#                                                   T3 Code as candidate clips
+#   tests/wispr-mic.py candidates [--all]           list them (edited ones first)
+#   tests/wispr-mic.py accept ID NAME ["REFERENCE"] make one a clip
 #
 # A reference may mark a span it is unsure of as {remove|retire}; the closer
 # alternative is scored.
@@ -37,7 +41,9 @@
 # transcript). Don't touch the mic's mute switch during a run.
 
 import argparse
+import contextlib
 import datetime
+import difflib
 import itertools
 import json
 import math
@@ -59,6 +65,10 @@ CHAIN_DIR = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / "hk-wispr-mic-chai
 DATA = Path(os.environ.get("HK_WISPR_MIC_DIR") or Path.home() / ".local/share/hk-wispr-mic")
 CLIPS = DATA / "clips"
 RESULTS = DATA / "results"
+CANDIDATES = DATA / "candidates.jsonl"
+T3_DB = Path(os.environ.get("T3_STATE_DB") or Path.home() / ".t3/userdata/statev2.sqlite")
+MATCH_WINDOW = datetime.timedelta(minutes=30)
+MAX_MATCH_DISTANCE = 0.5    # word edits per pasted word
 WISPR_DB = Path(os.environ.get("WISPR_APP_SUPPORT_DIR") or Path.home() / ".config/Wispr Flow")
 MIC = os.environ.get("HK_WISPR_SWITCH_SOURCE",
                      "alsa_input.usb-0c76_JOUNIVO_MICROPHONE-00.mono-fallback")
@@ -252,6 +262,20 @@ def latest_dictations(since):
     return rows
 
 
+@contextlib.contextmanager
+def snapshot_db(files, name):
+    """Open a copy of a live SQLite database (with its -wal/-shm), deleted
+    afterwards: Wispr's holds every recording."""
+    with tempfile.TemporaryDirectory() as snapshot:
+        for f in files:
+            shutil.copy2(f, snapshot)
+        con = sqlite3.connect(os.path.join(snapshot, name))
+        try:
+            yield con
+        finally:
+            con.close()
+
+
 def last_timestamp():
     with tempfile.TemporaryDirectory() as snapshot:
         for f in WISPR_DB.glob("flow.sqlite*"):
@@ -366,6 +390,100 @@ def chain(action):
     print(f"Wispr Mic running from {CHAIN_CONF} (pid {proc.pid})")
 
 
+# --- Mining T3 Code ---
+
+def utc(stamp):
+    """Wispr ("2026-10-03 04:04:28.918 +00:00") and T3 ("...Z") timestamps."""
+    stamp = stamp.replace(" +00:00", "+00:00").replace("Z", "+00:00").replace(" ", "T", 1)
+    return datetime.datetime.fromisoformat(stamp)
+
+
+def best_span(pasted, message):
+    """Where word list `pasted` best fits inside `message`, free to start and
+    end anywhere: (edit distance, start, end)."""
+    prev, start = [0] * (len(message) + 1), list(range(len(message) + 1))
+    for i, p in enumerate(pasted, 1):
+        cur, cur_start = [i] + [0] * len(message), [0] * (len(message) + 1)
+        for j, m in enumerate(message, 1):
+            cur[j], cur_start[j] = min((prev[j - 1] + (p != m), start[j - 1]),
+                                       (prev[j] + 1, start[j]),
+                                       (cur[j - 1] + 1, cur_start[j - 1]))
+        prev, start = cur, cur_start
+    dist, end = min((d, j) for j, d in enumerate(prev))
+    return dist, start[end], end
+
+
+def mine(since):
+    """Pair each dictation with the T3 Code message it was sent in, if any:
+    the matching span of the message is what the user actually sent, edits
+    included. Writes CANDIDATES for review; nothing becomes a clip yet."""
+    with snapshot_db(T3_DB.parent.glob(T3_DB.name + "*"), T3_DB.name) as t3:
+        messages = [(utc(m["createdAt"]), words(m["text"])) for m in (
+            json.loads(p) for (p,) in t3.execute(
+                "SELECT payload_json FROM orchestration_v2_projection_messages"
+                " WHERE role = 'user'"))]
+    with snapshot_db(WISPR_DB.glob("flow.sqlite*"), "flow.sqlite") as wispr:
+        rows = wispr.execute(
+            "SELECT transcriptEntityId, timestamp, asrText, pastedText FROM History"
+            " WHERE pastedText != '' AND audio IS NOT NULL AND timestamp >= ?"
+            " ORDER BY timestamp", (since or "",)).fetchall()
+
+    found = []
+    for entity, stamp, asr, pasted in rows:
+        pasted_words = words(pasted)
+        if len(pasted_words) < 3:
+            continue
+        sent_at = utc(stamp)
+        best = None
+        for when, message in messages:
+            if sent_at <= when <= sent_at + MATCH_WINDOW:
+                dist, a, b = best_span(pasted_words, message)
+                if best is None or dist < best[0]:
+                    best = (dist, " ".join(message[a:b]))
+        if best and best[0] / len(pasted_words) <= MAX_MATCH_DISTANCE:
+            found.append({"id": entity, "time": stamp, "asr": asr, "pasted": pasted,
+                          "sent": best[1], "distance": round(best[0] / len(pasted_words), 3)})
+    DATA.mkdir(parents=True, exist_ok=True)
+    with open(CANDIDATES, "w") as out:
+        for c in found:
+            out.write(json.dumps(c, ensure_ascii=False) + "\n")
+    edited = sum(1 for c in found if c["distance"] > 0)
+    print(f"{len(found)} of {len(rows)} dictations matched a T3 message: "
+          f"{edited} edited, {len(found) - edited} sent unchanged. See `candidates`.")
+
+
+def load_candidates():
+    if not CANDIDATES.exists():
+        sys.exit("No candidates yet: run `mine`")
+    return [json.loads(line) for line in open(CANDIDATES)]
+
+
+def show_candidates(show_all):
+    found = sorted(load_candidates(), key=lambda c: -c["distance"])
+    for c in found if show_all else [c for c in found if c["distance"] > 0]:
+        pasted = words(c["pasted"])
+        sent = c["sent"].split()
+        changes = [f"{' '.join(pasted[i1:i2]) or '-'} -> {' '.join(sent[j1:j2]) or '-'}"
+                   for tag, i1, i2, j1, j2 in
+                   difflib.SequenceMatcher(None, pasted, sent).get_opcodes() if tag != "equal"]
+        print(f"{c['id'][:8]}  {c['time'][:16]}  {c['distance']:.2f}  {'; '.join(changes)}")
+        print(f"          sent: {c['sent']}")
+
+
+def accept(prefix, name, reference):
+    matches = [c for c in load_candidates() if c["id"].startswith(prefix)]
+    if len(matches) != 1:
+        sys.exit(f"{len(matches)} candidates match {prefix}")
+    c = matches[0]
+    with snapshot_db(WISPR_DB.glob("flow.sqlite*"), "flow.sqlite") as wispr:
+        audio = wispr.execute("SELECT audio FROM History WHERE transcriptEntityId = ?",
+                              (c["id"],)).fetchone()[0]
+    with tempfile.NamedTemporaryFile(suffix=".wav") as wav:
+        wav.write(audio)
+        wav.flush()
+        add(name, wav.name, reference or c["sent"])
+
+
 # --- Commands ---
 
 def run(profiles, repeat, names):
@@ -460,6 +578,14 @@ def main():
     r.add_argument("name")
     r.add_argument("reference")
     sub.add_parser("list")
+    mi = sub.add_parser("mine")
+    mi.add_argument("--since", help="only dictations on or after YYYY-MM-DD (UTC)")
+    ca = sub.add_parser("candidates")
+    ca.add_argument("--all", action="store_true", help="include ones sent unchanged")
+    ac = sub.add_parser("accept")
+    ac.add_argument("id", help="a candidate id, or a unique prefix of one")
+    ac.add_argument("name")
+    ac.add_argument("reference", nargs="?", help="default: the text that was sent")
     u = sub.add_parser("run")
     u.add_argument("-p", "--profiles", default="off,whisper",
                    help="comma-separated (default: off,whisper)")
@@ -476,6 +602,12 @@ def main():
         add(args.name, args.wav, args.reference)
     elif args.cmd == "record":
         record(args.name, args.reference)
+    elif args.cmd == "mine":
+        mine(args.since)
+    elif args.cmd == "candidates":
+        show_candidates(args.all)
+    elif args.cmd == "accept":
+        accept(args.id, args.name, args.reference)
     elif args.cmd == "list":
         for name, reference in load_clips().items():
             print(f"{name:<20} {clip_info(CLIPS / f'{name}.wav')}\n{'':<20} {reference}")
