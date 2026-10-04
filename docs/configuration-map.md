@@ -149,6 +149,26 @@ a new session.
 keys and personal settings. It is gitignored and never tracked. `setup-dotfiles.sh`
 creates it from `config/uwsm/env.local.example` on first run if it doesn't exist.
 
+## Wispr Mic
+
+`config/pipewire/pipewire.conf.d/wispr-mic.conf` loads a PipeWire filter chain
+into the main PipeWire daemon. It reads the USB mic and offers the result as
+the source "Wispr Mic (virtual)"; Wispr only honors a hand-picked mic whose name
+contains "(virtual)". The chain is fixed (mono):
+
+    high-pass -> presence EQ -> gain -> expander -> de-esser -> limiter
+
+The expander, de-esser and limiter are LSP plugins (`lsp-plugins-ladspa`). If
+they are missing, PipeWire starts without Wispr Mic. After editing the chain,
+run `hk-audio-restart`.
+
+`config/hyprkarl/wispr-mic/<profile>.conf` are the profiles: control values
+that `hk-wispr-profile` sets on the running chain. `off.conf` holds every
+control at its neutral value (flat, dynamics bypassed) and must match the
+defaults in `wispr-mic.conf`; the others list only what they change, optionally
+on top of a `base = <profile>`. `tests/wispr-mic.py` compares profiles on fixed
+recordings by word error rate.
+
 ## AGS Bar
 
 The AGS bar lives under `config/ags/bar/`. The main editing surfaces are:

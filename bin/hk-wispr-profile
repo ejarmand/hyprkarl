@@ -1,0 +1,112 @@
+#!/bin/bash
+# hk-wispr-profile
+# Switch the DSP profile on Wispr Mic, the filtered mic Wispr Flow records from.
+#
+# Usage: hk-wispr-profile [status|list|toggle|cycle|<profile>]
+#   status     Print the active profile (the default)
+#   list       Print the available profiles
+#   toggle     Switch between off and whisper (from any other profile: off)
+#   cycle      Switch to the next profile, wrapping around to off
+#   <profile>  Switch to a profile in config/hyprkarl/wispr-mic/ (off, whisper, ...)
+#
+# A profile sets controls on the running filter chain
+# (config/pipewire/pipewire.conf.d/wispr-mic.conf), so Wispr's stream carries on
+# uninterrupted. Restarting PipeWire resets the chain to off.
+# $HK_WISPR_MIC_NODE names another chain to control, e.g. a test copy.
+
+# --- Constants ---
+PROFILE_DIR="$HYPRKARL_PATH/config/hyprkarl/wispr-mic"
+NODE="${HK_WISPR_MIC_NODE:-wispr_mic}"
+STATE="${XDG_RUNTIME_DIR:-/tmp}/hk-wispr-profile.$NODE"
+
+# --- Functions ---
+node_id() {
+  pw-dump Node | jq -r --arg n "$NODE" '.[] | select(.info.props["node.name"] == $n) | .id'
+}
+
+profiles() {
+  echo off
+  ls "$PROFILE_DIR" | sed -n 's/\.conf$//p' | grep -vx off | LC_ALL=C sort
+}
+
+# A profile's control lines, after those of its base profile (later lines win)
+profile_lines() {
+  local file="$PROFILE_DIR/$1.conf"
+  local base
+  base="$(sed -n 's/^base *= *//p' "$file")"
+  if [[ -n "$base" ]]; then
+    profile_lines "$base"
+  fi
+  grep -v -e '^ *#' -e '^ *$' -e '^base *=' "$file"
+}
+
+# The state file holds "<node id> <profile>"; a new node id means PipeWire
+# restarted and the chain is back to off.
+current() {
+  local id="$1"
+  local saved_id saved_profile
+  read -r saved_id saved_profile 2>/dev/null < "$STATE"
+  if [[ "$saved_id" == "$id" && -n "$saved_profile" ]]; then
+    echo "$saved_profile"
+  else
+    echo off
+  fi
+}
+
+apply() {
+  local id="$1" name="$2"
+  local params="" line key value
+  while IFS= read -r line; do
+    key="${line%%=*}"
+    key="${key%"${key##*[! ]}"}"
+    value="${line#*=}"
+    value="${value// /}"
+    params+=" \"$key\" $value"
+  done < <(profile_lines off; profile_lines "$name")
+  pw-cli set-param "$id" Props "{ params = [$params ] }" > /dev/null
+  echo "$id $name" > "$STATE"
+}
+
+# --- Script Body ---
+action="${1:-status}"
+
+if [[ "$action" == list ]]; then
+  profiles
+  exit 0
+fi
+
+id="$(node_id)"
+if [[ -z "$id" ]]; then
+  echo "Wispr Mic ($NODE) is not running: is lsp-plugins-ladspa installed? Then run hk-audio-restart." >&2
+  exit 1
+fi
+
+case "$action" in
+  status)
+    current "$id"
+    exit 0
+    ;;
+  toggle)
+    name=off
+    if [[ "$(current "$id")" == off ]]; then
+      name=whisper
+    fi
+    ;;
+  cycle)
+    name="$(profiles | grep -A1 -x "$(current "$id")" | sed -n 2p)"
+    name="${name:-off}"
+    ;;
+  *)
+    # Spoken names arrive with spaces ("whisper bright" for whisper-bright)
+    name="${action// /-}"
+    ;;
+esac
+
+if [[ ! -f "$PROFILE_DIR/$name.conf" ]]; then
+  echo "Usage: hk-wispr-profile [status|list|toggle|cycle|$(profiles | paste -sd'|')]" >&2
+  exit 1
+fi
+
+apply "$id" "$name"
+notify-send -h string:x-canonical-private-synchronous:wispr-profile -a hk-wispr-profile \
+  -t 2000 "Wispr Mic" "Profile: $name"

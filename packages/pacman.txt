@@ -27,6 +27,7 @@ imv
 jq
 lm_sensors
 localsend
+lsp-plugins-ladspa
 mako
 mpv
 nautilus
