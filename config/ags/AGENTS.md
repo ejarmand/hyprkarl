@@ -107,6 +107,11 @@ To register a new widget kind: import its component, defaults, and Config in `ba
 - `style.scss` — root stylesheet that `@use`s the partials; most bar changes belong in `theme.scss`, not here.
 - GTK still supplies base colors; each theme's `bar.scss` overrides the palette.
 
+`vera-light` and `vera-dark` use primary foreground text in `bar.scss` and
+cobalt accents. Both retain the default widget layout. Their source overrides
+live in each theme's `templates/`; update those alongside generated styling
+when changing the Vera themes so regeneration preserves the change.
+
 CSS class naming conventions:
 - `bar-*` — bar shell and layout structure.
 - `widget-*` — widget-level public hooks.

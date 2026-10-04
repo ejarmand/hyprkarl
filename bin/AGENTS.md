@@ -36,3 +36,10 @@ outside `lib/update.sh` and the setup scripts, which must run from a TTY.
 Several scripts embed Nerd Font glyphs in menu labels (rofi entries). These
 private-use-area characters are easy to drop silently when rewriting a whole
 file — prefer targeted edits to full-file rewrites in the `hk-menu-*` scripts.
+
+## Theme selection
+
+`hk-theme-list` discovers theme directories, including `vera-light` and
+`vera-dark`; new themes need no command-specific registration. `hk-theme-set`
+uses the theme's `light.mode` marker to select GNOME's light preference.
+Keep mode and palette choices in the theme files.

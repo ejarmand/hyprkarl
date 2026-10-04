@@ -12,3 +12,10 @@ config/hyprkarl/wispr-dictionary.csv
 # Locally added wallpapers (hk-wallpaper-add) stay out of the tree; each theme
 # ships only the wallpapers committed upstream
 themes/*/wallpapers/*
+
+# Private reference artwork stays local.
+/2000s_vera_art_0001_a.jpg
+
+# Plain default backgrounds shipped with the Vera themes.
+!themes/vera-light/wallpapers/01-default.png
+!themes/vera-dark/wallpapers/01-default.png

@@ -119,6 +119,15 @@ To build your own theme, either generate one from a color palette with
 [docs/themes.md](docs/themes.md) for both approaches and the full theme layout.
 
 Provided themes:
+
+- `vera-light` uses cream paper, blue ink, teal, lavender, and raspberry.
+- `vera-dark` uses a deep blue background and softer versions of those accents.
+
+Both Vera themes include a plain background matching their palette. Switch
+with `hk-theme set vera-light` or `hk-theme set vera-dark`. See
+[the Vera theme notes](docs/themes.md#vera-light-and-dark) for palettes and
+regeneration instructions.
+
 <details>
 <summary>hyprkarl</summary>
 

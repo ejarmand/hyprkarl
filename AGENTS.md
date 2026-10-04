@@ -96,7 +96,7 @@ symlink `config/hyprkarl/current/theme` (plus `theme.name`).
 
 Switch themes with:
 ```bash
-hk-theme set <theme-name>    # hyprkarl, everforest, gruvbox
+hk-theme set <theme-name>    # hyprkarl, everforest, gruvbox, vera-light, vera-dark
 ```
 
 When adding a new component that needs theming, add a corresponding file to
@@ -104,6 +104,15 @@ each theme directory. Themes can also be generated from a single color palette
 with the companion
 [theme generator](https://github.com/KarlJussila/hyprkarl-theme-generator)
 (locally at `../theme-generator/`).
+
+`vera-light` and `vera-dark` ship plain backgrounds matching their palettes.
+The reference painting is private and must stay out of commits; custom
+wallpapers remain ignored under each theme's `wallpapers/` directory.
+Each keeps its generator source in `palette.yaml` and `templates/`. Preserve
+the light variant's `light.mode`, GTK light preference, and Neovim light
+background when editing it. Its GTK CSS is compiled from Colloid's Light
+entrypoints; the companion generator currently defaults to Dark. See
+`docs/themes.md` for regeneration instructions.
 
 ### `hk-*` Commands
 

@@ -44,6 +44,85 @@ To list installed themes, run:
 hk-theme list
 ```
 
+## Vera light and dark
+
+`vera-light` and `vera-dark` take their colors from a private painting.
+The artwork stays local. Both ship a plain background matching their palette
+as `wallpapers/01-default.png`. The light theme uses cream paper and dark blue text;
+the dark theme uses a deep blue background and cream text. Cobalt marks active
+windows, teal marks success, raspberry marks errors, and lavender adds a
+second accent. Yellow becomes darker ochre in light mode so it stays readable.
+
+| Color | `vera-light` | `vera-dark` |
+| --- | --- | --- |
+| Background | `#f6f3e9` | `#141e2a` |
+| Foreground | `#253b4b` | `#edeade` |
+| Blue | `#275f89` | `#86b6db` |
+| Teal | `#1e6558` | `#82bfaa` |
+| Lavender | `#6e4a82` | `#b4a0d4` |
+| Raspberry | `#a12b51` | `#ef7c9c` |
+| Ochre / yellow | `#805c21` | `#e6cf8d` |
+
+```bash
+hk-theme set vera-light
+hk-theme set vera-dark
+```
+
+To use your own wallpaper, select the theme first, then run
+`hk-wallpaper add /path/to/your/image.jpg`. Repeat for the other variant if
+you want the same wallpaper in both. Locally added wallpapers are ignored
+by Git; only the plain default backgrounds ship with these themes.
+
+They cover the same applications as the existing themes, including GTK 3/4,
+Qt 5/6, Neovim, and all four terminals. Their bar layout matches `hyprkarl`.
+Only `vera-light` has `light.mode`; its GTK settings and Neovim background also
+select light mode. Foot supplies matching `[colors-dark]` and `[colors-light]`
+sections so terminal color-scheme detection preserves the selected palette.
+Both keep the GTK installation name `hyprkarl`, which matches the stowed
+theme bundle. Their Qt palette paths target `/home/earmand/.config/`; update
+those paths when installing on a different account.
+
+### Regenerate the Vera themes
+
+Each theme keeps its source palette in `palette.yaml` and template overrides
+in `templates/`. The original generation used companion generator commit
+`2645fecd819980f7f1c4482cc52deaeb5fc4ee6e`. Use its dependencies and `sassc`
+as described in that project's README. Run the following from the generator
+checkout, with `HYPRKARL_PATH` pointing to this repository:
+
+```bash
+for name in vera-light vera-dark; do
+  mkdir -p "palettes/$name/templates/wallpapers"
+  cp "$HYPRKARL_PATH/themes/$name/palette.yaml" "palettes/$name/"
+  cp -a "$HYPRKARL_PATH/themes/$name/templates/." "palettes/$name/templates/"
+  cp "$HYPRKARL_PATH/themes/$name/wallpapers/01-default.png" \
+    "palettes/$name/templates/wallpapers/"
+done
+python generate.py vera-dark
+python - <<'PY'
+import colloid
+from generate import generate
+
+compile_sass = colloid._run_sassc
+
+def compile_light(source, destination):
+    source = source.with_name(source.name.replace("-Dark", "-Light"))
+    compile_sass(source, destination)
+
+colloid._run_sassc = compile_light
+generate("vera-light")
+PY
+for name in vera-light vera-dark; do
+  cp -a "output/$name/." "$HYPRKARL_PATH/themes/$name/"
+done
+```
+
+The light build selects Colloid's Light SCSS entrypoints because this version
+of the generator hardcodes Dark entrypoints. The light theme's internal
+palette override supplies the light-to-dark GTK grey scale. Keep both when
+regenerating. The commands above preserve `palette.yaml` and `templates/` in
+the installed theme directories.
+
 ## Theme Contents
 
 The simplest way to create a theme is to copy an existing one and keep the same
