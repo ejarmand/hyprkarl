@@ -66,6 +66,8 @@ CHAIN_STREAM = "wispr_mic.capture"
 CHAIN_SOURCE = "wispr_mic"
 REPLAY_SINK = "hk_wispr_replay"
 
+SCRATCH = "org.hyprkarl.wispr-mic-scratch"
+
 LEAD_IN = 0.8           # s between starting dictation and playing the clip
 TAIL = 1.0              # s after the clip before stopping
 TRANSCRIPT_TIMEOUT = 45
@@ -258,6 +260,28 @@ def last_timestamp():
     return stamp
 
 
+def active_class():
+    return json.loads(sh("hyprctl", "activewindow", "-j") or "{}").get("class")
+
+
+def focus_scratch():
+    """Wispr pastes every transcript into the focused window, so keep that a
+    terminal running `cat > /dev/null`, whatever else the user clicks."""
+    if active_class() == SCRATCH:
+        return
+    clients = json.loads(sh("hyprctl", "clients", "-j") or "[]")
+    if not any(c.get("class") == SCRATCH for c in clients):
+        subprocess.Popen(["setsid", "uwsm-app", "--", "xdg-terminal-exec", f"--app-id={SCRATCH}",
+                          "-e", "sh", "-c", "cat > /dev/null"],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    deadline = time.time() + 5
+    while active_class() != SCRATCH:
+        if time.time() > deadline:
+            sys.exit("Couldn't focus the scratch window: stopping before Wispr pastes anywhere else")
+        sh("hyprctl", "dispatch", f"hl.dsp.focus({{ window = 'class:^({SCRATCH})$' }})", check=False)
+        time.sleep(0.3)
+
+
 def press():
     hk("hk-wispr-switch", "press")
 
@@ -265,6 +289,7 @@ def press():
 def dictate(replay, wav):
     """One hands-free dictation of `wav`; returns the new History row."""
     since = last_timestamp()
+    focus_scratch()
     press()
     deadline = time.time() + 5
     while (src := wispr_source()) is None and time.time() < deadline:
@@ -277,6 +302,7 @@ def dictate(replay, wav):
     time.sleep(LEAD_IN)
     replay.play(wav)
     time.sleep(TAIL)
+    focus_scratch()             # Wispr pastes once dictation stops
     press()
     deadline = time.time() + TRANSCRIPT_TIMEOUT
     while time.time() < deadline:
@@ -354,10 +380,8 @@ def run(profiles, repeat, names):
     (out_dir / "audio").mkdir(parents=True)
     trials = [(p, n, i) for i in range(repeat) for p in profiles for n in names]
     print(f"{len(trials)} dictations, about {sum(wav_seconds(CLIPS / f'{n}.wav') + 6 for _, n, _ in trials) / 60:.0f} min.")
-    input("Focus a scratch text field (Wispr pastes every transcript), then press Enter... ")
-    for s in (3, 2, 1):
-        print(f"  {s}", end="\r", flush=True)
-        time.sleep(1)
+    if sys.stdin.isatty():
+        input("Wispr pastes into a scratch window this opens; press Enter to start... ")
 
     before = profile()
     with Replay() as replay, open(out_dir / "results.jsonl", "w") as results:
