@@ -41,6 +41,11 @@ copy_seed_file() {
 }
 
 for seed in "${seeds[@]}"; do
+  # A link in the seed's place is the user's own setup, even while its target
+  # is missing (such as ~/.config/nvim pointing into a dotfiles checkout).
+  if [[ -L "$CONFIG_HOME/$seed" ]]; then
+    continue
+  fi
   mapfile -t files < <(cd "$SEED_ROOT" && find "$seed" \( -type f -o -type l \))
   for relative in "${files[@]}"; do
     if [[ -e "$CONFIG_HOME/$relative" ]] || [[ -L "$CONFIG_HOME/$relative" ]]; then

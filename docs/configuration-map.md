@@ -165,7 +165,9 @@ not in place.
 
 **Starting configs.** btop, Neovim, and Yazi cannot load Hyprkarl's
 defaults next to a file of yours, so `hk-update apply` copies Hyprkarl's
-complete config when you have none of their files. The copy is yours; updates
+complete config when you have none of their files. A config directory that
+is a link, for example into a dotfiles checkout, counts as yours even while
+its target is missing. The copy is yours; updates
 never change it. Delete it to get Hyprkarl's current version on the next
 update. Their theme colors stay linked to the active theme.
 

@@ -47,4 +47,11 @@ seed || fail "second run returned nonzero"
 [[ "$(cat "$CONFIG_HOME/kitty/local.conf")" == "edited" ]] \
   || fail "a second run overwrote an included personal file"
 
+# A linked config directory is the user's, even while its target is missing.
+rm -rf "$CONFIG_HOME/yazi"
+ln -s ../dotfiles/yazi "$CONFIG_HOME/yazi"
+seed || fail "a dangling linked config directory failed seeding"
+[[ -L "$CONFIG_HOME/yazi" ]] && [[ ! -e "$TEST_ROOT/dotfiles/yazi" ]] \
+  || fail "seeding replaced or filled a linked config directory"
+
 printf 'Starting-config seeding passed.\n'
