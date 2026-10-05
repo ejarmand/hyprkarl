@@ -21,10 +21,10 @@ themes/*/wallpapers/*
 !themes/vera-dark/wallpapers/01-default.png
 
 # Public artwork and plain backgrounds shipped with the Klimt themes.
-!themes/klimt-music/wallpapers/01-default.png
-!themes/klimt-music/wallpapers/02-music.jpg
-!themes/klimt-hope/wallpapers/01-default.png
-!themes/klimt-hope/wallpapers/02-hope.jpg
+!themes/klimt-music/wallpapers/02-default.png
+!themes/klimt-music/wallpapers/01-music.jpg
+!themes/klimt-hope/wallpapers/02-default.png
+!themes/klimt-hope/wallpapers/01-hope.jpg
 !themes/klimt-boa/wallpapers/01-default.png
-!themes/klimt-adele/wallpapers/01-default.png
-!themes/klimt-adele/wallpapers/02-adele.jpg
+!themes/klimt-adele/wallpapers/02-default.png
+!themes/klimt-adele/wallpapers/01-adele.jpg

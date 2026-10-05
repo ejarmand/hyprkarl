@@ -6,7 +6,7 @@ Gustav Klimt, *Hope, II* (1907–08), oil, gold and platinum on canvas, The Muse
 
 Commons labels the artwork public domain and the faithful two-dimensional reproduction PD-Art / [Public Domain Mark 1.0](https://creativecommons.org/publicdomain/mark/1.0/). That label is a rights-status statement, not a Creative Commons license. Credit: Gustav Klimt, *Hope, II*, MoMA; Google Art Project / Wikimedia Commons. Commons notes that faithful reproduction rights may differ between jurisdictions; the record expressly treats the reproduction as public domain in the United States.
 
-[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/02-hope.jpg`.
+[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/01-hope.jpg`.
 
 SHA-256: `73dca708334a72258153d8fa7bdad84ddbbbeadbac1c0d67dbce3a1ab35c563e`.
 

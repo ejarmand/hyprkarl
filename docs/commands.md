@@ -148,7 +148,8 @@ does not try to document every internal script.
 - `hk-wallpaper cache [--regenerate|--single <filename>]`
   Sync or rebuild wallpaper thumbnails for the active theme.
 - `hk-wallpaper init`
-  Reapply the current wallpaper through `hyprpaper`.
+  Reapply the current wallpaper through `hyprpaper`. Fails if the active theme
+  has no wallpaper with the current file name.
 
 ## Fingerprint
 
