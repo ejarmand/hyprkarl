@@ -130,6 +130,14 @@ that must stay out of commits (`.gitignore` covers the reference file); they
 ship only plain backgrounds. Keep `vera-light`'s `mode: light`, which carries
 the GTK light preference and Neovim's light background.
 
+`klimt-music`, `klimt-hope`, `klimt-boa` and `klimt-adele` are dark painting
+themes with Starship palettes. Each `SOURCES.md` records the artwork, image
+provenance and color adaptations; keep it current when changing a theme. The
+Music wallpaper is CC BY-SA 4.0: preserve its attribution and
+`ARTWORK-LICENSE.txt`, and apply share-alike terms to artwork adaptations.
+Record the public-domain evidence for any other bundled painting file, and
+keep private photos (such as dictionary photos) out of the repository.
+
 `hk-theme set <name>` builds into `~/.local/state/hyprkarl/themes/<name>.<timestamp>`,
 points the `current/theme` symlink at it, deletes older builds, copies the GTK
 theme to `~/.local/share/themes/hyprkarl/` (GTK does not follow symlinked theme

@@ -63,9 +63,17 @@ Hyprkarl. This fork adds:
 
 - `vera-light`: cream paper, blue ink, teal, lavender, and raspberry.
 - `vera-dark`: a deep blue background and softer versions of those accents.
+- `klimt-music`: petrol, muted gold and rose from the 1895 *Music* study.
+- `klimt-hope`: olive, gold and textile accents from *Hope II*.
+- `klimt-boa`: warm black, violet and copper from *Lady with a Hat and Feather Boa*.
+- `klimt-adele`: deep green, coral, sage and lilac from *Adele Bloch-Bauer II*.
 
 Both Vera themes include a plain background matching their palette; see [the
-Vera theme notes](docs/themes.md#vera-light-and-dark). Switch from
+Vera theme notes](docs/themes.md#vera-light-and-dark). The four Klimt themes
+are dark palettes with matching plain backgrounds and Starship prompt colors.
+The *Music* museum image is distributed under CC BY-SA 4.0. Each theme's
+`SOURCES.md` records its painting reference, image availability and color
+adaptations; see [the Klimt theme notes](docs/themes.md#klimt-painting-themes). Switch from
 `Hyprkarl Menu -> Config -> Theme` or with `hk-theme set <name>`. A theme is one `theme.yaml`; add your own, or override
 part of a shipped one, under `~/.config/hyprkarl/themes/`. See
 [Themes](docs/themes.md).

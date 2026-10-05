@@ -30,7 +30,8 @@ hk-theme list
 ```
 
 Hyprkarl ships `hyprkarl`, `everforest`, `gruvbox`, `loam`, and
-`tokyo-night`; this fork adds [`vera-light` and `vera-dark`](#vera-light-and-dark). The Tokyo Night source uses the original dark Night variant.
+`tokyo-night`; this fork adds [`vera-light` and `vera-dark`](#vera-light-and-dark)
+and [four Klimt painting themes](#klimt-painting-themes). The Tokyo Night source uses the original dark Night variant.
 Loam uses warm brown surfaces and a narrow olive, ochre, and bark palette. It
 began as an adaptation of Melange and retains the upstream attribution in its
 source directory.
@@ -74,6 +75,46 @@ background, and foot's light color section. Both route selection, btop,
 wifitui, Qt, Neovim search, and GTK accent colors through the [consumer
 color roles](#generated-bundle) so pale soft accents never carry text. To use
 your own wallpaper, select the theme, then run `hk-wallpaper add <image>`.
+
+## Klimt painting themes
+
+These four dark themes adapt painting colors for readable desktop text,
+terminal output and status indicators. Each is a `theme.yaml` with a Starship
+palette in `overrides/starship.toml`, and sets the same consumer color roles
+as Vera dark, plus btop's main text, opaque Qt placeholder text, and dark text
+on Yazi's error progress.
+
+| Theme | Painting reference | Main colors |
+| --- | --- | --- |
+| `klimt-music` | *Music*, study, 1895 | Petrol, muted gold, rose |
+| `klimt-hope` | *Hope II*, 1907–08 | Olive, gold, orange and textile accents |
+| `klimt-boa` | *Lady with a Hat and Feather Boa*, 1909 | Warm black, violet, copper and ivory |
+| `klimt-adele` | *Portrait of Adele Bloch-Bauer II*, 1912 | Deep green, coral, sage, lilac and cream |
+
+Switch with `hk-theme set klimt-music`, or substitute any name from the table.
+Music, Hope and Adele default to their painting and also ship a matching plain
+background, numbered last. Hope and Adele default to 3:2 landscape crops
+(`01-hope-figure.jpg`, `01-adele-portrait.jpg`) and keep a second Hope crop and
+the full paintings as alternatives. Boa ships only the plain `01-default.png`.
+
+The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
+under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the
+license text is `themes/klimt-music/ARTWORK-LICENSE.txt`. Preserve its
+attribution and license when redistributing it, state any image changes, and
+share artwork adaptations under the same license. This image license does not
+change the license of unrelated desktop configuration files.
+
+Hope II and Adele II ship the specific Commons reproductions documented in
+their `SOURCES.md`. Those file pages identify the paintings and faithful
+reproductions as public domain, including US pre-1931 publication statements.
+The statements are recorded source evidence, not independently reconstructed
+publication histories. Boa ships its plain background; its reference file's
+US public-domain basis remains unresolved.
+
+Each theme's `SOURCES.md` records its exact reference image, bundled files,
+source rights statements, dimensions and palette choices. A palette is an
+adaptation for UI use, not a calibrated reproduction of the painting. Private
+dictionary photos are never bundled.
 
 ## Source layout
 
