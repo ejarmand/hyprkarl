@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Dark text on painting colors, in prompt order: vermilion robe, turquoise, gold leaf, mosaic blue, magenta fleck; olive surfaces.
+# Dark text on painting colors, in prompt order: vermilion robe, turquoise, gold, slate blue, ivory figure; olive-brown and bronze surfaces.
 [palettes.hyprkarl]
 color_fg0 = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
 color_fg2 = '{{accent.primary.bright}}'
-color_bg1 = '#3f4426'  # deep olive
-color_bg3 = '#55582f'  # olive field
-color_magenta = '#f07457'  # vermilion robe
+color_bg1 = '#6b561c'  # bronze
+color_bg3 = '#3f4426'  # olive-brown
+color_magenta = '#ee6a48'  # vermilion robe
 color_purple = '{{ansi.magenta}}'
 color_orange = '#6cc6b4'  # turquoise
-color_yellow = '#f0c650'  # gold leaf
-color_aqua = '#9cb0f0'  # mosaic blue
-color_blue = '#e19ad0'  # magenta fleck
+color_yellow = '#e3a930'  # gold
+color_aqua = '#8da5c6'  # slate blue
+color_blue = '#e3d3bf'  # ivory figure
 color_green = '{{ansi.green}}'
 color_red = '{{ansi.red}}'

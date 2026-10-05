@@ -37,7 +37,7 @@ This reads the preserved palette and overrides directly and leaves the wallpaper
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
-Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 5.03:1; the colored segments are coral wall, floral green, ivory dress, lilac floor and rose panel, with dark text, and each is at least 5.4:1 against the terminal background. The trailing segments are backdrop green. Prompt glyphs are at least 10.44:1 against the background.
+Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 5.03:1; the colored segments are terracotta wall, ivory dress, floral green, dusty rose and grey teal, with dark text, and each is at least 6.0:1 against the terminal background. The trailing segments are backdrop green and slate. Prompt glyphs are at least 10.44:1 against the background.
 
 Yazi's error-progress text uses the dark background colour on the error fill, giving 8.11:1. Btop explicitly uses the primary foreground. Qt active and inactive placeholders use the opaque secondary foreground, with at least 6.09:1 across the theme surfaces.
 

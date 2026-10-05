@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Dark text on painting colors, in prompt order: coral wall, floral green, ivory dress, lilac floor, rose panel; green surfaces.
+# Dark text on painting colors, in prompt order: terracotta wall, ivory dress, floral green, dusty rose, grey teal; green and slate surfaces.
 [palettes.hyprkarl]
 color_fg0 = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
 color_fg2 = '{{accent.primary.bright}}'
-color_bg1 = '#2e4439'  # deep green
+color_bg1 = '#4b4f66'  # slate
 color_bg3 = '#3e5e4f'  # backdrop green
-color_magenta = '#ec8a74'  # coral wall
+color_magenta = '#d88b6f'  # terracotta wall
 color_purple = '{{bright.magenta}}'
-color_orange = '#9ec79c'  # floral green
-color_yellow = '#e6dcc4'  # ivory dress
-color_aqua = '#bba9dc'  # lilac floor
-color_blue = '#e6a3bc'  # rose panel
+color_orange = '#e6dcc4'  # ivory dress
+color_yellow = '#9fbf98'  # floral green
+color_aqua = '#d9a6b0'  # dusty rose
+color_blue = '#93b4b5'  # grey teal
 color_green = '{{bright.green}}'
 color_red = '{{bright.red}}'
