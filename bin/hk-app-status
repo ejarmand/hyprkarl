@@ -1,0 +1,51 @@
+#!/bin/bash
+# hk-app-status
+# Show installed and latest release for each hk-app AppImage. Read-only.
+#
+# Usage: hk-app-status [id...]
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "$SCRIPT_DIR/lib/app.sh"
+
+ids=()
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help) echo "Usage: hk-app-status [id...]"; exit 0 ;;
+    -*) echo "Unknown option: $arg" >&2; exit 1 ;;
+    *) ids+=("$arg") ;;
+  esac
+done
+[[ ${#ids[@]} -eq 0 ]] && mapfile -t ids < <(app_ids)
+
+if [[ ${#ids[@]} -eq 0 ]]; then
+  echo "No apps configured in $APP_CONF_DIR or $APP_DEFAULT_CONF_DIR."
+  exit 0
+fi
+
+printf '%-14s %-36s %-36s %s\n' APP INSTALLED LATEST STATE
+for id in "${ids[@]}"; do
+  (
+    app_load "$id"
+    current=$(app_current_tag "$id")
+    latest="-"
+    if [[ -z "$repo" ]]; then
+      state="manual"
+    elif app_latest 2>/dev/null; then
+      # The installed tag is a dir name, so compare against the latest one's.
+      # shellcheck disable=SC2154 # set by app_latest
+      latest=$(app_dir_tag "$release_tag")
+      if [[ -z "$current" ]]; then
+        state="not installed"
+      elif [[ "$current" == "$latest" ]]; then
+        state="up to date"
+      else
+        state="update available"
+      fi
+    else
+      latest="?"
+      state="cannot check"
+    fi
+    app_running "$id" && state="$state, running"
+    printf '%-14s %-36s %-36s %s\n' "$id" "${current:--}" "$latest" "$state"
+  )
+done

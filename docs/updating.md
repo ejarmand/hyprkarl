@@ -7,8 +7,8 @@ configuration lives outside the checkout, so an update never touches it.
 hk-update all
 ```
 
-This runs `hk-update sync`, then `hk-update apply`, then your `post-update`
-hooks, and stops at the first failure. Its review asks whether to apply the
+This runs `hk-update sync`, then `hk-update apply`, then `hk-update apps`,
+then your `post-update` hooks, and stops at the first failure. Its review asks whether to apply the
 update now; answering no stops before anything changes. When new commits are waiting, an update
 icon appears in the bar; clicking it, or the update menu entry, runs the same
 command in a terminal. `hk-version` prints the installed release. System packages are separate: `hk-pkg-upgrade` runs `paru -Syu`.
@@ -71,6 +71,16 @@ shown. Escape cancels without recording anything. Once reviewed, a removal is
 not offered again, even if you kept the package. A retired package that another
 installed package still needs is not offered; Hyprkarl marks it as a
 dependency instead, so pacman removes it once nothing needs it.
+
+## Apps: `hk-update apps`
+
+`hk-update all` runs this after `apply`, and you can run it alone; it is the
+same as `hk-app update`. It updates AppImages installed with `hk-app` (see the
+[command reference](commands.md#apps-appimages)). Unlike the other steps it
+has no recorded state: it compares each app's installed release with GitHub,
+installs the newest matching release, and keeps the previous one for
+`hk-app rollback`. `--dry-run` only reports. Running apps keep their old
+version until you restart them.
 
 ## Migrations
 
@@ -135,8 +145,9 @@ or rebase with Git, then run `hk-update apply`.
 ## Checking and cleanup
 
 `hk-update check` reports, without changing anything, the staged revision, the
-last applied revision, Stow conflicts, package changes waiting for review, and
-pending migrations.
+last applied revision, Stow conflicts, package changes waiting for review,
+pending migrations, and which `hk-app` AppImages have a newer release (this
+part queries GitHub).
 
 `hk-update remove-stale` removes broken links into the checkout. `apply` does
 this too.

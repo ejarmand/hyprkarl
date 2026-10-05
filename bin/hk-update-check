@@ -1,6 +1,7 @@
 #!/bin/bash
 # hk-update-check
-# Report pending source, configuration, package, and migration work. Read-only.
+# Report pending source, configuration, package, migration, and app work.
+# Read-only.
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 source "$SCRIPT_DIR/lib/update.sh"
@@ -74,3 +75,6 @@ if [[ ${#migrations[@]} -eq 0 ]]; then
 else
   printf '  %s\n' "${migrations[@]##*/}"
 fi
+
+printf '\n=== Apps ===\n'
+hk-app-status | sed 's/^/  /'

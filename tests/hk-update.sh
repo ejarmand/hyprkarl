@@ -355,9 +355,88 @@ EOF
     "migrations did not resume in order"
 }
 
+# Releases come from a mocked GitHub API, and each AppImage is a script that
+# extracts itself the way a type-2 AppImage does.
+make_app_release() {
+  local tag="$1" image="$WORK/app-images/demo-$1" sha
+  mkdir -p "$WORK/app-images"
+  cat > "$image" <<EOF
+#!/bin/bash
+[[ "\$1" == --appimage-extract ]] || exit 1
+mkdir -p squashfs-root
+printf '#!/bin/bash\necho demo $tag\n' > squashfs-root/AppRun
+chmod +x squashfs-root/AppRun
+printf '[Desktop Entry]\nName=Demo\nExec=demo %%U\nIcon=demo\n' > squashfs-root/demo.desktop
+EOF
+  sha=$(sha256sum "$image" | cut -d' ' -f1)
+  jq -n --arg tag "$tag" --arg name "demo-$(uname -m).AppImage" \
+    --arg url "https://example.invalid/demo-$tag" --arg digest "sha256:$sha" \
+    '[{tag_name: $tag, draft: false, prerelease: false,
+       assets: [{name: $name, browser_download_url: $url, digest: $digest}]}]' \
+    > "$WORK/app-releases.json"
+}
+
+run_apps() {
+  HK_TEST_APP_RELEASES="$WORK/app-releases.json" \
+  HK_TEST_APP_IMAGES="$WORK/app-images" \
+  PATH="$WORK/appbin:$PATH" run_isolated "$@"
+}
+
+test_apps() {
+  printf 'Testing hk-app installs through hk-update apps and check...\n'
+  mkdir -p "$WORK/appbin"
+  cat > "$WORK/appbin/gh" <<'EOF'
+#!/bin/bash
+exit 1
+EOF
+  cat > "$WORK/appbin/curl" <<'EOF'
+#!/bin/bash
+output=""
+while [[ $# -gt 1 ]]; do
+  [[ "$1" == -o ]] && output="$2"
+  shift
+done
+case "$1" in
+  "https://api.github.com/repos/owner/demo/releases?per_page=100&page=1")
+    cat "$HK_TEST_APP_RELEASES" ;;
+  https://api.github.com/*) printf '[]\n' ;;
+  *) cp "$HK_TEST_APP_IMAGES/${1##*/}" "$output" ;;
+esac
+EOF
+  chmod +x "$WORK/appbin"/*
+
+  mkdir -p "$FAKEHOME/.config/hyprkarl/apps"
+  printf 'repo=owner/demo\n' > "$FAKEHOME/.config/hyprkarl/apps/demo.conf"
+  opt="$FAKEHOME/.local/opt/demo"
+
+  make_app_release v1
+  run_apps "$ORIG/bin/hk-app" install demo >/dev/null 2>&1 \
+    || fail "hk-app install from a personal recipe failed"
+  assert_equal "$(readlink "$opt/current")" "v1" "install did not activate the release"
+  assert_equal "$("$FAKEHOME/.local/bin/demo")" "demo v1" "the launcher does not run the release"
+  assert_file_contains "$FAKEHOME/.local/share/applications/demo.desktop" \
+    "Exec=$FAKEHOME/.local/bin/demo %U" "the desktop entry does not run the launcher"
+
+  make_app_release v2
+  check=$(run_apps "$ORIG/bin/hk-update" check 2>/dev/null)
+  sed -n '/=== Apps ===/,$p' <<<"$check" | grep -q '^  demo .* v1 .* v2 .*update available' \
+    || fail "hk-update check did not report the app update"
+  sed -n '/=== Apps ===/,$p' <<<"$check" | grep -q '^  t3code ' \
+    || fail "hk-update check did not list a shipped app recipe"
+  assert_equal "$(readlink "$opt/current")" "v1" "hk-update check changed an app"
+
+  run_apps "$ORIG/bin/hk-update" apps >/dev/null 2>&1 || fail "hk-update apps failed"
+  assert_equal "$(readlink "$opt/current")" "v2" "hk-update apps did not update the app"
+  assert_equal "$(readlink "$opt/previous")" "v1" "hk-update apps did not keep the previous release"
+
+  run_apps "$ORIG/bin/hk-app" rollback demo >/dev/null 2>&1 || fail "hk-app rollback failed"
+  assert_equal "$("$FAKEHOME/.local/bin/demo")" "demo v1" "rollback did not restore the previous release"
+}
+
 make_mock_commands
 setup_source_sandbox
 test_source_and_theme_apply
 test_package_review
 test_migrations
+test_apps
 printf 'All update acceptance checks passed.\n'

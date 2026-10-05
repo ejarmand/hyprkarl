@@ -1,0 +1,57 @@
+#!/bin/bash
+# hk-app-config-update
+# Re-apply each app's config to its installed release without downloading:
+# rewrite the launcher and desktop entry and re-run post_install. Run after
+# editing ~/.config/hyprkarl/apps/<id>.conf or whatever post_install builds.
+#
+# Usage: hk-app-config-update [id...]   (default: every installed app)
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "$SCRIPT_DIR/lib/app.sh"
+
+# --- Functions ---
+
+reconfigure_app() {
+  local id="$1" tag
+  app_load "$id"
+  tag=$(app_current_tag "$id")
+  if [[ -z "$tag" ]]; then
+    info "$id: not installed (hk-app install $id)"
+    return 0
+  fi
+  if ! app_run_hook "$id" "$APP_OPT_DIR/$id/$tag" "$tag"; then
+    warn "$id: post-install failed; launcher and desktop entry left as they were"
+    return 1
+  fi
+  if ! app_integrate "$id"; then
+    warn "$id: cannot update the launcher or desktop entry"
+    return 1
+  fi
+  info "$id: reconfigured ($tag)"
+  app_running "$id" && warn "$id is running: restart it to pick up the change"
+  return 0
+}
+
+# --- Script Body ---
+
+ids=()
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help) echo "Usage: hk-app-config-update [id...]"; exit 0 ;;
+    -*) echo "Unknown option: $arg" >&2; exit 1 ;;
+    *) ids+=("$arg") ;;
+  esac
+done
+[[ ${#ids[@]} -eq 0 ]] && mapfile -t ids < <(app_ids)
+
+app_lock
+failed=()
+for id in "${ids[@]}"; do
+  ( reconfigure_app "$id" ) || failed+=("$id")
+done
+
+if [[ ${#failed[@]} -gt 0 ]]; then
+  warn "Failed: ${failed[*]}"
+  exit 1
+fi
+exit 0

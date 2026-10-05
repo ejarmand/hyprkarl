@@ -20,6 +20,7 @@ explaining what goes there.
 | Personal commands | `~/.local/bin/` |
 | fastfetch | The theme: its `fastfetch` keys in a theme overlay, or your own `~/.config/fastfetch/config.jsonc` |
 | btop, Neovim, Yazi | Their own `~/.config/<app>/`, copied from Hyprkarl once |
+| AppImage recipes (`hk-app`) | `~/.config/hyprkarl/apps/<id>.conf` |
 
 See [Extending Hyprkarl](extending-hyprkarl.md) for how to use each.
 
@@ -134,6 +135,7 @@ applies until you create one at the same path.
 |---|---|---|
 | `defaults/config/xdg-desktop-portal/portals.conf` | Portal backends, including the terminal file chooser | `~/.config/xdg-desktop-portal/portals.conf` |
 | `defaults/config/xdg-terminals.list` | Terminal for `xdg-terminal-exec` (Ghostty); `hk-default-terminal` writes yours | `~/.config/xdg-terminals.list` |
+| `defaults/config/hyprkarl/apps/<id>.conf` | AppImage recipes for `hk-app` | `~/.config/hyprkarl/apps/<id>.conf` |
 | `defaults/share/applications/` | Terminal arguments for Alacritty and foot; Nautilus without D-Bus activation, which opened two windows | A file of the same name in `~/.local/share/applications/` |
 
 The launcher hides a few rarely used applications through

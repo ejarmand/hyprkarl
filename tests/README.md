@@ -98,6 +98,11 @@ without a state write, reinstall after a removal cascade, and ordered
 migrations inside `apply` that resume after a failure. A failed apply still
 starts Quickshell again.
 
+Last, it installs an AppImage with `hk-app` from a mocked GitHub release, then
+checks that `hk-update check` reports its newer release (and lists a shipped
+recipe), `hk-update apps` updates it while keeping the previous release, and
+`hk-app rollback` returns to it.
+
 ```bash
 tests/hk-update.sh
 ```

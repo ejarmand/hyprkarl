@@ -8,10 +8,12 @@ source "$SCRIPT_DIR/lib/update.sh"
 usage() {
   cat <<'EOF'
 Usage:
-  hk-update all           Review incoming changes, then apply them
+  hk-update all           Review incoming changes, apply them, then update apps
   hk-update sync          Fetch and review one source revision
   hk-update apply         Apply it: packages, migrations, configuration, theme
   hk-update packages      Review removals and install new required packages
+  hk-update apps [--dry-run] [id...]
+                          Update AppImages installed with hk-app
   hk-update check         Report pending work without changing anything
   hk-update remove-stale  Remove broken links into this checkout
 EOF
@@ -28,6 +30,7 @@ case "$action" in
     fi
     hk-update-sync --then-apply || exit 1
     hk-update-apply || exit 1
+    hk-app-update || exit 1
     if ! hk-hook-run post-update; then
       printf 'Update completed, but a post-update hook failed.\n' >&2
       exit 1
@@ -35,6 +38,8 @@ case "$action" in
     ;;
   sync|apply|packages|check|remove-stale)
     exec "hk-update-$action" "$@" ;;
+  apps)
+    exec hk-app-update "$@" ;;
   ""|-h|--help|help)
     usage
     ;;

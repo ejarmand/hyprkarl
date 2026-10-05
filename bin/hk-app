@@ -1,0 +1,38 @@
+#!/bin/bash
+# hk-app
+# Install and update AppImages outside the package manager.
+#
+# Usage:
+#   hk-app install <id|owner/repo|url> [options] [-- launcher args...]
+#   hk-app update [--dry-run] [id...]
+#   hk-app config-update [id...]
+#   hk-app status [id...]
+#   hk-app rollback <id>
+#   hk-app restart <process-name>
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  hk-app install <id|owner/repo|url> [options] [-- args]
+                                   Install an AppImage and record its config
+  hk-app update [--dry-run] [id...]  Update installed apps to their latest release
+  hk-app config-update [id...]     Re-apply config (launcher, desktop entry,
+                                   post_install) to the installed release
+  hk-app status [id...]            Show installed vs latest release
+  hk-app rollback <id>             Swap to the previous release
+  hk-app restart <process-name>    Kill and relaunch a running app
+
+Configs live in ~/.config/hyprkarl/apps/<id>.conf; one there replaces a
+shipped config of the same name in $HYPRKARL_PATH/defaults/config/hyprkarl/apps/.
+Run hk-app install --help for install options.
+USAGE
+}
+
+action=${1:-}
+shift || true
+
+case "$action" in
+  install|update|config-update|status|rollback|restart) exec "hk-app-$action" "$@" ;;
+  ""|-h|--help|help) usage; exit 0 ;;
+  *) usage >&2; exit 1 ;;
+esac

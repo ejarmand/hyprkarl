@@ -1,0 +1,19 @@
+#!/bin/bash
+# hk-app-install-tui
+# Ask for a GitHub owner/repo or AppImage URL and install it with
+# hk-app-install. The menu's Install > AppImage entry runs this in a terminal.
+#
+# Intended to be launched via:
+#   hk-tui-launch hk-app-install-tui
+
+source=$(gum input --placeholder "owner/repo or AppImage URL" --header "Install an AppImage")
+if [[ -z "$source" ]]; then
+  exit 1
+fi
+
+if hk-app-install "$source"; then
+  hk-show-done
+else
+  hk-show-done "Install failed. Press any key to close..."
+  exit 1
+fi

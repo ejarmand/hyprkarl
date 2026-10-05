@@ -136,6 +136,14 @@
       "label": "Docker",
       "action": { "type": "menu", "menu": "docker-install" }
     },
+    "install.appimage": {
+      "parent": "install",
+      "order": 50,
+      "icon": "󰀻",
+      "label": "AppImage",
+      "searchText": "hk-app github release",
+      "action": { "type": "command", "command": "hk-tui-launch hk-app-install-tui" }
+    },
 
     "uninstall.system": {
       "parent": "uninstall",
@@ -401,6 +409,14 @@
       "icon": "󰏕",
       "label": "Upgrade Packages",
       "action": { "type": "command", "command": "hk-tui-launch hk-pkg-upgrade" }
+    },
+    "update.apps": {
+      "parent": "update",
+      "order": 30,
+      "icon": "󰀻",
+      "label": "Update Apps",
+      "searchText": "hk-app appimage",
+      "action": { "type": "command", "command": "hk-tui-launch bash -c 'hk-app-update && hk-show-done || hk-show-done \"Update failed. Press any key to close...\"'" }
     },
 
     "power.lock": {

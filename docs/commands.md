@@ -16,11 +16,14 @@ stable](updating.md#what-updates-keep-stable).
   commits are waiting. The shipped bar polls it hourly; offline it reuses the
   last fetched state.
 - `hk-update check`
-  Report the staged revision, the last applied revision, package changes, and
-  pending migrations without changing anything.
+  Report the staged revision, the last applied revision, package changes,
+  pending migrations, and which `hk-app` AppImages have a newer release (this
+  part queries GitHub) without changing anything.
 - `hk-update all`
-  Run `sync`, then `apply`, then personal `post-update` hooks. The update menu
-  launches this command in a terminal.
+  Run `sync`, then `apply`, then `hk-app update`, then personal `post-update`
+  hooks. The update menu launches this command in a terminal.
+- `hk-update apps [--dry-run] [id...]`
+  Update AppImages installed with `hk-app` (the same as `hk-app update`).
 - `hk-update sync`
   Fetch the configured remote and branch, show the new changelog entries and
   incoming commits, and pin one confirmed commit in XDG state. It does not move
@@ -202,6 +205,46 @@ stable](updating.md#what-updates-keep-stable).
   Return success if all named packages are installed.
 - `hk-pkg present --flatpak <app-id>...`
   Return success if all named Flatpaks are installed.
+
+## Apps (AppImages)
+
+AppImages installed outside the package manager. Each app has a config,
+`<id>.conf` (key reference at the top of `bin/lib/app.sh`). `hk-app install`
+writes yours to `~/.config/hyprkarl/apps/`; Hyprkarl ships a few in
+`defaults/config/hyprkarl/apps/`, and one of yours with the same name replaces
+it. An app installs to `~/.local/opt/<id>/<tag>/`, with `current` and
+`previous` links, a launcher at `~/.local/bin/<id>`, and a desktop entry.
+
+- `hk-app install <owner/repo> [--channel REGEX] [--asset REGEX] [--id ID] [-- args...]`
+  Install the newest GitHub release and write its config. `--channel` tracks
+  tags matching a regex (e.g. `nightly`) and admits prereleases; the default is
+  the newest stable release. Arguments after `--` are added to the launcher.
+  The download is checked against GitHub's SHA-256 digest when the release
+  publishes one.
+- `hk-app install <url> [--sha256 HEX] [--id ID] [-- args...]`
+  Install a direct AppImage URL. Manual installs are not updated; run
+  `hk-app install <id>` to fetch the URL again. Each release is named
+  `<version>-<hash>` after its bundled version and content, so a changed image
+  gets its own release (and `hk-app rollback` works) even if the version did not.
+- `hk-app install <id>`
+  Install from an existing config, such as a shipped one or one copied from
+  another machine. Takes no options: edit the config instead.
+- `hk-app update [--dry-run] [id...]`
+  Update installed apps to their newest matching release. Keeps the previous
+  release and lists running apps that need a restart.
+- `hk-app config-update [id...]`
+  Re-apply configs to the installed release without downloading: rewrite the
+  launcher and desktop entry and re-run the `post_install` command. Run it
+  after editing a config or whatever `post_install` builds.
+- `hk-app status [id...]`
+  Show the installed and latest release of each app.
+- `hk-app rollback <id>`
+  Swap to the previous release.
+- `hk-app restart <process-name>`
+  Kill and relaunch a running app (`hk-app-restart`).
+
+The menu's Install > AppImage entry asks for an `owner/repo` or URL
+(`hk-app-install-tui`), and Update > Update Apps runs `hk-app update`.
 
 ## Docker
 

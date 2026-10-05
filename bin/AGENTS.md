@@ -9,7 +9,7 @@ deploy step. Full command reference: `docs/commands.md`.
 - **Simple command**: one script, one action. The default.
 - **Dispatcher**: a command with three or more distinct actions (`hk-theme`,
   `hk-wallpaper`, `hk-update`, `hk-pkg`, `hk-fingerprint`, `hk-docker`,
-  `hk-shell`, `hk-display`). Each subcommand is its own top-level command,
+  `hk-shell`, `hk-display`, `hk-app`). Each subcommand is its own top-level command,
   `hk-<noun>-<action>`; the dispatcher is a thin router that `exec`s it.
 - **`bin/lib/`**: helpers shared by two or more commands. Not for single-use
   logic; keep that in the command itself.
@@ -54,6 +54,11 @@ without good reason.
 - **Hooks.** `hk-hook-run` runs the user's executables for `login`,
   `post-update`, `theme-set`, and `wallpaper-set`. Add an event only for a
   real public action.
+- **AppImages.** `hk-app` installs and updates AppImages from per-app recipes,
+  `<id>.conf`, read from `~/.config/hyprkarl/apps/` first, then
+  `defaults/config/hyprkarl/apps/`. `hk-app install` writes new recipes to the
+  personal directory, never into the checkout. `hk-app restart` routes to the
+  older `hk-app-restart`, which predates the family.
 - **Lock.** `hk-lock` starts `lock.qml`; `hk-suspend` only suspends, and
   Hypridle locks first.
 
