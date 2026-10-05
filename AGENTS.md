@@ -96,7 +96,7 @@ symlink `config/hyprkarl/current/theme` (plus `theme.name`).
 
 Switch themes with:
 ```bash
-hk-theme set <theme-name>    # hyprkarl, everforest, gruvbox, vera-light, vera-dark
+hk-theme set <theme-name>    # use hk-theme list to see the available themes
 ```
 
 When adding a new component that needs theming, add a corresponding file to
@@ -115,6 +115,16 @@ the light variant's `light.mode`, GTK light preference, and Neovim light
 background when editing it. Its GTK CSS is compiled from Colloid's Light
 entrypoints; the companion generator currently defaults to Dark. See
 `docs/themes.md` for regeneration instructions.
+
+`klimt-music`, `klimt-hope`, `klimt-boa` and `klimt-adele` are dark painting
+palettes with generator sources in `palette.yaml` and `templates/`, plus
+Starship colors. Keep their source overrides consistent with generated files.
+Each `SOURCES.md` records the artwork, image provenance and color adaptations.
+The Music museum wallpaper is CC BY-SA 4.0; preserve attribution and the
+license, and apply share-alike terms to artwork adaptations. Record the
+public-domain evidence for any other bundled painting file. Private dictionary
+photos must stay out of the repository. Add explicit `.gitignore` exceptions
+only for the exact public artwork or plain background files being shipped.
 
 ### `hk-*` Commands
 

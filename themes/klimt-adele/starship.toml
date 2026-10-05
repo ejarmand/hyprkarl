@@ -1,0 +1,16 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Cream text sits on dark segment fills. Green, red and purple are prompt glyphs.
+[palettes.hyprkarl]
+color_fg0 = '#eee8db'
+color_fg1 = '#eee8db'
+color_fg2 = '#cedeaf'
+color_bg1 = '#17231f'
+color_bg3 = '#202e28'
+color_magenta = '#d7a8bd'
+color_purple = '#efc4d6'
+color_orange = '#584a44'
+color_yellow = '#535540'
+color_aqua = '#3f544f'
+color_blue = '#425153'
+color_green = '#cedeaf'
+color_red = '#ffc1b4'

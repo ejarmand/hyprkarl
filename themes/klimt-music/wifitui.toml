@@ -1,0 +1,19 @@
+Primary = "#f0d395"
+Subtle = "#d1c8b7"
+Success = "#b1c8a0"
+Error = "#e7afa5"
+
+Normal = "#f1e7d5"
+Disabled = "#bdc0b5"
+Border = "#bdc0b5"
+
+SignalHigh = ["#bee0d8", "#bee0d8"]
+SignalLow = ["#19272b", "#19272b"]
+
+Saved = "#a1c9c4"
+
+TitleIcon = "󰖩 "
+NetworkSecureIcon = "󰌾 "
+NetworkOpenIcon = "󰿆 "
+NetworkUnknownIcon = " "
+NetworkSavedIcon = " "

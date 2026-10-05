@@ -112,6 +112,11 @@ cobalt accents. Both retain the default widget layout. Their source overrides
 live in each theme's `templates/`; update those alongside generated styling
 when changing the Vera themes so regeneration preserves the change.
 
+The four `klimt-*` themes also retain the default widget layout and primary
+foreground bar text. Their accent colors come from the painting palettes.
+Update their `templates/bar.scss` and `templates/bar-layout.ts` alongside
+generated files so regeneration preserves the layout and styling.
+
 CSS class naming conventions:
 - `bar-*` — bar shell and layout structure.
 - `widget-*` — widget-level public hooks.

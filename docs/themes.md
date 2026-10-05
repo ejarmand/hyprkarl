@@ -124,6 +124,67 @@ palette override supplies the light-to-dark GTK grey scale. Keep both when
 regenerating. The commands above preserve `palette.yaml` and `templates/` in
 the installed theme directories.
 
+## Klimt painting themes
+
+These four dark themes adapt painting colors for readable desktop text,
+terminal output and status indicators. Each keeps its source in `palette.yaml`
+and `templates/` and includes a Starship palette.
+
+| Theme | Painting reference | Main colors |
+| --- | --- | --- |
+| `klimt-music` | *Music*, study, 1895 | Petrol, muted gold, rose |
+| `klimt-hope` | *Hope II*, 1907–08 | Olive, gold, orange and textile accents |
+| `klimt-boa` | *Lady with a Hat and Feather Boa*, 1909 | Warm black, violet, copper and ivory |
+| `klimt-adele` | *Portrait of Adele Bloch-Bauer II*, 1912 | Deep green, coral, sage, lilac and cream |
+
+Switch with `hk-theme set klimt-music`, or substitute any name from the table.
+All four cover the same applications as Vera dark, retain the default bar
+layout, and ship a matching plain `wallpapers/01-default.png`.
+
+Music also ships `02-music.jpg` from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
+under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+Preserve its attribution and license when redistributing it, state any image
+changes, and share artwork adaptations under the same license. This image
+license does not change the license of unrelated desktop configuration files.
+
+Hope II and Adele II ship the specific Commons reproductions documented in
+their `SOURCES.md`. Those file pages identify the paintings and faithful
+reproductions as public domain, including US pre-1931 publication statements.
+The statements are recorded source evidence, not independently reconstructed
+publication histories. Boa ships its plain background; its reference file's
+US public-domain basis remains unresolved.
+
+Each theme's `SOURCES.md` records its exact reference image, bundled files,
+source rights statements, dimensions and palette choices. A palette is an
+adaptation for UI use, not a calibrated reproduction of the painting. Any
+locally added wallpaper stays ignored; only explicitly listed shipped files
+have `.gitignore` exceptions. Private dictionary photos are never bundled.
+
+### Regenerate the Klimt themes
+
+Use companion generator commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e`
+with its Python requirements and `sassc`. Run from its checkout, with
+`HYPRKARL_PATH` pointing to this repository:
+
+```bash
+python - <<'PY'
+import os
+from pathlib import Path
+import generate
+
+root = Path(os.environ["HYPRKARL_PATH"])
+generate.PALETTES_DIR = root / "themes"
+for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele"):
+    generate.generate(name, root / "themes" / name)
+PY
+```
+
+The build reads the source palettes and overrides directly, and retains source
+notes, license files and wallpapers. The overrides preserve the current bar
+layout, GTK installation name `hyprkarl`, Foot dark/light color reporting, and
+Starship palette. Like Vera, Qt palette paths target `/home/earmand/.config/`;
+update the Qt source overrides for another account before regenerating.
+
 ## Theme Contents
 
 The simplest way to create a theme is to copy an existing one and keep the same
@@ -214,8 +275,8 @@ keys:
 Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
 layout still works under themes without a `starship.toml` and on machines
 without Hyprkarl. Don't define `[palettes.hyprkarl]` in the layout, because the
-merged file would then contain the table twice. Only `vera-light` and
-`vera-dark` ship a Starship palette.
+merged file would then contain the table twice. The Vera variants and all four
+`klimt-*` themes ship a Starship palette.
 
 ## Create a New Theme
 
