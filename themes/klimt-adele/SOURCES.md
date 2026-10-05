@@ -12,7 +12,7 @@ The unchanged reproduction is `wallpapers/02-adele.jpg`, retrieved 2026-10-05. S
 
 Green from the floral backdrop, coral from the upper wall and flowers, rose and lilac from the side panels and floor, and cream from the dress. These are visual adaptations rather than exact pigment measurements. Surfaces are darkened, text is lifted toward cream, and terminal and status colours are brightened to remain readable. Some subdued cool hues are extended into blue and cyan terminal roles so commands and diagnostics retain distinct colours.
 
-`palette.yaml` is the colour source. `templates/` preserves Vera-dark's current bar layout and application overrides, with a palette-driven Starship template. It includes no wallpaper copies. GTK uses the installed name `hyprkarl`; Qt files point to the active theme; Foot supports both colour sections; Neovim retains a dark background.
+`palette.yaml` is the colour source. `templates/` preserves Vera-dark's current bar layout and application overrides, with a Starship template whose segment colors are picked from the painting. It includes no wallpaper copies. GTK uses the installed name `hyprkarl`; Qt files point to the active theme; Foot supports both colour sections; Neovim retains a dark background.
 
 ## Generation and checks
 
@@ -37,7 +37,7 @@ This reads the preserved palette and overrides directly and leaves the wallpaper
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
-Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 6.81:1: the colored segments use slightly saturated painting accents with dark text, as in vera-dark. Prompt glyphs are at least 10.44:1 against the background.
+Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 6.52:1; the colored segments follow the painting's bands in order: coral wall, rose panel, green flowers, lilac floor and ivory dress, with dark text. Prompt glyphs are at least 10.44:1 against the background.
 
 Yazi's error-progress text uses the dark background colour on the error fill, giving 8.11:1. Btop explicitly uses the primary foreground. Qt active and inactive placeholders use the opaque secondary foreground, with at least 6.09:1 across the theme surfaces.
 

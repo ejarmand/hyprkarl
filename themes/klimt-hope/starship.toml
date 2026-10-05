@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Light painting accents carry dark text, as in vera-dark; surface segments carry cream.
+# Segments, in prompt order: The robe's gold-to-vermilion mosaic, ending on a turquoise fleck.
 [palettes.hyprkarl]
 color_fg0 = '#212518'
 color_fg1 = '#f6e8c5'
 color_fg2 = '#ffdf88'
 color_bg1 = '#303624'
 color_bg3 = '#404633'
-color_magenta = '#e59fd8'
+color_magenta = '#f2cc55'  # gold leaf
 color_purple = '#dca8d2'
-color_orange = '#ff9c77'
-color_yellow = '#faca58'
-color_aqua = '#88d7c7'
-color_blue = '#a1b5f1'
+color_orange = '#f2a640'  # amber
+color_yellow = '#ee8a48'  # robe orange
+color_aqua = '#e86c4c'  # vermilion
+color_blue = '#72c4b2'  # turquoise fleck
 color_green = '#b4ce86'
 color_red = '#efa387'

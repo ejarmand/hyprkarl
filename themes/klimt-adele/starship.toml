@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Light painting accents carry dark text, as in vera-dark; surface segments carry cream.
+# Segments, in prompt order: The painting's bands: coral wall, rose panel, green flowers, lilac floor, ivory dress.
 [palettes.hyprkarl]
 color_fg0 = '#17231f'
 color_fg1 = '#eee8db'
 color_fg2 = '#cedeaf'
 color_bg1 = '#2a3932'
 color_bg3 = '#37483e'
-color_magenta = '#e19ebc'
+color_magenta = '#ec8a74'  # coral wall
 color_purple = '#efc4d6'
-color_orange = '#fe9a8b'
-color_yellow = '#ead182'
-color_aqua = '#92d3c6'
-color_blue = '#9cbfd7'
+color_orange = '#e6a3bc'  # rose panel
+color_yellow = '#9ec79c'  # floral green
+color_aqua = '#bba9dc'  # lilac floor
+color_blue = '#e6dcc4'  # ivory dress
 color_green = '#cedeaf'
 color_red = '#ffc1b4'

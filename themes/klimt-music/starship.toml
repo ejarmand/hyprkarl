@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Light painting accents carry dark text, as in vera-dark; surface segments carry cream.
+# Segments, in prompt order: Gold lyre and warm stone, then the blue field from light to deep.
 [palettes.hyprkarl]
 color_fg0 = '#19272b'
 color_fg1 = '#f1e7d5'
 color_fg2 = '#f0d395'
 color_bg1 = '#29383e'
 color_bg3 = '#394c52'
-color_magenta = '#dfa7cc'
+color_magenta = '#e2b65a'  # lyre gold
 color_purple = '#d6b0c9'
-color_orange = '#f5a597'
-color_yellow = '#ecbf65'
-color_aqua = '#96d4cc'
-color_blue = '#a3c3e4'
+color_orange = '#dba898'  # sphinx stone
+color_yellow = '#9cc0cc'  # pale field blue
+color_aqua = '#7fa9bb'  # field blue
+color_blue = '#6d94ad'  # deep field blue
 color_green = '#b1c8a0'
 color_red = '#e7afa5'
