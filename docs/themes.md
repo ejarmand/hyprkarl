@@ -30,7 +30,7 @@ hk-theme list
 ```
 
 Hyprkarl ships `hyprkarl`, `everforest`, `gruvbox`, `loam`, and
-`tokyo-night`. The Tokyo Night source uses the original dark Night variant.
+`tokyo-night`; this fork adds [`vera-light` and `vera-dark`](#vera-light-and-dark). The Tokyo Night source uses the original dark Night variant.
 Loam uses warm brown surfaces and a narrow olive, ochre, and bark palette. It
 began as an adaptation of Melange and retains the upstream attribution in its
 source directory.
@@ -46,6 +46,34 @@ Every selection rebuilds the theme. `hk-theme set`:
 
 A failed build leaves the active theme unchanged. Quickshell notices the switch
 and reloads without restarting.
+
+## Vera light and dark
+
+`vera-light` and `vera-dark` take their colors from a private painting.
+The artwork stays local and out of the repository. Both ship a plain
+background matching their palette as `wallpapers/01-default.png`. The light
+theme uses cream paper and dark blue text; the dark theme uses a deep blue
+background and cream text. Cobalt marks active windows, teal marks success,
+raspberry marks errors, and lavender adds a second accent. Yellow becomes
+darker ochre in light mode so it stays readable.
+
+| Color | `vera-light` | `vera-dark` |
+| --- | --- | --- |
+| Background | `#f6f3e9` | `#141e2a` |
+| Foreground | `#253b4b` | `#edeade` |
+| Blue | `#275f89` | `#86b6db` |
+| Teal | `#1e6558` | `#82bfaa` |
+| Lavender | `#6e4a82` | `#b4a0d4` |
+| Raspberry | `#a12b51` | `#ef7c9c` |
+| Ochre / yellow | `#805c21` | `#e6cf8d` |
+
+Each is a single `theme.yaml` plus a Starship palette in
+`overrides/starship.toml`. `vera-light` sets `mode: light`, which selects
+Colloid's light GTK build and the light desktop preference, Neovim's light
+background, and foot's light color section. Both route selection, btop,
+wifitui, Qt, Neovim search, and GTK accent colors through the [consumer
+color roles](#generated-bundle) so pale soft accents never carry text. To use
+your own wallpaper, select the theme, then run `hk-wallpaper add <image>`.
 
 ## Source layout
 

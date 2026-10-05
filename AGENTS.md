@@ -125,6 +125,11 @@ overlays live in `~/.config/hyprkarl/themes/<name>/`. The compiler in
 `theme-generator/` merges its defaults, the theme, and any personal overlay,
 and renders every consumer's files.
 
+This fork adds `vera-light` and `vera-dark`, colored after a private painting
+that must stay out of commits (`.gitignore` covers the reference file); they
+ship only plain backgrounds. Keep `vera-light`'s `mode: light`, which carries
+the GTK light preference and Neovim's light background.
+
 `hk-theme set <name>` builds into `~/.local/state/hyprkarl/themes/<name>.<timestamp>`,
 points the `current/theme` symlink at it, deletes older builds, copies the GTK
 theme to `~/.local/share/themes/hyprkarl/` (GTK does not follow symlinked theme

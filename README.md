@@ -59,8 +59,14 @@ menu entries, widgets, and interfaces.
 ## Themes
 
 `hyprkarl`, `everforest`, `gruvbox`, `loam`, and `tokyo-night` ship with
-Hyprkarl. Switch from `Hyprkarl Menu -> Config -> Theme` or with
-`hk-theme set <name>`. A theme is one `theme.yaml`; add your own, or override
+Hyprkarl. This fork adds:
+
+- `vera-light`: cream paper, blue ink, teal, lavender, and raspberry.
+- `vera-dark`: a deep blue background and softer versions of those accents.
+
+Both Vera themes include a plain background matching their palette; see [the
+Vera theme notes](docs/themes.md#vera-light-and-dark). Switch from
+`Hyprkarl Menu -> Config -> Theme` or with `hk-theme set <name>`. A theme is one `theme.yaml`; add your own, or override
 part of a shipped one, under `~/.config/hyprkarl/themes/`. See
 [Themes](docs/themes.md).
 
