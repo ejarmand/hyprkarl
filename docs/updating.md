@@ -42,7 +42,8 @@ git -C ~/.local/share/hyprkarl config hyprkarl.updateBranch develop
    (`hk-config-seed`);
 6. restows shipped links, removes stale ones, and links the agent skill;
 7. rebuilds the selected theme;
-8. restores the wallpaper and reloads Hyprland, terminals, and Btop;
+8. restores the wallpaper, reloads Hyprland, terminals, and Btop, and
+   rebuilds the Starship prompt;
 9. starts Quickshell again, whether or not the steps succeeded.
 
 The applied revision is recorded only when every step succeeds. If one fails,

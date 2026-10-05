@@ -88,6 +88,7 @@ if pgrep -x Hyprland >/dev/null; then
 fi
 hk-terminal-reload || fail "Terminal configuration reload failed."
 hk-btop-reload || fail "Btop configuration reload failed."
+hk-starship-reload || fail "Starship prompt rebuild failed."
 
 update_write_configuration_revision || fail "Could not record the applied revision."
 update_clear_pending_source

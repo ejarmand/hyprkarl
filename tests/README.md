@@ -19,7 +19,10 @@ tests/hk-config-seed.sh
 Builds a shipped theme into disposable XDG state, applies a sparse same-name
 source overlay, checks wallpaper precedence and wallpaper-free themes, proves
 that a failed build leaves the active theme unchanged, and checks that the GTK
-theme is a real copy and older builds are deleted.
+theme is a real copy and older builds are deleted. It also renders a theme's
+Starship palette from an override and checks that `hk-starship-reload` merges
+it into a prompt layout in place of the layout's palette, or copies the layout
+unchanged for a theme without one.
 
 ```bash
 tests/hk-theme-runtime.sh

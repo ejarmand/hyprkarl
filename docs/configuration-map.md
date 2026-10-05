@@ -58,6 +58,8 @@ and are not for editing:
 - `display/` holds the layout the display panel saved: `monitors.lua`, which
   Hyprland loads, and `layout.json`. Rules in `hyprland.local.lua` still win.
 - `calculator-history.json` keeps the calculator's last five results.
+- `starship.toml` is your Starship layout merged with the theme's palette
+  (`hk-starship-reload`).
 
 `hk-update apply` links Hyprkarl's agent skill into the skill folders of
 coding agents (`~/.agents`, `~/.claude`, `~/.codex`), creating them, so an
@@ -81,7 +83,8 @@ Hyprkarl's bootstrap, which loads, in order:
 
 At login, the `autostart` module runs `hk-autostart`, which starts the shell,
 the idle daemon, and the wallpaper, sets the cursor, and runs your `login`
-hooks. The module also starts GNOME Keyring's Secret Service, then
+hooks. The module also rebuilds the Starship prompt, starts GNOME Keyring's
+Secret Service, then
 `hk-wispr-switch`, then Wispr Flow in the tray.
 
 Unfocused windows are 80% opaque through a `default-opacity` tag that every
@@ -103,7 +106,8 @@ fallback. For syntax, see Hyprland's
 - puts `defaults/config/` first in `XDG_CONFIG_DIRS` and `defaults/share/`
   first in `XDG_DATA_DIRS`, followed by Flatpak's entries;
 - sets `EDITOR=nvim`, `TERMINAL=ghostty`, `QT_QPA_PLATFORMTHEME`,
-  `WIFITUI_THEME`, and `WISPR_TRANSCRIPT_HOOK=hk-voice-command`;
+  `WIFITUI_THEME`, `STARSHIP_CONFIG`, and
+  `WISPR_TRANSCRIPT_HOOK=hk-voice-command`;
 - saves screenshots to `~/Pictures/screenshots` (`HYPRSHOT_DIR`) and screen
   recordings to `~/Videos/screenrecord` (`HYPRKARL_SCREENRECORD_DIR`); create
   both directories;
@@ -157,6 +161,7 @@ not in place.
 | Cursor | Each theme switch writes `~/.local/share/icons/default/index.theme` |
 | File chooser | Linked `xdg-desktop-portal-termfilechooser/config`, which opens Yazi in your terminal |
 | fastfetch | The theme's whole config, found through `XDG_CONFIG_DIRS`; your own `~/.config/fastfetch/config.jsonc` replaces it |
+| Starship | `hk-starship-reload` merges your `~/.config/starship.toml` with the theme's palette into `~/.local/state/hyprkarl/starship.toml`, where `STARSHIP_CONFIG` points |
 
 **Starting configs.** btop, Neovim, and Yazi cannot load Hyprkarl's
 defaults next to a file of yours, so `hk-update apply` copies Hyprkarl's

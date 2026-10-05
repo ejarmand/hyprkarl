@@ -78,4 +78,27 @@ theme_ensure_wallpaper_selection \
 "$ORIG/bin/hk-wallpaper-init" --if-ready \
   || fail "wallpaper-free theme was not a startup no-op"
 
+# A theme's starship.toml (here from a personal override) is merged into the
+# user's prompt layout in place of the layout's own palette line.
+mkdir -p "$HYPRKARL_USER_THEMES/hyprkarl/overrides"
+printf "[palettes.hyprkarl]\ncolor_fg0 = '{{base.foreground}}'\n" \
+  > "$HYPRKARL_USER_THEMES/hyprkarl/overrides/starship.toml"
+theme_activate hyprkarl >/dev/null \
+  || fail "theme with a Starship palette did not activate"
+printf "format = '\$all'\npalette = 'gruvbox_dark'\n\n[palettes.gruvbox_dark]\npalette = 'kept'\n" \
+  > "$XDG_CONFIG_HOME/starship.toml"
+"$ORIG/bin/hk-starship-reload" || fail "Starship prompt rebuild failed"
+starship="$XDG_STATE_HOME/hyprkarl/starship.toml"
+[[ "$(sed '/^\[/q' "$starship" | grep '^palette = ')" == "palette = 'hyprkarl'" ]] \
+  || fail "merged prompt does not select only the theme palette"
+grep -qx "palette = 'kept'" "$starship" \
+  || fail "a palette key inside a table was dropped"
+grep -q "^color_fg0 = '#" "$starship" \
+  || fail "theme palette was not rendered into the merged prompt"
+rm "$HYPRKARL_USER_THEMES/hyprkarl/overrides/starship.toml"
+theme_activate hyprkarl >/dev/null || fail "theme without a Starship palette did not activate"
+"$ORIG/bin/hk-starship-reload" || fail "Starship prompt rebuild without a palette failed"
+cmp -s "$XDG_CONFIG_HOME/starship.toml" "$starship" \
+  || fail "a theme without a palette did not use the layout unchanged"
+
 printf 'Theme runtime integration passed.\n'

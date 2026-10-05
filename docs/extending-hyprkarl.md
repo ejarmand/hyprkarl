@@ -404,3 +404,8 @@ generated files through
 selects the active wallpaper. Edit theme sources and rebuild rather than
 editing generated files. Use a `theme-set` hook when your application needs
 an explicit reload.
+
+The Starship prompt already follows the theme: keep your layout in
+`~/.config/starship.toml`, refer to the theme palette's color names, and run
+`hk-starship-reload` after editing it. See [Starship
+prompt](themes.md#starship-prompt).

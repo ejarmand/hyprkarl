@@ -242,6 +242,41 @@ wifitui:
 The generated `theme.yaml` contains the fully merged and resolved graph for
 inspection. It is output, not the next authoring source.
 
+## Starship prompt
+
+Starship has no include mechanism, so Hyprkarl builds the prompt config.
+`hk-starship-reload` reads your layout from `~/.config/starship.toml`. If the
+active theme renders a `starship.toml`, the command appends that file's
+`[palettes.hyprkarl]` table and selects it with `palette = 'hyprkarl'`, in
+place of the layout's own top-level `palette` line. Otherwise it copies the
+layout unchanged. The result goes to `~/.local/state/hyprkarl/starship.toml`,
+and `config/uwsm/env` points `STARSHIP_CONFIG` there. Open shells pick up the
+new colors at their next prompt.
+
+`hk-theme set`, `hk-update apply`, and login run the command. Run
+`hk-starship-reload` yourself after you edit `~/.config/starship.toml`. Edits
+to the generated file are lost.
+
+A theme ships its palette as an `overrides/starship.toml` template, since no
+shared template exists for it; it may use palette expressions such as
+`{{base.foreground}}`. A layout uses the palette by referring to color names
+instead of hex values, for example `bg:color_blue fg:color_fg0`. The theme
+palettes define these keys:
+
+| Key | Use |
+| --- | --- |
+| `color_fg0` | Text on the colored segments |
+| `color_fg1` | Text on the time segment (`color_bg1`) |
+| `color_fg2` | Text on the Docker and Conda segments (`color_bg3`) |
+| `color_bg1`, `color_bg3` | Surface segments at the end of the line |
+| `color_magenta`, `color_orange`, `color_yellow`, `color_aqua`, `color_blue` | Segment backgrounds, in order along the prompt |
+| `color_green`, `color_red`, `color_purple` | Prompt character for success, error, and Vim replace mode |
+
+Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
+layout still works under themes without a Starship palette and on machines
+without Hyprkarl. Don't define `[palettes.hyprkarl]` in the layout, because the
+merged file would then contain the table twice.
+
 ## GTK output
 
 The active build contains a `gtk-theme/` directory. `hk-theme set` copies it

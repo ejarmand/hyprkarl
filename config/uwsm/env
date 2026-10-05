@@ -31,6 +31,10 @@ export EDITOR=nvim
 [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/uwsm/default" ]] \
   && source "${XDG_CONFIG_HOME:-$HOME/.config}/uwsm/default"
 
+# Starship prompt: ~/.config/starship.toml merged with the theme palette
+# (hk-starship-reload)
+export STARSHIP_CONFIG="${XDG_STATE_HOME:-$HOME/.local/state}/hyprkarl/starship.toml"
+
 # Set wifitui theme
 export WIFITUI_THEME="${XDG_STATE_HOME:-$HOME/.local/state}/hyprkarl/current/theme/wifitui.toml"
 

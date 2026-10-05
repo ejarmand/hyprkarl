@@ -28,10 +28,11 @@ hyprctl reload >/dev/null
 theme_apply_cursor
 hk-terminal-reload
 hk-btop-reload || exit 1
+hk-starship-reload || post_action_status=1
 
 hk-hook-run theme-set || post_action_status=1
 
 if [[ "$post_action_status" -ne 0 ]]; then
-  printf "Theme '%s' was applied, but a wallpaper action or lifecycle hook failed.\n" "$THEME_NAME" >&2
+  printf "Theme '%s' was applied, but a wallpaper action, the Starship prompt, or a lifecycle hook failed.\n" "$THEME_NAME" >&2
   exit 1
 fi

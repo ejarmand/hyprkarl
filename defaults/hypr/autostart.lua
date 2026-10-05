@@ -5,6 +5,9 @@
 hl.on("hyprland.start", function()
     hl.exec_cmd("hk-autostart")
 
+    -- Rebuild the Starship prompt from ~/.config/starship.toml and the theme
+    hl.exec_cmd("hk-starship-reload")
+
     -- Secret Service for apps that keep passwords in the keyring
     hl.exec_cmd("/usr/bin/gnome-keyring-daemon --start --components=secrets")
 
