@@ -4,7 +4,9 @@
 
 CURRENT_WALLPAPER_LINK="$HYPRKARL_PATH/config/hyprkarl/current/wallpaper"
 
-if [[ ! -L "$CURRENT_WALLPAPER_LINK" ]]; then
+# Fail when the link is missing or dangling (e.g. the new theme has no file
+# with the current wallpaper's name) so callers can fall back to a cycle.
+if [[ ! -L "$CURRENT_WALLPAPER_LINK" || ! -e "$CURRENT_WALLPAPER_LINK" ]]; then
   exit 1
 fi
 

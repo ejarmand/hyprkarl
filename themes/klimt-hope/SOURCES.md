@@ -6,9 +6,16 @@ Gustav Klimt, *Hope, II* (1907–08), oil, gold and platinum on canvas, The Muse
 
 Commons labels the artwork public domain and the faithful two-dimensional reproduction PD-Art / [Public Domain Mark 1.0](https://creativecommons.org/publicdomain/mark/1.0/). That label is a rights-status statement, not a Creative Commons license. Credit: Gustav Klimt, *Hope, II*, MoMA; Google Art Project / Wikimedia Commons. Commons notes that faithful reproduction rights may differ between jurisdictions; the record expressly treats the reproduction as public domain in the United States.
 
-[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/02-hope.jpg`.
+[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/03-hope.jpg`.
 
 SHA-256: `73dca708334a72258153d8fa7bdad84ddbbbeadbac1c0d67dbce3a1ab35c563e`.
+
+Two landscape crops of that same file are also shipped. They change only the framing, orientation and encoding, so they remain faithful reproductions of the public-domain painting:
+
+- `wallpapers/01-hope-figure.jpg`, the default: the upper figure at full resolution, cropped to 2700 × 1800 (3:2) from the top of the original, about 480 pixels from the left edge. SHA-256: `d2a7fca204719c5e26e71122538fab3cf1c50212b2844723d91dc845ff5340d2`.
+- `wallpapers/02-hope-lower.jpg`: the lower half of the painting, with its mosaic robe and three bowed heads, rotated 90° and scaled to 2046 × 1364 (3:2). SHA-256: `fe3d810107dd5d3c6ee569aeb0b9b38c254bfff5fe262c3d89310f0bdcd23620`.
+
+Both crops were made by the repository owner and re-encoded as JPEG for size.
 
 ## Palette
 
@@ -18,7 +25,7 @@ Visual interpretation of the public image: the olive field becomes a dark olive 
 
 Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e`. `palette.yaml` and `templates/` are the regeneration inputs. Copy both into the generator's `palettes/klimt-hope/`, then run `python generate.py klimt-hope -o /tmp/klimt-hope` and copy that output into this directory. Preserve `palette.yaml`, `templates/`, `SOURCES.md`, and `wallpapers/` when copying. The plain background is 3840 × 2160 pixels in the palette's background color; wallpapers are kept outside templates to avoid duplicate assets.
 
-Vera-dark overrides preserve the current bar layout, dark GTK preference and `hyprkarl` GTK/Neovim names, explicit Neovim highlights, and both Foot color sections. Qt retains this account's `/home/earmand/.config/qt{5,6}ct/style-colors.conf` paths; another account must adjust them. Additional overrides set btop's main text, make Qt placeholder/disabled text opaque, and use dark text for Yazi error progress. Starship includes only the palette: normal segments use cream text on darker painting hues, with bright success/error prompt characters. It leaves the user's prompt layout intact.
+Vera-dark overrides preserve the current bar layout, dark GTK preference and `hyprkarl` GTK/Neovim names, explicit Neovim highlights, and both Foot color sections. Qt retains this account's `/home/earmand/.config/qt{5,6}ct/style-colors.conf` paths; another account must adjust them. Additional overrides set btop's main text, make Qt placeholder/disabled text opaque, and use dark text for Yazi error progress. Starship includes only the palette. Its colored segments are persimmon robe, gold, lapis, mosaic green and emerald, with dark text; the trailing segments are bronze and olive-brown. Neighboring segments use different hues, and every colored segment is at least 4.6:1 against the terminal background. It leaves the user's prompt layout intact.
 
 ## Validation
 
@@ -26,6 +33,6 @@ Both complete generator runs, including GTK 3/4 compilation with LibSass 0.23, s
 
 Independent WCAG relative luminance uses linear sRGB, rather than the generator's HSL luminance helper. Checks cover normal/muted/dim text, colored terminal and status text on all theme surfaces, selection, Yazi text pairs, Qt text/placeholder pairs, common GTK secondary and selection text, and current normal Starship segment pairs. ANSI black is a background/decorative color. Disabled GTK controls retain Colloid's reduced opacity and are outside the text target. No desktop theme was activated; native Foot runtime validation was unavailable because Foot is not installed in the build environment.
 
-Measured ratios: main text/background **12.86:1**; muted and dim text on the lightest surface **6.21:1** and **5.31:1**; selection **9.52:1**. The lowest checked ordinary text pair is common GTK secondary text at **4.61:1**. Normal Starship pairs, including the existing layout's fixed OS/hostname background and Docker/Conda text, are at least **5.30:1**.
+Measured ratios: main text/background **12.86:1**; muted and dim text on the lightest surface **6.21:1** and **5.31:1**; selection **9.52:1**. The lowest checked ordinary text pair is common GTK secondary text at **4.61:1**. Starship segment text is at least **4.68:1**, and prompt glyphs are at least **7.64:1** against the background.
 
-The current private prompt reuses `color_yellow` as both the directory's segment background and its Vim visual-mode indicator. Its small visual-mode character has **2.10:1** contrast against the terminal background. This role collision remains a layout limitation; the normal directory text meets the text target.
+The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph. Both are readable.

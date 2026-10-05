@@ -10,7 +10,7 @@ The same file page requests a US public-domain tag. Its existing life-term and Y
 
 Violet from the hat, copper rose from the hair and background, ivory from the glove and face, and warm near-black from the feather boa. These are visual adaptations rather than exact pigment measurements. Surfaces are darkened, text is lifted toward cream, and terminal and status colours are brightened to remain readable. Some subdued cool hues are extended into blue and cyan terminal roles so commands and diagnostics retain distinct colours.
 
-`palette.yaml` is the colour source. `templates/` preserves Vera-dark's current bar layout and application overrides, with a palette-driven Starship template. It includes no wallpaper copies. GTK uses the installed name `hyprkarl`; Qt files point to the active theme; Foot supports both colour sections; Neovim retains a dark background.
+`palette.yaml` is the colour source. `templates/` preserves Vera-dark's current bar layout and application overrides, with a Starship template whose segment colors are picked from the painting. It includes no wallpaper copies. GTK uses the installed name `hyprkarl`; Qt files point to the active theme; Foot supports both colour sections; Neovim retains a dark background.
 
 ## Generation and checks
 
@@ -35,10 +35,10 @@ This reads the preserved palette and overrides directly and leaves the wallpaper
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
-Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.56:1. Selection contrast is 8.05:1. The actual prompt's hardcoded purple OS/hostname segment has 4.98:1 contrast; the four palette-controlled segment fills have at least 7.12:1. Python/Kubernetes text has 6.19:1. Green, red and purple character glyphs remain bright, with at least 10.07:1.
+Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.56:1. Selection contrast is 8.05:1. Starship segment text is at least 4.71:1; the colored segments are violet hat, copper hair, ivory glove, cool sage and dusty rose, with dark text, and each is at least 5.4:1 against the terminal background. The trailing segments are plum. Prompt glyphs are at least 10.00:1 against the background.
 
 Yazi's error-progress text uses the dark background colour on the error fill, giving 7.26:1. Btop explicitly uses the primary foreground. Qt active and inactive placeholders use the opaque secondary foreground, with at least 6.04:1 across the theme surfaces.
 
-All listed pairs meet 4.5:1. The existing prompt also uses `color_yellow` for both a directory-segment background and a Vim visual-mode glyph. This palette keeps the segment readable; the shared yellow glyph role remains a limitation of that prompt layout. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
+All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph. Both are readable. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
 
 The plain background is 3840 × 2160 pixels, filled with `#191418`. No active theme was switched.

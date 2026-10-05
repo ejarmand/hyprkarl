@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Cream text sits on dark segment fills. Green, red and purple are prompt glyphs.
+# Cream text on deep painting colors, in prompt order: indigo sash, rose panel, pavilion ochre, garden green, horse slate; hat brown and wall red surfaces.
 [palettes.hyprkarl]
 color_fg0 = '#eee8db'
 color_fg1 = '#eee8db'
 color_fg2 = '#cedeaf'
-color_bg1 = '#17231f'
-color_bg3 = '#202e28'
-color_magenta = '#d7a8bd'
+color_bg1 = '#7a3328'  # wall red
+color_bg3 = '#4a2a26'  # hat brown
+color_magenta = '#4b3c9a'  # indigo sash
 color_purple = '#efc4d6'
-color_orange = '#584a44'
-color_yellow = '#535540'
-color_aqua = '#3f544f'
-color_blue = '#425153'
+color_orange = '#93506f'  # rose panel
+color_yellow = '#7d5229'  # pavilion ochre
+color_aqua = '#2a6e48'  # garden green
+color_blue = '#4f5e76'  # horse slate
 color_green = '#cedeaf'
 color_red = '#ffc1b4'

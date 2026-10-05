@@ -24,7 +24,8 @@ Hyprkarl:
 
 - updates `config/hyprkarl/current/theme`
 - writes `config/hyprkarl/current/theme.name`
-- updates the wallpaper state
+- keeps the current wallpaper's file name if the new theme has it, otherwise
+  switches to the theme's first wallpaper in name order
 - updates GNOME and QT themes
 - reloads Hyprland, mako, terminals, and `btop`
 - rebuilds the Starship prompt config (`hk-starship-reload`)
@@ -138,10 +139,14 @@ and `templates/` and includes a Starship palette.
 | `klimt-adele` | *Portrait of Adele Bloch-Bauer II*, 1912 | Deep green, coral, sage, lilac and cream |
 
 Switch with `hk-theme set klimt-music`, or substitute any name from the table.
-All four cover the same applications as Vera dark, retain the default bar
-layout, and ship a matching plain `wallpapers/01-default.png`.
+All four cover the same applications as Vera dark and retain the default bar
+layout. Music, Hope and Adele default to their painting and also ship a
+matching plain background, numbered last. Hope and Adele default to 3:2
+landscape crops (`01-hope-figure.jpg`, `01-adele-portrait.jpg`) and keep a
+second Hope crop and the full paintings as alternatives. Boa ships only the plain
+`01-default.png`.
 
-Music also ships `02-music.jpg` from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
+The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
 under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 Preserve its attribution and license when redistributing it, state any image
 changes, and share artwork adaptations under the same license. This image
@@ -323,7 +328,10 @@ because the repo already expects a specific file layout.
 
 ## Wallpapers in Themes
 
-Wallpapers are stored in each theme's `wallpapers/` directory.
+Wallpapers are stored in each theme's `wallpapers/` directory. The first file
+in name order is the theme's default, so name it `01-…`. Switching themes keeps
+the current wallpaper's file name when the new theme has one, otherwise it uses
+that default.
 
 To add a wallpaper to the current theme, you can run:
 

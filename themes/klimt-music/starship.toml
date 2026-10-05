@@ -1,16 +1,16 @@
-# Palette merged with the user's layout by hk-starship-reload.
-# Colored powerline backgrounds are dark; prompt characters use bright red/green.
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: lyre gold, lavender-grey bow, terracotta hair, turquoise, pale green; the harp's blue-green and hair-brown surfaces.
 [palettes.hyprkarl]
-color_fg0 = '#f1e7d5'
+color_fg0 = '#19272b'
 color_fg1 = '#f1e7d5'
 color_fg2 = '#f0d395'
-color_bg1 = '#29383e'
-color_bg3 = '#19272b'
-color_magenta = '#d6b0c9'
+color_bg1 = '#4b3635'  # hair brown
+color_bg3 = '#235459'  # harp blue-green
+color_magenta = '#e2b65a'  # lyre gold
 color_purple = '#d6b0c9'
-color_orange = '#565247'
-color_yellow = '#545340'
-color_aqua = '#425859'
-color_blue = '#455660'
+color_orange = '#b3b1cc'  # lavender-grey bow
+color_yellow = '#d9906c'  # terracotta hair
+color_aqua = '#4fb0a4'  # turquoise
+color_blue = '#b4cfa4'  # pale green
 color_green = '#b1c8a0'
 color_red = '#e7afa5'

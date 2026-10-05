@@ -1,16 +1,16 @@
-# Palette merged with the user's layout by hk-starship-reload.
-# Colored powerline backgrounds are dark; prompt characters use bright red/green.
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: persimmon robe, gold, lapis, mosaic green, emerald; bronze and olive-brown surfaces.
 [palettes.hyprkarl]
-color_fg0 = '#f6e8c5'
+color_fg0 = '#212518'
 color_fg1 = '#f6e8c5'
 color_fg2 = '#ffdf88'
-color_bg1 = '#303624'
-color_bg3 = '#212518'
-color_magenta = '#dca8d2'
+color_bg1 = '#3f4426'  # olive-brown
+color_bg3 = '#6b561c'  # bronze
+color_magenta = '#f25a30'  # persimmon robe
 color_purple = '#dca8d2'
-color_orange = '#5e5034'
-color_yellow = '#5e552f'
-color_aqua = '#43574a'
-color_blue = '#4a5157'
+color_orange = '#e3a930'  # gold
+color_yellow = '#4a8cef'  # lapis
+color_aqua = '#9cbf5c'  # mosaic green
+color_blue = '#3fc28a'  # emerald
 color_green = '#b4ce86'
 color_red = '#efa387'
