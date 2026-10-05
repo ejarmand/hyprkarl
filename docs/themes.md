@@ -214,6 +214,31 @@ Fastfetch belongs to the theme entirely. Its `fastfetch` keys set the logo's
 the layout or the logo art. A `~/.config/fastfetch/config.jsonc` of your own
 takes precedence over every theme.
 
+A few consumers take colors by role, and a theme can point a role at another
+palette value without overriding the template:
+
+| Key | Default | Used for |
+|---|---|---|
+| `terminal.selection_fg`, `terminal.selection_bg` | `base.background`, `ui.cursor` | Selected text in foot and Ghostty |
+| `btop.main_fg` | empty (btop's own) | btop's text |
+| `btop.highlight` | `accent.secondary.soft` | btop's highlighted keys and graph starts |
+| `wifitui.subtle` | `accent.secondary.soft` | wifitui's subtle text |
+| `qt.highlight` | `accent.secondary.base` | Qt's selection highlight |
+| `gtk.accent`, `gtk.accent_bright` | `accent.secondary.base`, `accent.secondary.bright` | Colloid's accent and links |
+
+For example, a light theme whose soft accents are pale points the btop and
+wifitui roles at readable colors:
+
+```yaml
+btop:
+  highlight: "{{accent.secondary.base}}"
+wifitui:
+  subtle: "{{base.foreground_muted}}"
+```
+
+`mode: light` also selects Neovim's light background and gives foot a matching
+`[colors-light]` section.
+
 The generated `theme.yaml` contains the fully merged and resolved graph for
 inspection. It is output, not the next authoring source.
 

@@ -32,7 +32,36 @@ $yellow-dark: {{ansi.yellow}};
 $orange-light: {{mix(bright.yellow, bright.red, 45)}};
 $orange-dark: {{mix(ansi.yellow, ansi.red, 45)}};
 
-// Grey
+// Grey: Colloid's ramp runs from the light end (050) to the dark end (950),
+// so it starts at the background in light mode and at the foreground in dark
+// mode. White and black follow the same way.
+{% if mode == 'light' %}
+$grey-050: {{mix(base.foreground, base.background, 95)}};
+$grey-100: {{mix(base.foreground, base.background, 90)}};
+$grey-150: {{mix(base.foreground, base.background, 85)}};
+$grey-200: {{mix(base.foreground, base.background, 80)}};
+$grey-250: {{mix(base.foreground, base.background, 74)}};
+$grey-300: {{mix(base.foreground, base.background, 68)}};
+$grey-350: {{mix(base.foreground, base.background, 62)}};
+$grey-400: {{mix(base.foreground, base.background, 56)}};
+$grey-450: {{mix(base.foreground, base.background, 50)}};
+$grey-500: {{mix(base.foreground, base.background, 44)}};
+$grey-550: {{mix(base.foreground, base.background, 38)}};
+$grey-600: {{mix(base.foreground, base.background, 24)}};
+$grey-650: {{mix(base.foreground, base.background, 19)}};
+$grey-700: {{mix(base.foreground, base.background, 14)}};
+$grey-750: {{mix(base.foreground, base.background, 10)}};
+$grey-800: {{mix(base.foreground, base.background, 6)}};
+$grey-850: {{mix(base.foreground, base.background, 2)}};
+$grey-900: {{base.foreground}};
+$grey-950: {{base.foreground}};
+
+// White
+$white: {{base.background}};
+
+// Black
+$black: {{base.foreground}};
+{% else %}
 $grey-050: {{mix(base.background, base.foreground, 95)}};
 $grey-100: {{mix(base.background, base.foreground, 90)}};
 $grey-150: {{mix(base.background, base.foreground, 85)}};
@@ -58,6 +87,7 @@ $white: {{base.foreground}};
 
 // Black
 $black: {{base.background}};
+{% endif %}
 
 // Button
 $button-close: {{status.error}};
@@ -65,8 +95,8 @@ $button-max: {{status.success}};
 $button-min: {{status.warning}};
 
 // Link
-$links: {{accent.secondary.base}};
+$links: {{gtk.accent}};
 
 // Theme
-$default-light: {{accent.secondary.bright if accent.secondary is defined and accent.secondary.bright is defined else bright.blue}};
-$default-dark: {{accent.secondary.base if accent.secondary is defined and accent.secondary.base is defined else ansi.blue}};
+$default-light: {{gtk.accent_bright}};
+$default-dark: {{gtk.accent}};

@@ -39,6 +39,31 @@ wallpaper:
   accent: "{{accent.primary.base}}"
   accent_dim: "{{accent.primary.soft}}"
 
+# Colors some consumers take by role. A theme points one at another palette
+# value when the default role does not suit its palette.
+terminal:
+  # Selected text in foot and Ghostty
+  selection_fg: "{{base.background}}"
+  selection_bg: "{{ui.cursor}}"
+
+btop:
+  # Text color; empty leaves btop's own default
+  main_fg: ""
+  # Highlighted keys and the start of the memory, network, and process graphs
+  highlight: "{{accent.secondary.soft}}"
+
+wifitui:
+  subtle: "{{accent.secondary.soft}}"
+
+qt:
+  # Selection highlight in the Qt palettes
+  highlight: "{{accent.secondary.base}}"
+
+gtk:
+  # Colloid's theme accent and link color
+  accent: "{{accent.secondary.base}}"
+  accent_bright: "{{accent.secondary.bright}}"
+
 fastfetch:
   logo:
     mark: "{{accent.primary.bright}}"

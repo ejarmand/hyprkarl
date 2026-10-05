@@ -6,7 +6,7 @@ end
 
 vim.cmd("highlight clear")
 vim.g.colors_name = "hyprkarl"
-vim.opt.background = "dark"
+vim.opt.background = "{{mode}}"
 
 ----------------------------------------------------------------
 -- Palette

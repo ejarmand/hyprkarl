@@ -1,5 +1,5 @@
 Primary = "{{accent.primary.bright}}"
-Subtle = "{{accent.secondary.soft}}"
+Subtle = "{{wifitui.subtle}}"
 Success = "{{status.success}}"
 Error = "{{status.error}}"
 

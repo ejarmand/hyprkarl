@@ -1,6 +1,7 @@
-theme[main_bg]       = "{{base.background}}"
+{% if btop.main_fg %}theme[main_fg]       = "{{btop.main_fg}}"
+{% endif %}theme[main_bg]       = "{{base.background}}"
 theme[title]         = "{{accent.secondary.bright}}"
-theme[hi_fg]         = "{{accent.secondary.soft}}"
+theme[hi_fg]         = "{{btop.highlight}}"
 
 theme[selected_bg]   = "{{ui.panel}}"
 theme[selected_fg]   = "{{base.foreground}}"
@@ -38,12 +39,12 @@ theme[available_start]   = "{{base.layer1}}"
 theme[available_mid]     = "{{accent.tertiary.base}}"
 theme[available_end]     = "{{accent.tertiary.bright}}"
 
-theme[used_start]        = "{{accent.secondary.soft}}"
+theme[used_start]        = "{{btop.highlight}}"
 theme[used_mid]          = "{{accent.secondary.base}}"
 theme[used_end]          = "{{accent.secondary.bright}}"
 
 # network (distinct but not semantic-danger)
-theme[download_start]    = "{{accent.secondary.soft}}"
+theme[download_start]    = "{{btop.highlight}}"
 theme[download_mid]      = "{{accent.secondary.base}}"
 theme[download_end]      = "{{accent.primary.base}}"
 
@@ -52,6 +53,6 @@ theme[upload_mid]        = "{{accent.tertiary.base}}"
 theme[upload_end]        = "{{accent.primary.bright}}"
 
 # process (neutral activity → use secondary)
-theme[process_start]     = "{{accent.secondary.soft}}"
+theme[process_start]     = "{{btop.highlight}}"
 theme[process_mid]       = "{{accent.secondary.base}}"
 theme[process_end]       = "{{accent.secondary.bright}}"

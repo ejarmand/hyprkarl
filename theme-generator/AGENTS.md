@@ -70,6 +70,13 @@ theme. Use a theme override only when that theme needs structurally different
 output; values that fit the shared graph belong in `theme.yaml` or
 `defaults/theme.yaml`.
 
+Light mode is handled in the shared templates through `mode` (Colloid's grey
+ramp, Neovim's background, foot's `[colors-light]` section), not in theme
+overrides. Where themes disagree about which palette color a consumer should
+use, the template reads a role token (`terminal`, `btop`, `wifitui`, `qt`,
+`gtk` in `defaults/theme.yaml`) whose default keeps the earlier output, so
+built-in themes that do not set it render unchanged.
+
 ## Checks
 
 Run from `theme-generator/`:
