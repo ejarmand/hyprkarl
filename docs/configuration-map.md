@@ -97,7 +97,11 @@ fallback. For syntax, see Hyprland's
   command can replace an `hk-*` command of the same name;
 - puts `defaults/config/` first in `XDG_CONFIG_DIRS` and `defaults/share/`
   first in `XDG_DATA_DIRS`, followed by Flatpak's entries;
-- sets `EDITOR=nvim`, `QT_QPA_PLATFORMTHEME`, and `WIFITUI_THEME`;
+- sets `EDITOR=nvim`, `TERMINAL=ghostty`, `QT_QPA_PLATFORMTHEME`, and
+  `WIFITUI_THEME`;
+- saves screenshots to `~/Pictures/screenshots` (`HYPRSHOT_DIR`) and screen
+  recordings to `~/Videos/screenrecord` (`HYPRKARL_SCREENRECORD_DIR`); create
+  both directories;
 - loads `~/.config/uwsm/default`, where `hk-default-editor` records your
   editor, then `~/.config/uwsm/env.local`.
 
@@ -129,7 +133,7 @@ applies until you create one at the same path.
 | Default | Purpose | Your override |
 |---|---|---|
 | `defaults/config/xdg-desktop-portal/portals.conf` | Portal backends, including the terminal file chooser | `~/.config/xdg-desktop-portal/portals.conf` |
-| `defaults/config/xdg-terminals.list` | Terminal for `xdg-terminal-exec`; `hk-default-terminal` writes yours | `~/.config/xdg-terminals.list` |
+| `defaults/config/xdg-terminals.list` | Terminal for `xdg-terminal-exec` (Ghostty); `hk-default-terminal` writes yours | `~/.config/xdg-terminals.list` |
 | `defaults/share/applications/` | Terminal arguments for Alacritty and foot; Nautilus without D-Bus activation, which opened two windows | A file of the same name in `~/.local/share/applications/` |
 
 The launcher hides a few rarely used applications through

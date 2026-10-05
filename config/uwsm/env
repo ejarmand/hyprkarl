@@ -14,6 +14,15 @@ export XDG_DATA_DIRS="$HYPRKARL_PATH/defaults/share:/var/lib/flatpak/exports/sha
 # Qt theme
 export QT_QPA_PLATFORMTHEME=qt6ct
 
+# Terminal for programs that read $TERMINAL; Hyprkarl itself opens terminals
+# through xdg-terminal-exec (defaults/config/xdg-terminals.list)
+export TERMINAL=ghostty
+
+# Where screenshots (hyprshot, via hk-screenshot) and screen recordings
+# (hk-screen-record) are saved. Create the directories first.
+export HYPRSHOT_DIR="$HOME/Pictures/screenshots"
+export HYPRKARL_SCREENRECORD_DIR="$HOME/Videos/screenrecord"
+
 # Default editor; hk-default-editor records a different choice in uwsm/default
 export EDITOR=nvim
 [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/uwsm/default" ]] \
