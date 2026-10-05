@@ -39,10 +39,10 @@ This reads the preserved palette and overrides directly and leaves the wallpaper
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
-Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 5.32:1; the colored segments are wall red, pavilion ochre, forest green, horse blue-grey and lettuce green, with dark text, and each is at least 5.3:1 against the terminal background. The trailing segments are the eggplant sash and the brown of the hat, which ground the lighter colors. Prompt glyphs are at least 10.44:1 against the background.
+Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 4.75:1. Unlike the other Klimt prompts, Adele uses cream text on deep colors so it can open on the indigo sash: indigo sash, rose panel, pavilion ochre, garden green and horse slate, then the hat's brown and the wall red. Being deep, these segments stand out from the dark green background by hue rather than brightness (at least 1.86:1). Prompt glyphs are at least 10.44:1 against the background.
 
 Yazi's error-progress text uses the dark background colour on the error fill, giving 8.11:1. Btop explicitly uses the primary foreground. Qt active and inactive placeholders use the opaque secondary foreground, with at least 6.09:1 across the theme surfaces.
 
-All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph; both are readable. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
+All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph. The ochre segment is dark enough for cream text, so that glyph is only 2.40:1 against the background. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
 
 The plain background is 3840 × 2160 pixels, filled with `#17231f`. No active theme was switched.

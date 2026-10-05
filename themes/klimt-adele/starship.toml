@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Dark text on painting colors, in prompt order: wall red, pavilion ochre, forest green, horse blue-grey, lettuce green; eggplant sash and hat brown surfaces.
+# Cream text on deep painting colors, in prompt order: indigo sash, rose panel, pavilion ochre, garden green, horse slate; hat brown and wall red surfaces.
 [palettes.hyprkarl]
-color_fg0 = '#17231f'
+color_fg0 = '#eee8db'
 color_fg1 = '#eee8db'
 color_fg2 = '#cedeaf'
-color_bg1 = '#4a2a24'  # hat brown
-color_bg3 = '#4a2f5e'  # eggplant sash
-color_magenta = '#e8705a'  # wall red
+color_bg1 = '#7a3328'  # wall red
+color_bg3 = '#4a2a26'  # hat brown
+color_magenta = '#4b3c9a'  # indigo sash
 color_purple = '#efc4d6'
-color_orange = '#dba35c'  # pavilion ochre
-color_yellow = '#5fa36f'  # forest green
-color_aqua = '#a3b5d2'  # horse blue-grey
-color_blue = '#b8ca5e'  # lettuce green
+color_orange = '#93506f'  # rose panel
+color_yellow = '#7d5229'  # pavilion ochre
+color_aqua = '#2a6e48'  # garden green
+color_blue = '#4f5e76'  # horse slate
 color_green = '#cedeaf'
 color_red = '#ffc1b4'
