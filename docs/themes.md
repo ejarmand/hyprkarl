@@ -281,7 +281,7 @@ keys:
 Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
 layout still works under themes without a `starship.toml` and on machines
 without Hyprkarl. If the layout uses `color_fg_host`, define it in that palette
-too. `klimt-adele` opens on a near-black segment and sets it to cream. Don't define `[palettes.hyprkarl]` in the layout, because the
+too. `klimt-adele` opens on a near-black segment and sets it to near-white. Don't define `[palettes.hyprkarl]` in the layout, because the
 merged file would then contain the table twice. The Vera variants and all four
 `klimt-*` themes ship a Starship palette.
 
