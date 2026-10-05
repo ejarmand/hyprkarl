@@ -141,9 +141,9 @@ and `templates/` and includes a Starship palette.
 Switch with `hk-theme set klimt-music`, or substitute any name from the table.
 All four cover the same applications as Vera dark and retain the default bar
 layout. Music, Hope and Adele default to their painting and also ship a
-matching plain background, numbered last. Hope and Adele default to landscape
-crops (`01-hope-lower.jpg`, `01-adele-portrait.jpg`) and keep a second Hope
-crop and the full paintings as alternatives. Boa ships only the plain
+matching plain background, numbered last. Hope and Adele default to 3:2
+landscape crops (`01-hope-figure.jpg`, `01-adele-portrait.jpg`) and keep a
+second Hope crop and the full paintings as alternatives. Boa ships only the plain
 `01-default.png`.
 
 The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),

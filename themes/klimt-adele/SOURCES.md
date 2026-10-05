@@ -8,7 +8,7 @@ The file page includes a US pre-1931 publication/registration statement and PD-A
 
 The unchanged reproduction is `wallpapers/02-adele.jpg`, retrieved 2026-10-05. SHA-256: `8c49d204cbb2ed3955be283998cba8c7573a21cdd3a32bbac6890b84bf1d787c`. The matching plain background is `wallpapers/03-default.png`.
 
-The default wallpaper, `wallpapers/01-adele-portrait.jpg`, is a landscape crop of that same file: its top 1576 × 1065 pixels (hat, face and the red wall), made by the repository owner and re-encoded as JPEG. It changes only the framing, so it remains a faithful reproduction of the public-domain painting. SHA-256: `ef86f2960dc1429442909c89af61d94bb228b4e72b4cd72b005aa59e93f4617b`.
+The default wallpaper, `wallpapers/01-adele-portrait.jpg`, is a landscape crop of that same file: its top 1575 × 1050 pixels, a 3:2 frame of the hat, face and red wall, made by the repository owner and re-encoded as JPEG. It changes only the framing, so it remains a faithful reproduction of the public-domain painting. SHA-256: `18fce17b4dded783abccd247ab553ce7d60f3011919a6d32e246a823019d21ab`.
 
 ## Palette choices
 

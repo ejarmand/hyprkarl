@@ -12,8 +12,8 @@ SHA-256: `73dca708334a72258153d8fa7bdad84ddbbbeadbac1c0d67dbce3a1ab35c563e`.
 
 Two landscape crops of that same file are also shipped. They change only the framing, orientation and encoding, so they remain faithful reproductions of the public-domain painting:
 
-- `wallpapers/01-hope-lower.jpg`, the default: the lower half of the painting, with its mosaic robe and three bowed heads, rotated 90° and scaled to 2048 × 1366. SHA-256: `773ebf8554714578743d92af1318362914f01fd14dc3ec6f6b5f7fe8bd9c0a65`.
-- `wallpapers/02-hope-figure.jpg`: the upper figure at full resolution, cropped to 2700 × 1803 from the top of the original, about 480 pixels from the left edge. SHA-256: `a9958d1ace21e26f68dc6cb3019796682eec897689dd5c39c233126046271829`.
+- `wallpapers/01-hope-figure.jpg`, the default: the upper figure at full resolution, cropped to 2700 × 1800 (3:2) from the top of the original, about 480 pixels from the left edge. SHA-256: `d2a7fca204719c5e26e71122538fab3cf1c50212b2844723d91dc845ff5340d2`.
+- `wallpapers/02-hope-lower.jpg`: the lower half of the painting, with its mosaic robe and three bowed heads, rotated 90° and scaled to 2046 × 1364 (3:2). SHA-256: `fe3d810107dd5d3c6ee569aeb0b9b38c254bfff5fe262c3d89310f0bdcd23620`.
 
 Both crops were made by the repository owner and re-encoded as JPEG for size.
 
