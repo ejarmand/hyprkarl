@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Dark text on painting colors, in prompt order: terracotta wall, ivory dress, floral green, dusty rose, grey teal; green and slate surfaces.
+# Dark text on painting colors, in prompt order: wall red, pavilion ochre, forest green, horse blue-grey, lettuce green; eggplant sash and hat brown surfaces.
 [palettes.hyprkarl]
 color_fg0 = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
 color_fg2 = '{{accent.primary.bright}}'
-color_bg1 = '#4b4f66'  # slate
-color_bg3 = '#3e5e4f'  # backdrop green
-color_magenta = '#d88b6f'  # terracotta wall
+color_bg1 = '#4a2a24'  # hat brown
+color_bg3 = '#4a2f5e'  # eggplant sash
+color_magenta = '#e8705a'  # wall red
 color_purple = '{{bright.magenta}}'
-color_orange = '#e6dcc4'  # ivory dress
-color_yellow = '#9fbf98'  # floral green
-color_aqua = '#d9a6b0'  # dusty rose
-color_blue = '#93b4b5'  # grey teal
+color_orange = '#dba35c'  # pavilion ochre
+color_yellow = '#5fa36f'  # forest green
+color_aqua = '#a3b5d2'  # horse blue-grey
+color_blue = '#b8ca5e'  # lettuce green
 color_green = '{{bright.green}}'
 color_red = '{{bright.red}}'
