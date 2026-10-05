@@ -35,8 +35,12 @@ if [[ -f "$THEME_PALETTE" ]]; then
       echo "palette = 'hyprkarl'" &&
       # Drop the layout's top-level palette line. A bare [table] header ends the
       # top level; powerline segments like [](...) inside format don't match.
-      awk '/^[[:space:]]*\[[^]]+\][[:space:]]*$/ { in_table = 1 }
-        !(!in_table && /^[[:space:]]*palette[[:space:]]*=/)' "$LAYOUT" &&
+      # Lines inside a multi-line string (""" or ''') are skipped by both
+      # rules; an odd count of those delimiters on a line toggles in_str.
+      awk '!in_str && /^[[:space:]]*\[[^]]+\][[:space:]]*$/ { in_table = 1 }
+        { keep = in_str || in_table || !/^[[:space:]]*palette[[:space:]]*=/ }
+        gsub(/"""|\047\047\047/, "&") % 2 { in_str = !in_str }
+        keep' "$LAYOUT" &&
       echo &&
       cat "$THEME_PALETTE"
   } >"$tmp"
