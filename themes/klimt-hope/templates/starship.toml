@@ -1,5 +1,5 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Dark text on painting colors, in prompt order: persimmon robe, gold, lapis, mosaic green, turquoise; bronze and olive-brown surfaces.
+# Dark text on painting colors, in prompt order: persimmon robe, gold, soft lapis, forest green, turquoise; bronze and olive-brown surfaces.
 [palettes.hyprkarl]
 color_fg0 = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
@@ -9,8 +9,8 @@ color_bg3 = '#6b561c'  # bronze
 color_magenta = '#ff4a28'  # persimmon robe
 color_purple = '{{ansi.magenta}}'
 color_orange = '#f0b21a'  # gold
-color_yellow = '#3a88ff'  # lapis
-color_aqua = '#58b55a'  # mosaic green
+color_yellow = '#72a5ea'  # soft lapis
+color_aqua = '#3a9e52'  # forest green disc
 color_blue = '#3db3bf'  # turquoise
 color_green = '{{ansi.green}}'
 color_red = '{{ansi.red}}'

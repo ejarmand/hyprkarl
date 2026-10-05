@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Dark text on painting colors, in prompt order: lyre gold, lavender-grey bow, terracotta hair, turquoise, pale green; the harp's blue-green and hair-brown surfaces.
+# Dark text on painting colors, in prompt order: lyre gold, wet rock, terracotta hair, lapis, sphinx stone; the harp's blue-green and hair-brown surfaces.
 [palettes.hyprkarl]
 color_fg0 = '#19272b'
 color_fg1 = '#f1e7d5'
 color_fg2 = '#f0d395'
-color_bg1 = '#4b3635'  # hair brown
+color_bg1 = '#34221f'  # dark hair brown
 color_bg3 = '#235459'  # harp blue-green
 color_magenta = '#e2b65a'  # lyre gold
 color_purple = '#d6b0c9'
-color_orange = '#a9b0d0'  # lavender-grey bow
+color_orange = '#8b90a3'  # wet rock
 color_yellow = '#c88a5f'  # terracotta hair
-color_aqua = '#4fb0a4'  # turquoise
-color_blue = '#b4cfa4'  # pale green
+color_aqua = '#5c8be8'  # lapis
+color_blue = '#bf9c8c'  # sphinx stone
 color_green = '#b1c8a0'
 color_red = '#e7afa5'
