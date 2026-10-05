@@ -6,9 +6,16 @@ Gustav Klimt, *Hope, II* (1907–08), oil, gold and platinum on canvas, The Muse
 
 Commons labels the artwork public domain and the faithful two-dimensional reproduction PD-Art / [Public Domain Mark 1.0](https://creativecommons.org/publicdomain/mark/1.0/). That label is a rights-status statement, not a Creative Commons license. Credit: Gustav Klimt, *Hope, II*, MoMA; Google Art Project / Wikimedia Commons. Commons notes that faithful reproduction rights may differ between jurisdictions; the record expressly treats the reproduction as public domain in the United States.
 
-[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/01-hope.jpg`.
+[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/03-hope.jpg`.
 
 SHA-256: `73dca708334a72258153d8fa7bdad84ddbbbeadbac1c0d67dbce3a1ab35c563e`.
+
+Two landscape crops of that same file are also shipped. They change only the framing, orientation and encoding, so they remain faithful reproductions of the public-domain painting:
+
+- `wallpapers/01-hope-lower.jpg`, the default: the lower half of the painting, with its mosaic robe and three bowed heads, rotated 90° and scaled to 2048 × 1366. SHA-256: `773ebf8554714578743d92af1318362914f01fd14dc3ec6f6b5f7fe8bd9c0a65`.
+- `wallpapers/02-hope-figure.jpg`: the upper figure at full resolution, cropped to 2700 × 1803 from the top of the original, about 480 pixels from the left edge. SHA-256: `a9958d1ace21e26f68dc6cb3019796682eec897689dd5c39c233126046271829`.
+
+Both crops were made by the repository owner and re-encoded as JPEG for size.
 
 ## Palette
 

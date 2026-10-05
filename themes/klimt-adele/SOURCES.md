@@ -6,7 +6,9 @@ Source image: [Wikimedia Commons file page](https://commons.wikimedia.org/wiki/F
 
 The file page includes a US pre-1931 publication/registration statement and PD-Art for the faithful reproduction. These are recorded source assertions; the historical publication event has not been independently reconstructed. Credit: Gustav Klimt, *Portrait of Adele Bloch-Bauer II*, The Yorck Project / Wikimedia Commons.
 
-The unchanged reproduction is `wallpapers/01-adele.jpg`, retrieved 2026-10-05. SHA-256: `8c49d204cbb2ed3955be283998cba8c7573a21cdd3a32bbac6890b84bf1d787c`. The matching plain background is `wallpapers/02-default.png`.
+The unchanged reproduction is `wallpapers/02-adele.jpg`, retrieved 2026-10-05. SHA-256: `8c49d204cbb2ed3955be283998cba8c7573a21cdd3a32bbac6890b84bf1d787c`. The matching plain background is `wallpapers/03-default.png`.
+
+The default wallpaper, `wallpapers/01-adele-portrait.jpg`, is a landscape crop of that same file: its top 1576 × 1065 pixels (hat, face and the red wall), made by the repository owner and re-encoded as JPEG. It changes only the framing, so it remains a faithful reproduction of the public-domain painting. SHA-256: `ef86f2960dc1429442909c89af61d94bb228b4e72b4cd72b005aa59e93f4617b`.
 
 ## Palette choices
 
@@ -33,7 +35,7 @@ generate.generate(name, root / "themes" / name)
 PYGEN
 ```
 
-This reads the preserved palette and overrides directly and leaves the wallpaper directory intact. Regenerate the plain background with ImageMagick using `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png` from this theme directory.
+This reads the preserved palette and overrides directly and leaves the wallpaper directory intact. Regenerate the plain background with ImageMagick using `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png` from this theme directory.
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
