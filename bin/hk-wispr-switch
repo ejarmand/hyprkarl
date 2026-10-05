@@ -1,0 +1,213 @@
+#!/usr/bin/env python3
+
+# Turn a microphone's hardware mute switch into Wispr Flow's hands-free
+# control: unmuting starts hands-free dictation, muting stops it.
+#
+# The switch is invisible to the computer except in the audio: a muted mic
+# sends exact digital silence, while an open one never does (room noise alone
+# keeps samples off zero). So this listens to the mic and presses Wispr's
+# hands-free shortcut (Ctrl+Super+Space) on its own virtual keyboard when the
+# silence ends, and again when it starts if Wispr is still recording.
+#
+# It stays out of the way while another app (a meeting, Discord) is recording
+# from the mic, and ignores silence from a software mute (hk-mic).
+#
+# Wispr's helper looks for keyboards only when it starts, so this must be
+# running before Wispr launches (autostart orders it so). After restarting
+# this, restart Wispr too.
+#
+# Usage: hk-wispr-switch [run|on|off|toggle|status]
+#   run       Listen to the mic (the default; autostart runs this)
+#   on | off | toggle
+#             Resume or pause the switch without stopping the listener;
+#             resets to on at the next login
+#   status    Print on or off
+#
+# The mic is $HK_WISPR_SWITCH_SOURCE (a PipeWire source name, see
+# `pactl list sources short`), set in ~/.config/uwsm/env.local to use another.
+
+import fcntl
+import json
+import os
+import struct
+import subprocess
+import sys
+import syslog
+import time
+from pathlib import Path
+
+SOURCE = os.environ.get("HK_WISPR_SWITCH_SOURCE",
+                        "alsa_input.usb-0c76_JOUNIVO_MICROPHONE-00.mono-fallback")
+NAME = "hk-wispr-switch"
+OFF_FLAG = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / f"{NAME}.off"
+
+RATE = 16000
+BLOCK = RATE // 50              # 20 ms of samples
+MUTED_AFTER = 5                 # all-zero blocks before the mic counts as muted
+OPEN_AFTER = 2                  # non-zero blocks before it counts as open again
+
+# <linux/input-event-codes.h> and <linux/uinput.h>
+EV_SYN, EV_KEY, SYN_REPORT = 0, 1, 0
+KEY_LEFTCTRL, KEY_LEFTMETA, KEY_SPACE = 29, 125, 57
+KEYS_A_TO_Z = [30, 48, 46, 32, 18, 33, 34, 35, 23, 36, 37, 38, 50, 49, 24, 25,
+               16, 19, 31, 20, 22, 47, 17, 45, 21, 44]
+UI_SET_EVBIT, UI_SET_KEYBIT = 0x40045564, 0x40045565
+UI_DEV_SETUP, UI_DEV_CREATE, UI_DEV_DESTROY = 0x405C5503, 0x5501, 0x5502
+BUS_VIRTUAL = 0x06
+
+
+def log(msg):
+    # Also to the journal (`journalctl --user -t hk-wispr-switch`): autostart
+    # discards stderr.
+    print(f"{NAME}: {msg}", file=sys.stderr, flush=True)
+    syslog.syslog(msg)
+
+
+def notify(msg):
+    subprocess.run(["notify-send", "-a", NAME, "-t", "2000", "Wispr mic switch", msg],
+                   check=False)
+
+
+class Keyboard:
+    """A virtual keyboard that can press Wispr's hands-free chord. Wispr only
+    watches devices with letter keys, so it advertises A-Z too."""
+
+    def __init__(self):
+        self.fd = os.open("/dev/uinput", os.O_WRONLY | os.O_NONBLOCK)
+        fcntl.ioctl(self.fd, UI_SET_EVBIT, EV_KEY)
+        for key in [KEY_LEFTCTRL, KEY_LEFTMETA, KEY_SPACE, *KEYS_A_TO_Z]:
+            fcntl.ioctl(self.fd, UI_SET_KEYBIT, key)
+        setup = struct.pack("HHHH80sI", BUS_VIRTUAL, 0, 0, 1, NAME.encode(), 0)
+        fcntl.ioctl(self.fd, UI_DEV_SETUP, setup)
+        fcntl.ioctl(self.fd, UI_DEV_CREATE)
+
+    def _emit(self, key, value):
+        os.write(self.fd, struct.pack("llHHi", 0, 0, EV_KEY, key, value))
+        os.write(self.fd, struct.pack("llHHi", 0, 0, EV_SYN, SYN_REPORT, 0))
+        time.sleep(0.02)
+
+    def press_hands_free(self):
+        for key in (KEY_LEFTCTRL, KEY_LEFTMETA, KEY_SPACE):
+            self._emit(key, 1)
+        for key in (KEY_SPACE, KEY_LEFTMETA, KEY_LEFTCTRL):
+            self._emit(key, 0)
+
+    def close(self):
+        fcntl.ioctl(self.fd, UI_DEV_DESTROY)
+        os.close(self.fd)
+
+
+def soft_muted():
+    out = subprocess.run(["pactl", "get-source-mute", SOURCE], capture_output=True,
+                         text=True, check=False).stdout
+    return "yes" in out
+
+
+def is_wispr(pid):
+    try:
+        return "/wispr-flow/" in os.readlink(f"/proc/{pid}/exe")
+    except OSError:
+        return False
+
+
+def recorders(own_pid):
+    """(wispr, others): whether Wispr, and whether any other app besides this
+    listener, is recording from the mic."""
+    out = subprocess.run(["pactl", "-f", "json", "list", "source-outputs"],
+                         capture_output=True, text=True, check=False).stdout
+    sources = subprocess.run(["pactl", "list", "sources", "short"], capture_output=True,
+                             text=True, check=False).stdout
+    index = next((line.split()[0] for line in sources.splitlines()
+                  if line.split()[1:2] == [SOURCE]), None)
+    wispr = others = False
+    for stream in json.loads(out or "[]"):
+        pid = stream["properties"].get("application.process.id", "")
+        if str(stream.get("source")) != index or not pid.isdigit() or int(pid) == own_pid:
+            continue
+        if is_wispr(pid):
+            wispr = True
+        else:
+            others = True
+    return wispr, others
+
+
+def listen(keyboard):
+    """Follow the mic until its stream ends (unplugged, PipeWire restart)."""
+    rec = subprocess.Popen(
+        ["parec", "--raw", f"--device={SOURCE}", "--format=s16le", "--channels=1",
+         f"--rate={RATE}", "--latency-msec=20", f"--client-name={NAME}",
+         "--property=node.dont-reconnect=true"],
+        stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    muted, run, soft = None, 0, False
+    try:
+        while (data := rec.stdout.read(BLOCK * 2)):
+            silent = not any(data)
+            if muted is None or silent == muted:
+                run = 0
+                if muted is None:
+                    muted = silent        # starting state: take it as found
+                continue
+            run += 1
+            if run < (OPEN_AFTER if muted else MUTED_AFTER):
+                continue
+            muted, run = silent, 0
+            if muted:
+                soft = soft_muted()
+                if not soft and not OFF_FLAG.exists() and recorders(rec.pid)[0]:
+                    keyboard.press_hands_free()
+                    log("switch muted: stopped hands-free")
+                continue
+            if soft:
+                log("software unmute: left alone")
+                continue
+            if OFF_FLAG.exists():
+                log("switch unmuted while paused: left alone")
+                continue
+            wispr, others = recorders(rec.pid)
+            if others:
+                log("switch unmuted while another app records: left alone")
+            elif not wispr:
+                keyboard.press_hands_free()
+                log("switch unmuted: started hands-free")
+    finally:
+        rec.kill()
+
+
+def run():
+    keyboard = Keyboard()
+    OFF_FLAG.unlink(missing_ok=True)
+    log(f"listening to {SOURCE}")
+    try:
+        while True:
+            listen(keyboard)
+            time.sleep(3)             # mic missing: wait for it to come back
+    finally:
+        keyboard.close()
+
+
+def set_enabled(on):
+    if on:
+        OFF_FLAG.unlink(missing_ok=True)
+    else:
+        OFF_FLAG.touch()
+    notify("On: the mute switch controls hands-free" if on
+           else "Paused: the mute switch only mutes")
+
+
+syslog.openlog(NAME)
+action = sys.argv[1] if len(sys.argv) > 1 else "run"
+if action == "run":
+    try:
+        run()
+    except KeyboardInterrupt:
+        pass
+elif action == "on":
+    set_enabled(True)
+elif action == "off":
+    set_enabled(False)
+elif action == "toggle":
+    set_enabled(OFF_FLAG.exists())
+elif action == "status":
+    print("off" if OFF_FLAG.exists() else "on")
+else:
+    sys.exit(f"Usage: {NAME} [run|on|off|toggle|status]")

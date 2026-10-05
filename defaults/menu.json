@@ -33,6 +33,13 @@
       "widthRole": "reference",
       "entryAlignment": "left"
     },
+    "voice-commands": {
+      "title": "Voice Commands",
+      "sourceCommand": "hk-voice-command-menu-entries",
+      "emptyLabel": "No voice commands",
+      "widthRole": "reference",
+      "entryAlignment": "left"
+    },
     "icons": {
       "title": "Icons",
       "sourceCommand": "hk-icon-menu-entries",
@@ -194,6 +201,14 @@
       "icon": "󰗑",
       "label": "Power Profile",
       "action": { "type": "menu", "menu": "power-profile" }
+    },
+    "utilities.voice-commands": {
+      "parent": "utilities",
+      "order": 50,
+      "icon": "󰍬",
+      "label": "Voice Commands",
+      "searchText": "wispr dictation cheat sheet",
+      "action": { "type": "menu", "menu": "voice-commands" }
     },
 
     "config.theme": {

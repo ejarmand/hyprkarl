@@ -8,3 +8,7 @@ __pycache__/
 
 # Machine-local Claude Code state (settings, hooks, worktrees) — never tracked
 .claude/
+
+# Personal data stays local: the fork is public. hk-wispr-dictionary now
+# writes its backup to ~/.config/hyprkarl/; this covers the old in-repo path.
+config/hyprkarl/wispr-dictionary.csv

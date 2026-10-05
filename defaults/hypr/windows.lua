@@ -52,6 +52,7 @@ require("windows/floating")
 require("windows/media")
 require("windows/terminals")
 require("windows/screenshots")
+require("windows/wispr-flow")
 
 -- Final default-opacity application (must stay the last opacity rule) ---------
 hl.window_rule({ match = { tag = "default-opacity" }, opacity = "1.0 0.8" })

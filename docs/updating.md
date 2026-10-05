@@ -33,7 +33,8 @@ git -C ~/.local/share/hyprkarl config hyprkarl.updateBranch develop
 `apply` brings the machine to the staged revision:
 
 1. stops Quickshell, which runs from the checkout;
-2. fast-forwards to the staged revision;
+2. fast-forwards to the staged revision, and checks out the commits it pins
+   for any submodule already fetched (the Wispr Flow helper);
 3. installs new required packages and reviews retired ones
    (`hk-update packages`);
 4. runs pending migrations;

@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+"""Launch the application a voice command names.
+
+hk-voice-command runs this for "launch <name>". When exactly one shown
+application's name is, or starts with, the spoken words, it starts that
+application; otherwise it opens the launcher to pick one by hand.
+
+Usage: hk-voice-launch <spoken name>
+"""
+
+import re
+import subprocess
+import sys
+
+import gi
+
+gi.require_version("Gio", "2.0")
+from gi.repository import Gio
+
+
+def words(text: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", text.casefold().replace("'", "")).split())
+
+
+def matching_apps(spoken: str) -> list[str]:
+    names = {
+        app.get_id(): words(app.get_display_name() or app.get_name() or "")
+        for app in Gio.AppInfo.get_all()
+        if app.get_id() and app.should_show()
+    }
+    exact = [app_id for app_id, name in names.items() if name == spoken]
+    return exact or [app_id for app_id, name in names.items() if name.startswith(spoken)]
+
+
+def main() -> int:
+    spoken = words(" ".join(sys.argv[1:]))
+    if not spoken:
+        print("Usage: hk-voice-launch <spoken name>", file=sys.stderr)
+        return 1
+
+    matches = matching_apps(spoken)
+    if len(matches) == 1:
+        subprocess.Popen(["uwsm-app", "--", matches[0]], start_new_session=True)
+        return 0
+    return subprocess.run(["hk-shell", "launcher", "open"], check=False).returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

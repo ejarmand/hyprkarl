@@ -59,6 +59,11 @@ without good reason.
   `defaults/config/hyprkarl/apps/`. `hk-app install` writes new recipes to the
   personal directory, never into the checkout. `hk-app restart` routes to the
   older `hk-app-restart`, which predates the family.
+- **Voice commands.** Wispr Flow's helper runs `hk-voice-command` on every
+  transcript, so it answers fast (exit 0: handled, 1: paste as text) and runs
+  slow work in the background. Its phrases are data in
+  `defaults/config/hyprkarl/voice-commands.conf`, replaced whole by the user's
+  `~/.config/hyprkarl/voice-commands.conf`.
 - **Lock.** `hk-lock` starts `lock.qml`; `hk-suspend` only suspends, and
   Hypridle locks first.
 

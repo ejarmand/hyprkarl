@@ -340,6 +340,59 @@ shell.
 - `hk-btop-reload`
   Reload the running `btop` so it picks up theme changes.
 
+## Voice Commands (Wispr Flow)
+
+Wispr Flow installs as an `hk-app` AppImage (`hk-app install wispr-flow`) with
+a locally built helper swapped in. Login starts it in the tray, after
+`hk-wispr-switch`.
+
+- `hk-voice-command [--dry-run] <transcript>` / `--list` / `--join-mode MODE`
+  Wispr Flow's transcript hook (`WISPR_TRANSCRIPT_HOOK` in `config/uwsm/env`).
+  A transcript matching a phrase in the voice command file runs its command
+  instead of being pasted; anything else is pasted, joined to the previous
+  dictation in the same window. The file is
+  `~/.config/hyprkarl/voice-commands.conf` if you have one, which replaces
+  Hyprkarl's `defaults/config/hyprkarl/voice-commands.conf`; its header
+  documents the syntax. `--list` prints the phrases for the focused app and
+  everywhere, which the Utilities > Voice Commands menu shows (say "cheat
+  sheet" to open it).
+- `hk-voice-keys <step>...`
+  Send keys (`CTRL+L`, `Return`) and text (`type:TEXT`) to the focused window.
+- `hk-voice-launch <name>`
+  Start the application whose name is, or starts with, the spoken words; with
+  no single match, open the launcher. The "launch" and "open" phrases run it.
+- `hk-wispr-word-add [--correction]`
+  Open Wispr's "Add to vocabulary" dialog through AT-SPI, cursor in the word
+  field; `--correction` sets it up as misspelling -> correct word.
+- `hk-wispr-dictionary [output.csv|-]`
+  Back up Wispr's personal dictionary as a CSV in Wispr's import format
+  (default: `~/.config/hyprkarl/wispr-dictionary.csv`, outside the checkout so
+  personal words stay out of the repo).
+- `hk-wispr-helper-install [release-dir]`
+  The `post_install` command in the `wispr-flow` app recipe: builds
+  `wispr-flow-linux-helper` from the `vendor/wispr-flow-helper` submodule
+  (the `local` branch of
+  [ejarmand/wisprflow-linux-helper](https://github.com/ejarmand/wisprflow-linux-helper),
+  fetched on first use; set `WISPR_HELPER_SRC` to build another checkout) and
+  swaps it into the release, keeping the shipped helper as `.orig`. Rebuild
+  and reinstall it with `hk-app config-update wispr-flow`; to pick up new
+  helper commits, run `git submodule update --remote vendor/wispr-flow-helper`
+  and commit the new pin. `hk-update apply` keeps a fetched submodule at the
+  pinned commit.
+- `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
+  Export Wispr's dictation history (raw speech recognition, cleaned and pasted
+  text, audio) to `~/Documents/wispr-exports/` for review.
+- `hk-wispr-switch [run|on|off|toggle|status]`
+  Make a USB mic's hardware mute switch drive Wispr hands-free: unmuting starts
+  it, muting stops it (by pressing Ctrl+Super+Space on a virtual keyboard, which
+  is why that shortcut is left unbound). It hears the switch as exact digital
+  silence, stays out of the way while another app records from the mic, and
+  ignores software mutes. Login starts it before Wispr, whose helper only finds
+  keyboards at launch; restart Wispr after restarting it. `off` and `toggle`
+  (`Super+Alt+D`) pause it until the next login. The mic is
+  `$HK_WISPR_SWITCH_SOURCE` (default: the Jounivo JV601); it logs to
+  `journalctl --user -t hk-wispr-switch`.
+
 ## Internal Helpers
 
 Other scripts, keybindings, and bar widgets call these; they can change in
@@ -352,6 +405,8 @@ any release:
   `hk-display-preview`, `hk-display-confirm`, `hk-display-revert`,
   `hk-display-scale`, `hk-display-toggle`, `hk-display-brightness`; internal
   timeout helper: `hk-display-watch`
+- Menu row providers: `hk-voice-command-menu-entries` (the voice command cheat
+  sheet)
 - Notification helpers: `hk-battery-notify`, `hk-notify-window-class`,
   `hk-show-done`, `hk-suggest-reboot`
 - Lookup helpers: `hk-battery-find`, `hk-icon-find`, `hk-cmd-present`,

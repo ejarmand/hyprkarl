@@ -1,0 +1,192 @@
+#!/usr/bin/env python3
+
+# Open Wispr Flow's "Add to vocabulary" dialog with the cursor in its first
+# field: a plain new word by default, or with --correction set up as a
+# correction (Misspelling -> correct word).
+# Wispr has no API for its dictionary, so this presses its own buttons through
+# AT-SPI. That needs Wispr started with --force-renderer-accessibility.
+
+import json
+import subprocess
+import sys
+import time
+
+import gi
+
+gi.require_version("Atspi", "2.0")
+from gi.repository import Atspi, Gio, GLib  # noqa: E402
+
+TIMEOUT = 5.0
+
+
+def fail(msg):
+    # hyprctl notify: icon 3 = error, shown for 6 s.
+    subprocess.run(["hyprctl", "notify", "3", "6000", "0", f"Wispr add word: {msg}"],
+                   stdout=subprocess.DEVNULL, check=False)
+    sys.exit(msg)
+
+
+def focus_hub():
+    subprocess.run(
+        ["hyprctl", "dispatch",
+         "hl.dsp.focus({ window = 'initialtitle:^(Wispr Flow)$' })"],
+        stdout=subprocess.DEVNULL, check=False,
+    )
+
+
+def hub_on_screen():
+    out = subprocess.run(["hyprctl", "-j", "clients"], capture_output=True,
+                         text=True, check=False).stdout
+    return any(c.get("initialTitle") == "Wispr Flow" for c in json.loads(out or "[]"))
+
+
+def dbus_get(bus, service, path, iface, prop):
+    return bus.call_sync(service, path, "org.freedesktop.DBus.Properties", "Get",
+                         GLib.Variant("(ss)", (iface, prop)), None, 0, -1, None
+                         ).unpack()[0]
+
+
+def open_hub_from_tray():
+    """Click "Open Wispr Flow" in Wispr's tray menu (the Hub may be closed to
+    the tray, and launching Wispr again does not bring it back)."""
+    bus = Gio.bus_get_sync(Gio.BusType.SESSION)
+    items = dbus_get(bus, "org.kde.StatusNotifierWatcher", "/StatusNotifierWatcher",
+                     "org.kde.StatusNotifierWatcher", "RegisteredStatusNotifierItems")
+    for item in items:
+        service, _, path = item.partition("/")
+        path = "/" + path if path else "/StatusNotifierItem"
+        try:
+            sni = "org.kde.StatusNotifierItem"
+            if not dbus_get(bus, service, path, sni, "Id").startswith("Wispr Flow"):
+                continue
+            menu = dbus_get(bus, service, path, sni, "Menu")
+            _, (_, _, entries) = bus.call_sync(
+                service, menu, "com.canonical.dbusmenu", "GetLayout",
+                GLib.Variant("(iias)", (0, 1, ["label"])), None, 0, -1, None).unpack()
+        except GLib.Error:
+            continue
+        for entry_id, props, _ in entries:
+            if props.get("label") == "Open Wispr Flow":
+                bus.call_sync(service, menu, "com.canonical.dbusmenu", "Event",
+                              GLib.Variant("(isvu)", (entry_id, "clicked", GLib.Variant("i", 0), 0)),
+                              None, 0, -1, None)
+                return
+    fail("Could not find Open Wispr Flow in its tray menu. Is Wispr running?")
+
+
+def hub():
+    desktop = Atspi.get_desktop(0)
+    for i in range(desktop.get_child_count()):
+        app = desktop.get_child_at_index(i)
+        if app is None or app.get_name() != "wispr-flow":
+            continue
+        for j in range(app.get_child_count()):
+            frame = app.get_child_at_index(j)
+            if frame is not None and frame.get_name() == "Wispr Flow":
+                return frame
+    return None
+
+
+def find(root, role, name=None):
+    """All descendants with this role (and exact name, if given)."""
+    hits = []
+
+    def walk(node):
+        try:
+            count = node.get_child_count()
+            if node.get_role_name() == role and name in (None, node.get_name()):
+                hits.append(node)
+        except Exception:
+            return
+        for i in range(count):
+            try:
+                walk(node.get_child_at_index(i))
+            except Exception:
+                pass
+
+    walk(root)
+    return hits
+
+
+def wait_for(what, lookup, timeout=TIMEOUT):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        found = lookup()
+        if found:
+            return found
+        time.sleep(0.15)
+    fail(f"Could not find {what} in Wispr Flow. Is it running with accessibility on?")
+
+
+def press(node):
+    node.get_action_iface().do_action(0)
+
+
+def in_hub(role, name=None):
+    root = hub()
+    return find(root, role, name) if root else []
+
+
+def dialog():
+    dialogs = in_hub("dialog")
+    return dialogs[0] if dialogs else None
+
+
+def misspelling_field():
+    dlg = dialog()
+    return find(dlg, "entry", "Misspelling") if dlg else None
+
+
+def new_word_field():
+    """The dialog's word field. Its accessible name follows the placeholder
+    ("Add a new word", or "Correct spelling" after the correction box was
+    ticked), so take the entry that is not the Misspelling field."""
+    dlg = dialog()
+    if not dlg:
+        return None
+    return [e for e in find(dlg, "entry") if e.get_name() != "Misspelling"][:1] or None
+
+
+def set_correction(on):
+    """Tick or untick "Correct a misspelling": the checkbox that reveals the
+    Misspelling field. Which box it is is found by trying them."""
+    if bool(misspelling_field()) == on:
+        return
+    for index in range(len(find(dialog(), "check box"))):
+        press(find(dialog(), "check box")[index])
+        deadline = time.monotonic() + 2.5
+        while time.monotonic() < deadline and bool(misspelling_field()) != on:
+            time.sleep(0.1)
+        if bool(misspelling_field()) == on:
+            return
+        press(find(dialog(), "check box")[index])  # wrong box, undo it
+    fail("Could not find the Correct a misspelling checkbox.")
+
+
+def main():
+    correction = "--correction" in sys.argv[1:]
+    # A hidden Hub still shows up over AT-SPI, but Chromium stalls its updates,
+    # so it has to be on screen first.
+    if not hub_on_screen():
+        open_hub_from_tray()
+        wait_for("the Hub window", hub_on_screen)
+    dictionary = wait_for("the Dictionary button",
+                          lambda: in_hub("button", "Dictionary"))
+    focus_hub()
+
+    if dialog() is None:
+        press(dictionary[0])
+        press(wait_for("the Add new button",
+                       lambda: in_hub("button", "Add new"))[0])
+        wait_for("the Add to vocabulary dialog", dialog)
+
+    set_correction(correction)
+    field = misspelling_field() if correction else new_word_field()
+    if not field:
+        fail("Could not find the word field in the dialog.")
+    focus_hub()
+    field[0].get_component_iface().grab_focus()
+
+
+if __name__ == "__main__":
+    main()

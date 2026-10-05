@@ -75,7 +75,9 @@ another branch in a live checkout hot-reloads its files into the session.
 
 `hk-update apply` uses GNU Stow to link `config/` into `~/.config/`. `bin/` is
 put on `$PATH` by `config/uwsm/env`, after `~/.local/bin` so a personal command
-can replace an `hk-*` one. Editing a stowed file edits the live config.
+can replace an `hk-*` one. `vendor/wispr-flow-helper` is a Git submodule (the
+Wispr Flow helper fork that `hk-wispr-helper-install` builds); it is not
+stowed, and `hk-update apply` only moves it once it has been fetched. Editing a stowed file edits the live config.
 Renaming or deleting one leaves a stale symlink, which `hk-update apply` (or
 `hk-update remove-stale`) prunes.
 

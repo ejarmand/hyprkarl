@@ -53,6 +53,7 @@ qt5ct
 qt6ct
 quickshell
 resvg
+rust
 satty
 sassc
 stow

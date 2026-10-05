@@ -1,0 +1,47 @@
+#!/bin/bash
+# hk-wispr-helper-install
+# hk-app post_install hook for wispr-flow: build wispr-flow-linux-helper from a
+# checkout and swap it into a release, keeping the shipped one as .orig.
+# Builds the vendor/wispr-flow-helper submodule (the ejarmand fork's `local`
+# branch), or whatever checkout WISPR_HELPER_SRC points at.
+#
+# Usage: hk-wispr-helper-install [release-dir]
+#   release-dir defaults to $APP_DIR (set by hk-app), then the current install.
+
+HELPER_NAME="wispr-flow-linux-helper"
+HK="$HYPRKARL_PATH"
+HELPER_SRC="${WISPR_HELPER_SRC:-$HK/vendor/wispr-flow-helper}"
+
+release_dir="${1:-${APP_DIR:-$HOME/.local/opt/wispr-flow/current}}"
+
+# A fresh clone has the submodule's directory but not its files.
+if [[ -z "${WISPR_HELPER_SRC:-}" && ! -f "$HELPER_SRC/Cargo.toml" ]]; then
+  gum log --level info "Fetching the helper submodule"
+  git -C "$HK" submodule update --init vendor/wispr-flow-helper
+fi
+if [[ ! -f "$HELPER_SRC/Cargo.toml" ]]; then
+  gum log --level error "No helper checkout at $HELPER_SRC (set WISPR_HELPER_SRC)"
+  exit 1
+fi
+
+gum log --level info "Building $HELPER_NAME from $HELPER_SRC ($(git -C "$HELPER_SRC" describe --always --dirty))"
+if ! cargo build --release --quiet --manifest-path "$HELPER_SRC/Cargo.toml"; then
+  gum log --level error "Helper build failed"
+  exit 1
+fi
+built="$HELPER_SRC/target/release/$HELPER_NAME"
+ours=$("$built" --version) || exit 1
+
+target=$(find "$release_dir/usr/lib" -path "*/resources/Release/$HELPER_NAME" -type f 2>/dev/null | head -n1)
+if [[ -z "$target" ]]; then
+  gum log --level error "No $HELPER_NAME inside $release_dir"
+  exit 1
+fi
+
+[[ -e "$target.orig" ]] || cp -p "$target" "$target.orig"
+install -m 0755 "$built" "$target" || exit 1
+shipped=$("$target.orig" --version 2>/dev/null)
+gum log --level info "Helper: $ours (release shipped ${shipped:-unknown})"
+if [[ "$shipped" != "$ours" ]]; then
+  gum log --level warn "The release ships a different helper version; rebase the helper branch onto the tag it ships."
+fi

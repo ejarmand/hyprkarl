@@ -21,6 +21,7 @@ explaining what goes there.
 | fastfetch | The theme: its `fastfetch` keys in a theme overlay, or your own `~/.config/fastfetch/config.jsonc` |
 | btop, Neovim, Yazi | Their own `~/.config/<app>/`, copied from Hyprkarl once |
 | AppImage recipes (`hk-app`) | `~/.config/hyprkarl/apps/<id>.conf` |
+| Voice commands (Wispr Flow) | `~/.config/hyprkarl/voice-commands.conf` |
 
 See [Extending Hyprkarl](extending-hyprkarl.md) for how to use each.
 
@@ -41,6 +42,8 @@ it. Its main parts:
 - `templates/`: files Hyprkarl writes from, such as the personal files it
   creates, system configs for migrations, and Docker service definitions.
 - `data/`: generated data, such as the icon picker's list.
+- `vendor/wispr-flow-helper/`: a Git submodule, the Wispr Flow helper fork
+  that `hk-wispr-helper-install` builds. It is fetched on first use.
 
 ## Machine state
 
@@ -78,7 +81,8 @@ Hyprkarl's bootstrap, which loads, in order:
 
 At login, the `autostart` module runs `hk-autostart`, which starts the shell,
 the idle daemon, and the wallpaper, sets the cursor, and runs your `login`
-hooks.
+hooks. The module also starts GNOME Keyring's Secret Service, then
+`hk-wispr-switch`, then Wispr Flow in the tray.
 
 Unfocused windows are 80% opaque through a `default-opacity` tag that every
 window gets; a window rule with `tag = "-default-opacity"` keeps one opaque,
@@ -98,8 +102,8 @@ fallback. For syntax, see Hyprland's
   command can replace an `hk-*` command of the same name;
 - puts `defaults/config/` first in `XDG_CONFIG_DIRS` and `defaults/share/`
   first in `XDG_DATA_DIRS`, followed by Flatpak's entries;
-- sets `EDITOR=nvim`, `TERMINAL=ghostty`, `QT_QPA_PLATFORMTHEME`, and
-  `WIFITUI_THEME`;
+- sets `EDITOR=nvim`, `TERMINAL=ghostty`, `QT_QPA_PLATFORMTHEME`,
+  `WIFITUI_THEME`, and `WISPR_TRANSCRIPT_HOOK=hk-voice-command`;
 - saves screenshots to `~/Pictures/screenshots` (`HYPRSHOT_DIR`) and screen
   recordings to `~/Videos/screenrecord` (`HYPRKARL_SCREENRECORD_DIR`); create
   both directories;
@@ -136,6 +140,7 @@ applies until you create one at the same path.
 | `defaults/config/xdg-desktop-portal/portals.conf` | Portal backends, including the terminal file chooser | `~/.config/xdg-desktop-portal/portals.conf` |
 | `defaults/config/xdg-terminals.list` | Terminal for `xdg-terminal-exec` (Ghostty); `hk-default-terminal` writes yours | `~/.config/xdg-terminals.list` |
 | `defaults/config/hyprkarl/apps/<id>.conf` | AppImage recipes for `hk-app` | `~/.config/hyprkarl/apps/<id>.conf` |
+| `defaults/config/hyprkarl/voice-commands.conf` | Phrases for `hk-voice-command` | `~/.config/hyprkarl/voice-commands.conf` |
 | `defaults/share/applications/` | Terminal arguments for Alacritty and foot; Nautilus without D-Bus activation, which opened two windows | A file of the same name in `~/.local/share/applications/` |
 
 The launcher hides a few rarely used applications through

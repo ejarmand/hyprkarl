@@ -47,6 +47,12 @@ if [[ -n "$pending" ]] && [[ "$pending" != "$head" ]]; then
     || fail "Could not fast-forward to the reviewed source revision."
 fi
 
+# Initialized submodules (the Wispr helper, once hk-wispr-helper-install has
+# fetched it) follow the commits this revision pins; uninitialized ones stay
+# that way.
+git -C "$HYPRKARL_PATH" submodule update \
+  || fail "Could not check out the submodule commits this revision pins."
+
 # Packages first: a migration may configure a package this revision adds.
 hk-update-packages || fail "Package changes did not complete."
 

@@ -23,6 +23,9 @@ export TERMINAL=ghostty
 export HYPRSHOT_DIR="$HOME/Pictures/screenshots"
 export HYPRKARL_SCREENRECORD_DIR="$HOME/Videos/screenrecord"
 
+# Wispr Flow's helper runs this on each transcript (voice commands)
+export WISPR_TRANSCRIPT_HOOK=hk-voice-command
+
 # Default editor; hk-default-editor records a different choice in uwsm/default
 export EDITOR=nvim
 [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/uwsm/default" ]] \

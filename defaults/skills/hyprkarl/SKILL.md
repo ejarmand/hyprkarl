@@ -54,6 +54,7 @@ never edit files under `~/.local/state/hyprkarl/`, which are generated.
 | Personal scripts | `~/.local/bin/`, which is on `PATH` before Hyprkarl's commands |
 | fastfetch's look, logo, or info lines | The theme: `fastfetch` keys in a theme overlay, or an `overrides/config/fastfetch/config.jsonc` template |
 | btop, Neovim, Yazi | Their own `~/.config/<app>/`; these are the user's copies |
+| Voice command phrases (Wispr Flow) | `~/.config/hyprkarl/voice-commands.conf`, a full copy of `$HYPRKARL_PATH/defaults/config/hyprkarl/voice-commands.conf` that replaces it |
 | AppImages installed outside the package manager | `hk-app install <owner/repo>`, which records `~/.config/hyprkarl/apps/<id>.conf`; to change a shipped app's recipe, copy it from `$HYPRKARL_PATH/defaults/config/hyprkarl/apps/` there and run `hk-app config-update <id>` |
 
 `$HYPRKARL_PATH/docs/configuration-map.md` lists every location, and

@@ -1,0 +1,16 @@
+#!/bin/bash
+# hk-voice-command-menu-entries
+# Print the voice command cheat sheet as dynamic menu rows: the focused app's
+# phrases first, then the ones that work everywhere (hk-voice-command --list).
+# The "In this app" and "Everywhere" headings are disabled rows.
+
+hk-voice-command --list | jq -R -s -c '
+  split("\n")
+  | map(select(length > 0))
+  | to_entries
+  | map({
+      id: "voice-command.\(.key)",
+      label: .value,
+      disabled: (.value | startswith("──")),
+      action: { type: "dismiss" }
+    })'

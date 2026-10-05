@@ -1,0 +1,4 @@
+[submodule "vendor/wispr-flow-helper"]
+	path = vendor/wispr-flow-helper
+	url = https://github.com/ejarmand/wisprflow-linux-helper.git
+	branch = local
