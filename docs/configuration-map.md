@@ -131,6 +131,7 @@ For Hyprland syntax and option reference, see the official Hyprland docs:
 - adds `bin/` to `PATH`
 - extends `XDG_DATA_DIRS` for Flatpak desktop entries
 - points `WIFITUI_THEME` at the active theme
+- points `STARSHIP_CONFIG` at the merged prompt config from `hk-starship-reload`
 - sets `QT_QPA_PLATFORMTHEME`
 - sources `config/uwsm/default`
 - sources `config/uwsm/env.local` if it exists

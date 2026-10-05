@@ -72,6 +72,7 @@ When the theme changes, Hyprkarl:
 - updates the wallpaper state
 - updates GNOME and QT themes
 - reloads Hyprland, mako, terminals, `btop`, and the bar
+- rebuilds the Starship prompt colors
 
 Some changes may not take effect everywhere immediately, but most of the theme
 switch happens right away.

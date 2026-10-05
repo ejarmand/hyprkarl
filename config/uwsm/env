@@ -16,5 +16,8 @@ source ~/.config/uwsm/default
 # Set wifitui theme
 export WIFITUI_THEME="$HOME/.config/hyprkarl/current/theme/wifitui.toml"
 
+# Starship prompt: ~/.config/starship.toml merged with the theme palette (hk-starship-reload)
+export STARSHIP_CONFIG="$HOME/.local/state/hyprkarl/starship.toml"
+
 # Machine-local env vars (API keys, personal settings) — not tracked in git
 [[ -f ~/.config/uwsm/env.local ]] && source ~/.config/uwsm/env.local

@@ -198,12 +198,20 @@ When an app can import another file, keep its main config in `config/` and
 import from the active theme. When it cannot, symlink the full config file from
 the active theme into place. Use relative symlinks.
 
+When an app cannot import and its main config is the user's own file, don't
+replace that file with the theme's. Instead, have a reload command merge the
+user's config with a theme fragment into a generated file, and point the app at
+the generated file (see [Starship Prompt](themes.md#starship-prompt)).
+
 Examples:
 
 - the AGS bar symlinks `theme.scss` to `current/theme/bar.scss`
 - terminal configs import from `current/theme/...`
 - Hyprland `loadfile`s `current/theme/hyprland.lua` at the end of its config
 - `hyprlock` points at `current/wallpaper`
+- `hk-starship-reload` merges `~/.config/starship.toml` with
+  `current/theme/starship.toml` into `~/.local/state/hyprkarl/starship.toml`,
+  and `STARSHIP_CONFIG` points at it
 
 ## Exposing New Config Files
 
