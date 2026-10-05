@@ -78,13 +78,14 @@ checkout.
 hk-update all
 ```
 
-`hk-update all` runs the complete sequence. You can also stop between steps or
-run one category yourself:
+`hk-update all` runs the complete sequence, ending with the AppImages installed
+with `hk-app`. You can also stop between steps or run one category yourself:
 
 ```bash
 hk-update sync          # fetch and review incoming changes
 hk-update apply         # apply them: packages, migrations, configuration, theme
 hk-update packages      # review removals once and install requirements
+hk-update apps          # update AppImages installed with hk-app
 hk-update check         # report pending work without changing it
 hk-update remove-stale  # remove broken links into the checkout only
 ```

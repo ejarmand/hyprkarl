@@ -19,15 +19,16 @@ Its top-level sections are:
 - `Launch`
   App launcher
 - `Install`
-  Package install menus
+  Package, Docker, and AppImage install menus
 - `Uninstall`
   Package uninstall menus
 - `Utilities`
-  Toggles, screen recording, and other utility actions
+  Toggles, screen recording, the voice command cheat sheet, and other utility
+  actions
 - `Config`
   Themes, wallpapers, defaults, and other quick settings
 - `Update`
-  Hyprkarl and system package update commands
+  Hyprkarl, system package, and AppImage update commands
 - `Power`
   Lock, suspend, reboot, and shutdown actions
 
@@ -161,6 +162,8 @@ Install sources are:
   `hk-pkg-install-tui --flatpak`
 - Docker services:
   `hk-shell menu open docker-install`
+- AppImages (a GitHub `owner/repo` or a URL):
+  `hk-app install <owner/repo|url>`; see [Apps](commands.md#apps-appimages)
 
 The package menus use `fzf` to search available packages.
 
