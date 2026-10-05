@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Cream text sits on dark segment fills. Green, red and purple are prompt glyphs.
+# Light painting accents carry dark text, as in vera-dark; surface segments carry cream.
 [palettes.hyprkarl]
-color_fg0 = '#eee0d1'
+color_fg0 = '#191418'
 color_fg1 = '#eee0d1'
 color_fg2 = '#d0bce9'
-color_bg1 = '#191418'
-color_bg3 = '#231c22'
-color_magenta = '#ca9fce'
+color_bg1 = '#2d252e'
+color_bg3 = '#413645'
+color_magenta = '#d394d9'
 color_purple = '#e3bde5'
-color_orange = '#553937'
-color_yellow = '#534539'
-color_aqua = '#424648'
-color_blue = '#483f4f'
+color_orange = '#f4806d'
+color_yellow = '#e5b979'
+color_aqua = '#96c8c0'
+color_blue = '#b69bd9'
 color_green = '#c9d1b7'
 color_red = '#f1b2a1'

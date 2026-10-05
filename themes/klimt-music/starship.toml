@@ -1,16 +1,16 @@
-# Palette merged with the user's layout by hk-starship-reload.
-# Colored powerline backgrounds are dark; prompt characters use bright red/green.
+# Merged with the user's prompt by hk-starship-reload.
+# Light painting accents carry dark text, as in vera-dark; surface segments carry cream.
 [palettes.hyprkarl]
-color_fg0 = '#f1e7d5'
+color_fg0 = '#19272b'
 color_fg1 = '#f1e7d5'
 color_fg2 = '#f0d395'
 color_bg1 = '#29383e'
-color_bg3 = '#19272b'
-color_magenta = '#d6b0c9'
+color_bg3 = '#394c52'
+color_magenta = '#dfa7cc'
 color_purple = '#d6b0c9'
-color_orange = '#565247'
-color_yellow = '#545340'
-color_aqua = '#425859'
-color_blue = '#455660'
+color_orange = '#f5a597'
+color_yellow = '#ecbf65'
+color_aqua = '#96d4cc'
+color_blue = '#a3c3e4'
 color_green = '#b1c8a0'
 color_red = '#e7afa5'

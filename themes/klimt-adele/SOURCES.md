@@ -37,10 +37,10 @@ This reads the preserved palette and overrides directly and leaves the wallpaper
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
-Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. The actual prompt's hardcoded purple OS/hostname segment has 5.28:1 contrast; the four palette-controlled segment fills have at least 6.27:1. Python/Kubernetes text has 5.26:1. Green, red and purple character glyphs remain bright, with at least 10.44:1.
+Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 6.81:1: the colored segments use slightly saturated painting accents with dark text, as in vera-dark. Prompt glyphs are at least 10.44:1 against the background.
 
 Yazi's error-progress text uses the dark background colour on the error fill, giving 8.11:1. Btop explicitly uses the primary foreground. Qt active and inactive placeholders use the opaque secondary foreground, with at least 6.09:1 across the theme surfaces.
 
-All listed pairs meet 4.5:1. The existing prompt also uses `color_yellow` for both a directory-segment background and a Vim visual-mode glyph. This palette keeps the segment readable; the shared yellow glyph role remains a limitation of that prompt layout. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
+All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph; both are readable. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
 
 The plain background is 3840 × 2160 pixels, filled with `#17231f`. No active theme was switched.
