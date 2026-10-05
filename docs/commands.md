@@ -381,15 +381,27 @@ and `previous` symlinks, a launcher at `~/.local/bin/<id>`, and a desktop entry.
 - `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
   Export Wispr's dictation history (raw ASR, cleaned and pasted text, audio)
   to `~/Documents/wispr-exports/` for review.
-- `hk-wispr-switch [run|on|off|toggle|status]`
+- `hk-wispr-switch [run|on|off|toggle|status|press]`
   Make a USB mic's hardware mute switch drive Wispr hands-free: unmuting starts
   it, muting stops it (by pressing Ctrl+Super+Space on a virtual keyboard). It
   hears the switch as exact digital silence, stays out of the way while another
-  app records from the mic, and ignores software mutes. Autostart runs it
-  before Wispr, whose helper only finds keyboards at launch; restart Wispr after
-  restarting it. `off`/`toggle` (`Super+Alt+D`) pause it until the next login.
+  app records from the mic, and ignores software mutes. Wispr may record from
+  the mic or from Wispr Mic (`hk-wispr-profile`). Autostart runs it before
+  Wispr, whose helper only finds keyboards at launch; restart Wispr after
+  restarting it. `off`/`toggle` (`Super+Alt+D`) pause it until the next login;
+  `press` has the running listener press the shortcut once (the
+  `tests/wispr-mic.py` harness starts and stops dictation with it).
   The mic is `$HK_WISPR_SWITCH_SOURCE` (default: the Jounivo JV601); it logs to
   `journalctl --user -t hk-wispr-switch`.
+- `hk-wispr-profile [status|list|toggle|cycle|<profile>]`
+  Switch the DSP profile on Wispr Mic, a filtered copy of the mic for Wispr to
+  record from (pick "Wispr Mic (virtual)" in Wispr's mic settings). Profiles
+  live in `config/hyprkarl/wispr-mic/` (`off`, `whisper`, `whisper-bright`,
+  `whisper-deess`) and are set live on the running chain, so dictation carries
+  on uninterrupted. `toggle` (`Super+Alt+W`) switches between `off` and
+  `whisper`; `cycle` (`Super+Shift+Alt+W`) steps through all of them. Voice
+  commands: "whisper mode", "normal mode", "next mic profile", "mic profile
+  <name>". Restarting PipeWire resets it to `off`. Needs `lsp-plugins-ladspa`.
 
 ## Internal Helpers
 

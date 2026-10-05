@@ -137,3 +137,86 @@ tests/hk-update-live.sh reset
 git -C ~/.local/share/hyprkarl checkout main
 ~/.local/share/hyprkarl/setup-dotfiles.sh
 ```
+
+---
+
+## `wispr-mic.py`
+
+Compares [Wispr Mic profiles](../docs/commands.md#voice-commands-wispr-flow)
+by replaying the same recordings through each one into Wispr Flow and scoring
+the transcripts. Fixed recordings mean identical delivery in every run, so the
+profile is the only variable.
+
+For each profile and clip it sets the profile, moves the chain's input from the
+mic to a private null sink, starts hands-free dictation (`hk-wispr-switch
+press`), plays the clip, stops, and reads the new dictation out of Wispr's
+database. The score is the word error rate (WER) of Wispr's raw ASR, before its
+AI cleanup, against the clip's reference text; the formatted text is scored too.
+It also keeps the audio Wispr received for each dictation, so a profile's
+output can be checked for clipping.
+
+```bash
+tests/wispr-mic.py record sixths "The sixths were strengths"   # record from the mic; Enter stops
+tests/wispr-mic.py add tirade ~/Documents/wispr-exports/.../audio/X.wav \
+  "Besides that tirade, yep, {remove|retire} that skill, open the PR, push, get back to me"
+tests/wispr-mic.py list
+tests/wispr-mic.py run                          # off and whisper, every clip
+tests/wispr-mic.py run -p off,whisper,whisper-bright -n 3 tirade
+tests/wispr-mic.py report                       # the table from the last run
+tests/wispr-mic.py restore                      # chain back on the mic, after a crash
+tests/wispr-mic.py chain start|stop|status      # this checkout's chain, in its own PipeWire process
+```
+
+The harness runs this checkout's `hk-wispr-profile` and profiles, not the ones
+on `$PATH`, so it can test a worktree without touching the live config.
+`chain start` loads this checkout's `wispr-mic.conf` into a private `pipewire
+-c` process, a client of the PipeWire daemon like `filter-chain.service`: no
+stow and no `hk-audio-restart`, and `chain stop` removes it. Only one Wispr
+Mic can exist at a time, so it refuses while the live chain is loaded.
+
+### Mining test cases from T3 Code
+
+Dictations you sent through T3 Code come with a reference for free: the
+message you actually sent, edits included.
+
+```bash
+tests/wispr-mic.py mine                 # pair dictations with T3 messages -> candidates
+tests/wispr-mic.py candidates           # edited ones, biggest change first (--all: unchanged too)
+tests/wispr-mic.py accept 7ec5d6c3 tirade-sent                  # clip with the sent text
+tests/wispr-mic.py accept 7ec5d6c3 tirade-sent "corrected text"  # or your own reference
+```
+
+`mine` reads copies of Wispr's and T3's databases (`$T3_STATE_DB`, default
+`~/.t3/userdata/statev2.sqlite`). For each dictation it looks at messages sent
+up to 30 minutes later and finds the span that best matches what Wispr pasted.
+Review before accepting:
+- Not every edit is a correction; some are rewrites.
+- The span stops where the pasted words do, so words you added at the very
+  start or end of the dictation are cut off.
+- An unchanged send doesn't prove Wispr was right.
+
+Wispr's own record of post-paste edits is empty on Linux; capturing them in
+every app, with a review interface, is #10.
+
+`{a|b}` in a reference marks a span you're unsure of; the closer alternative is
+scored. Clips added from `hk-wispr-transcripts` are Wispr's own 16 kHz copies,
+so they already went through any clipping at the mic; `record` captures the mic
+itself, which is what the chain sees live.
+
+### Safety and requirements
+
+- **Personal data stays local.** Clips, references and results live in
+  `$HK_WISPR_MIC_DIR` (default `~/.local/share/hk-wispr-mic/`), outside the repo.
+- **Wispr pastes every transcript.** Focus a scratch text field before the run
+  starts (it gives you a countdown), and keep the harness's own terminal
+  unfocused so nothing is typed into a shell. A transcript that matches a voice
+  command (`config/hyprkarl/voice-commands.conf`) runs it.
+- **Real dictations.** Each trial is a normal Wispr dictation: it lands in your
+  history and counts toward any usage limits.
+- Wispr must be running with "Wispr Mic (virtual)" as its mic, and
+  `hk-wispr-switch` must be running a version with `press` (restart it, then
+  Wispr). The run stops if Wispr records from anything else.
+- Don't touch the mic's mute switch during a run: `hk-wispr-switch` would press
+  the shortcut too.
+- The previous profile is restored at the end; if the harness dies mid-run,
+  `restore` reconnects the chain to the mic.

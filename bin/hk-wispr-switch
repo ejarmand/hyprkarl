@@ -10,7 +10,8 @@
 # silence ends, and again when it starts if Wispr is still recording.
 #
 # It stays out of the way while another app (a meeting, Discord) is recording
-# from the mic, and ignores silence from a software mute (hk-mic).
+# from the mic, and ignores silence from a software mute (hk-mic). Wispr may
+# record from the mic or from Wispr Mic, the filtered copy (hk-wispr-profile).
 #
 # Wispr's helper looks for keyboards only when it starts, so this must be
 # running before Wispr launches (autostart orders it so). After restarting
@@ -22,6 +23,8 @@
 #             Resume or pause the switch without stopping the listener;
 #             resets to on at the next login
 #   status    Print on or off
+#   press     Have the running listener press the hands-free shortcut once
+#             (tests/wispr-mic.py uses this to start and stop dictation)
 #
 # The mic is $HK_WISPR_SWITCH_SOURCE (a PipeWire source name, see
 # `pactl list sources short`), set in ~/.config/uwsm/env.local to use another.
@@ -29,6 +32,7 @@
 import fcntl
 import json
 import os
+import signal
 import struct
 import subprocess
 import sys
@@ -39,7 +43,13 @@ from pathlib import Path
 SOURCE = os.environ.get("HK_WISPR_SWITCH_SOURCE",
                         "alsa_input.usb-0c76_JOUNIVO_MICROPHONE-00.mono-fallback")
 NAME = "hk-wispr-switch"
-OFF_FLAG = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / f"{NAME}.off"
+RUNTIME = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp"))
+OFF_FLAG = RUNTIME / f"{NAME}.off"
+PID_FILE = RUNTIME / f"{NAME}.pid"
+# Wispr Mic (config/pipewire/pipewire.conf.d/wispr-mic.conf): Wispr may record
+# from it, and its own stream on the mic is not another app.
+FILTERED = "wispr_mic"
+FILTER_STREAM = "wispr_mic.capture"
 
 RATE = 16000
 BLOCK = RATE // 50              # 20 ms of samples
@@ -112,17 +122,19 @@ def is_wispr(pid):
 
 def recorders(own_pid):
     """(wispr, others): whether Wispr, and whether any other app besides this
-    listener, is recording from the mic."""
+    listener, is recording from the mic or Wispr Mic."""
     out = subprocess.run(["pactl", "-f", "json", "list", "source-outputs"],
                          capture_output=True, text=True, check=False).stdout
     sources = subprocess.run(["pactl", "list", "sources", "short"], capture_output=True,
                              text=True, check=False).stdout
-    index = next((line.split()[0] for line in sources.splitlines()
-                  if line.split()[1:2] == [SOURCE]), None)
+    indexes = {line.split()[0] for line in sources.splitlines()
+               if line.split()[1:2] in ([SOURCE], [FILTERED])}
     wispr = others = False
     for stream in json.loads(out or "[]"):
-        pid = stream["properties"].get("application.process.id", "")
-        if str(stream.get("source")) != index or not pid.isdigit() or int(pid) == own_pid:
+        props = stream["properties"]
+        pid = props.get("application.process.id") or ""
+        if (str(stream.get("source")) not in indexes or props.get("node.name") == FILTER_STREAM
+                or not pid.isdigit() or int(pid) == own_pid):
             continue
         if is_wispr(pid):
             wispr = True
@@ -176,6 +188,8 @@ def listen(keyboard):
 def run():
     keyboard = Keyboard()
     OFF_FLAG.unlink(missing_ok=True)
+    PID_FILE.write_text(str(os.getpid()))
+    signal.signal(signal.SIGUSR1, lambda *_: keyboard.press_hands_free())
     log(f"listening to {SOURCE}")
     try:
         while True:
@@ -209,5 +223,15 @@ elif action == "toggle":
     set_enabled(OFF_FLAG.exists())
 elif action == "status":
     print("off" if OFF_FLAG.exists() else "on")
+elif action == "press":
+    # A stale pid could be another process now, which SIGUSR1 would kill
+    try:
+        pid = int(PID_FILE.read_text())
+        running = NAME in Path(f"/proc/{pid}/cmdline").read_text()
+    except (OSError, ValueError):
+        running = False
+    if not running:
+        sys.exit(f"{NAME} is not running")
+    os.kill(pid, signal.SIGUSR1)
 else:
-    sys.exit(f"Usage: {NAME} [run|on|off|toggle|status]")
+    sys.exit(f"Usage: {NAME} [run|on|off|toggle|status|press]")

@@ -22,6 +22,10 @@ hl.bind("SUPER + CTRL + N", hl.dsp.exec_cmd("hk-nightlight"), { description = "T
 -- Pause or resume the mic mute switch starting Wispr hands-free (hk-wispr-switch)
 hl.bind("SUPER + ALT + D", hl.dsp.exec_cmd("hk-wispr-switch toggle"), { description = "Toggle Wispr mic switch" })
 
+-- Wispr Mic DSP profile (hk-wispr-profile): whisper on/off, or step through all
+hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("hk-wispr-profile toggle"), { description = "Toggle Wispr whisper profile" })
+hl.bind("SUPER + SHIFT + ALT + W", hl.dsp.exec_cmd("hk-wispr-profile cycle"), { description = "Next Wispr mic profile" })
+
 -- Control panels
 hl.bind("SUPER + CTRL + A", hl.dsp.exec_cmd("hk-audio-launch"), { description = "Audio controls" })
 hl.bind("SUPER + CTRL + B", hl.dsp.exec_cmd("hk-bluetooth-launch"), { description = "Bluetooth controls" })
