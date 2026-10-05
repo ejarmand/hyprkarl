@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Cream text on deep painting colors, in prompt order: indigo sash, dusty rose panel, pavilion ochre, garden green, horse slate; hat brown and wall red surfaces.
+# Dark text on painting colors, in prompt order: garden green, ivory dress, dusty rose panel, horse blue-grey, rider yellow; near-black sash and wall red surfaces.
 [palettes.hyprkarl]
-color_fg0 = '{{base.foreground}}'
+color_fg0 = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
 color_fg2 = '{{accent.primary.bright}}'
-color_bg1 = '#a8432f'  # wall red
-color_bg3 = '#4a2a26'  # hat brown
-color_magenta = '#3a3282'  # indigo sash
+color_bg1 = '#b8352a'  # wall red
+color_bg3 = '#221c45'  # sash, near black
+color_magenta = '#6aa889'  # garden green
 color_purple = '{{bright.magenta}}'
-color_orange = '#87566f'  # dusty rose panel
-color_yellow = '#95552c'  # pavilion ochre
-color_aqua = '#2c6b55'  # garden green
-color_blue = '#4f5e76'  # horse slate
+color_orange = '#e8dfc9'  # ivory dress
+color_yellow = '#d39aae'  # dusty rose panel
+color_aqua = '#9fb2d0'  # horse blue-grey
+color_blue = '#dcc25a'  # rider yellow
 color_green = '{{bright.green}}'
 color_red = '{{bright.red}}'
