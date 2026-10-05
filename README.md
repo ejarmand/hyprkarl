@@ -122,11 +122,21 @@ Provided themes:
 
 - `vera-light` uses cream paper, blue ink, teal, lavender, and raspberry.
 - `vera-dark` uses a deep blue background and softer versions of those accents.
+- `klimt-music` uses petrol, muted gold and rose from the 1895 *Music* study.
+- `klimt-hope` uses olive, gold and textile accents from *Hope II*.
+- `klimt-boa` uses warm black, violet and copper from *Lady with a Hat and Feather Boa*.
+- `klimt-adele` uses deep green, coral, sage and lilac from *Adele Bloch-Bauer II*.
 
 Both Vera themes include a plain background matching their palette. Switch
 with `hk-theme set vera-light` or `hk-theme set vera-dark`. See
 [the Vera theme notes](docs/themes.md#vera-light-and-dark) for palettes and
 regeneration instructions.
+
+The four Klimt themes are dark palettes with matching plain backgrounds and
+Starship prompt colors. The *Music* museum image is distributed under
+CC BY-SA 4.0. Each theme's `SOURCES.md` records its painting reference, image
+availability and color adaptations. See [the Klimt theme notes](docs/themes.md#klimt-painting-themes)
+for wallpaper credits and regeneration.
 
 <details>
 <summary>hyprkarl</summary>
