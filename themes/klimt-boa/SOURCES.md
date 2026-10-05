@@ -35,10 +35,10 @@ This reads the preserved palette and overrides directly and leaves the wallpaper
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
-Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.56:1. Selection contrast is 8.05:1. Starship segment text is at least 4.53:1; the colored segments are dark velvet tones with ivory text: violet hat, plum, copper hair, rosewood and smoky violet. Prompt glyphs are at least 10.00:1 against the background.
+Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.56:1. Selection contrast is 8.05:1. Starship segment text is at least 4.71:1; the colored segments are violet hat, copper hair, ivory glove, cool sage and dusty rose, with dark text, and each is at least 5.4:1 against the terminal background. The trailing segments are plum. Prompt glyphs are at least 10.00:1 against the background.
 
 Yazi's error-progress text uses the dark background colour on the error fill, giving 7.26:1. Btop explicitly uses the primary foreground. Qt active and inactive placeholders use the opaque secondary foreground, with at least 6.04:1 across the theme surfaces.
 
-All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph. The copper segment is dark enough for ivory text, so that glyph is only 3.10:1 against the background. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
+All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph. Both are readable. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
 
 The plain background is 3840 × 2160 pixels, filled with `#191418`. No active theme was switched.

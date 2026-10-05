@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Segments, in prompt order: The robe's gold-to-vermilion mosaic, ending on a turquoise fleck.
+# Dark text on painting colors, in prompt order: vermilion robe, turquoise, gold leaf, mosaic blue, magenta fleck; olive surfaces.
 [palettes.hyprkarl]
 color_fg0 = '#212518'
 color_fg1 = '#f6e8c5'
 color_fg2 = '#ffdf88'
-color_bg1 = '#303624'
-color_bg3 = '#404633'
-color_magenta = '#f2cc55'  # gold leaf
+color_bg1 = '#3f4426'  # deep olive
+color_bg3 = '#55582f'  # olive field
+color_magenta = '#f07457'  # vermilion robe
 color_purple = '#dca8d2'
-color_orange = '#f2a640'  # amber
-color_yellow = '#ee8a48'  # robe orange
-color_aqua = '#e86c4c'  # vermilion
-color_blue = '#72c4b2'  # turquoise fleck
+color_orange = '#6cc6b4'  # turquoise
+color_yellow = '#f0c650'  # gold leaf
+color_aqua = '#9cb0f0'  # mosaic blue
+color_blue = '#e19ad0'  # magenta fleck
 color_green = '#b4ce86'
 color_red = '#efa387'

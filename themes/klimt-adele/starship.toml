@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Segments, in prompt order: The painting's bands: coral wall, rose panel, green flowers, lilac floor, ivory dress.
+# Dark text on painting colors, in prompt order: coral wall, floral green, ivory dress, lilac floor, rose panel; green surfaces.
 [palettes.hyprkarl]
 color_fg0 = '#17231f'
 color_fg1 = '#eee8db'
 color_fg2 = '#cedeaf'
-color_bg1 = '#2a3932'
-color_bg3 = '#37483e'
+color_bg1 = '#2e4439'  # deep green
+color_bg3 = '#3e5e4f'  # backdrop green
 color_magenta = '#ec8a74'  # coral wall
 color_purple = '#efc4d6'
-color_orange = '#e6a3bc'  # rose panel
-color_yellow = '#9ec79c'  # floral green
+color_orange = '#9ec79c'  # floral green
+color_yellow = '#e6dcc4'  # ivory dress
 color_aqua = '#bba9dc'  # lilac floor
-color_blue = '#e6dcc4'  # ivory dress
+color_blue = '#e6a3bc'  # rose panel
 color_green = '#cedeaf'
 color_red = '#ffc1b4'

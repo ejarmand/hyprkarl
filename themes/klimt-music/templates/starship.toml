@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Segments, in prompt order: Gold lyre and warm stone, then the blue field from light to deep.
+# Dark text on painting colors, in prompt order: lyre gold, sphinx stone, field blue, auburn hair, weathered sage; petrol surfaces.
 [palettes.hyprkarl]
 color_fg0 = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
 color_fg2 = '{{accent.primary.bright}}'
-color_bg1 = '{{base.surface}}'
-color_bg3 = '{{base.surface_alt}}'
+color_bg1 = '#2f4a52'  # deep petrol
+color_bg3 = '#3b5d68'  # petrol
 color_magenta = '#e2b65a'  # lyre gold
 color_purple = '{{ansi.magenta}}'
 color_orange = '#dba898'  # sphinx stone
-color_yellow = '#9cc0cc'  # pale field blue
-color_aqua = '#7fa9bb'  # field blue
-color_blue = '#6d94ad'  # deep field blue
+color_yellow = '#8fb8c8'  # field blue
+color_aqua = '#d9906c'  # auburn hair
+color_blue = '#a9c4a0'  # weathered sage
 color_green = '{{ansi.green}}'
 color_red = '{{ansi.red}}'

@@ -1,16 +1,16 @@
 # Merged with the user's prompt by hk-starship-reload.
-# Dark segments with ivory text, in prompt order: violet hat, plum, copper hair, rosewood, smoke.
+# Dark text on painting colors, in prompt order: violet hat, copper hair, ivory glove, cool sage, dusty rose; plum surfaces.
 [palettes.hyprkarl]
-color_fg0 = '{{base.foreground}}'
+color_fg0 = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
 color_fg2 = '{{accent.primary.bright}}'
-color_bg1 = '{{base.surface}}'
-color_bg3 = '{{base.surface_alt}}'
-color_magenta = '#5e4478'  # violet hat
+color_bg1 = '#3e3242'  # deep plum
+color_bg3 = '#584a5e'  # plum
+color_magenta = '#b79ad6'  # violet hat
 color_purple = '{{bright.magenta}}'
-color_orange = '#713e62'  # plum
-color_yellow = '#9a5038'  # copper hair
-color_aqua = '#7a4a45'  # rosewood
-color_blue = '#56485e'  # smoky violet
+color_orange = '#e3946f'  # copper hair
+color_yellow = '#eadfcf'  # ivory glove
+color_aqua = '#a2bcb8'  # cool sage
+color_blue = '#d99aa8'  # dusty rose
 color_green = '{{bright.green}}'
 color_red = '{{bright.red}}'
