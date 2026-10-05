@@ -2,6 +2,7 @@
 # Dark text on painting colors, in prompt order: violet hat, copper hair, ivory glove, cool sage, dusty rose; plum surfaces.
 [palettes.hyprkarl]
 color_fg0 = '#191418'
+color_fg_host = '#191418'
 color_fg1 = '#eee0d1'
 color_fg2 = '#d0bce9'
 color_bg1 = '#3e3242'  # deep plum

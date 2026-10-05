@@ -2,6 +2,7 @@
 # Dark text on painting colors, in prompt order: persimmon robe, gold, soft lapis, forest green, turquoise; bronze and olive-brown surfaces.
 [palettes.hyprkarl]
 color_fg0 = '#212518'
+color_fg_host = '#212518'
 color_fg1 = '#f6e8c5'
 color_fg2 = '#ffdf88'
 color_bg1 = '#3f4426'  # olive-brown

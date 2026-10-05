@@ -2,6 +2,7 @@
 # Dark text on painting colors, in prompt order: lyre gold, wet rock, terracotta hair, lapis, sphinx stone; the harp's blue-green and hair-brown surfaces.
 [palettes.hyprkarl]
 color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
 color_fg1 = '{{base.foreground}}'
 color_fg2 = '{{accent.primary.bright}}'
 color_bg1 = '#34221f'  # dark hair brown

@@ -271,6 +271,7 @@ keys:
 | Key | Use |
 | --- | --- |
 | `color_fg0` | Text on the colored segments |
+| `color_fg_host` | Text on the first (host) segment; usually the same as `color_fg0` |
 | `color_fg1` | Text on the time segment (`color_bg1`) |
 | `color_fg2` | Text on the Docker and Conda segments (`color_bg3`) |
 | `color_bg1`, `color_bg3` | Surface segments at the end of the line |
@@ -279,7 +280,8 @@ keys:
 
 Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
 layout still works under themes without a `starship.toml` and on machines
-without Hyprkarl. Don't define `[palettes.hyprkarl]` in the layout, because the
+without Hyprkarl. If the layout uses `color_fg_host`, define it in that palette
+too. `klimt-adele` opens on a near-black segment and sets it to cream. Don't define `[palettes.hyprkarl]` in the layout, because the
 merged file would then contain the table twice. The Vera variants and all four
 `klimt-*` themes ship a Starship palette.
 
