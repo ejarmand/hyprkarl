@@ -23,6 +23,9 @@ would edit.
   Files copied or rendered by setup and install commands
 - `applications/`
   Desktop files exposed under `~/.local/share/applications/`
+- `fonts/hyprkarl-icons/`
+  SVG sources for the custom icon font (`svg/`), plus `draft-icons.py`, which
+  generated the first drafts. Not stowed.
 - `vendor/wispr-flow-helper/`
   Git submodule: the Wispr Flow helper fork that `hk-wispr-helper-install`
   builds (`git submodule update --init` after cloning)
