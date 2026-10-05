@@ -58,6 +58,24 @@ wifitui:
 qt:
   # Selection highlight in the Qt palettes
   highlight: "{{accent.secondary.base}}"
+  # Placeholder text and disabled selected text, each with its opacity as a
+  # two-digit hex alpha
+  placeholder: "{{base.foreground_muted}}"
+  placeholder_alpha: "80"
+  placeholder_disabled: "{{base.foreground_dim}}"
+  placeholder_disabled_alpha: "80"
+  highlighted_text_disabled: "{{base.foreground}}"
+  highlighted_text_disabled_alpha: "66"
+
+yazi:
+  progress_error_fg: "{{status.warning}}"
+
+nvim:
+  # Empty keeps the template's own choice: the surface color for terminal
+  # color 8, and the background on the primary accent for search matches
+  terminal_color_8: ""
+  search_fg: ""
+  search_bg: ""
 
 gtk:
   # Colloid's theme accent and link color

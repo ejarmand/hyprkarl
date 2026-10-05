@@ -317,9 +317,9 @@ To ship wallpapers and preview screenshots with the theme, add:
 - `themes/<name>/previews/` — `busy.png`, `launcher.png`, `menu.png`, and
   `wallpapers.png`; these become `screenshots/` in the generated bundle.
 
-Some consumers take colors by role (`terminal.selection_*`, `btop.main_fg`,
-`btop.highlight`, `wifitui.subtle`, `qt.highlight`, `gtk.accent`,
-`gtk.accent_bright`; defaults in `theme-generator/defaults/theme.yaml`). Point
+Some consumers take colors by role (`terminal`, `btop`, `wifitui`, `qt`,
+`yazi`, `nvim`, and `gtk` keys; defaults and comments in
+`theme-generator/defaults/theme.yaml`, table in `docs/themes.md`). Point
 one at another palette value in `theme.yaml` rather than overriding the
 template. `mode: light` already flips Colloid's grey ramp, Neovim's
 background, and foot's color section.

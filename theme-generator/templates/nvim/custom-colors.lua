@@ -69,7 +69,7 @@ vim.g.terminal_color_5 = c.magenta
 vim.g.terminal_color_6 = c.cyan
 vim.g.terminal_color_7 = c.fg
 
-vim.g.terminal_color_8 = c.surface
+vim.g.terminal_color_8 = {% if nvim.terminal_color_8 %}"{{nvim.terminal_color_8}}"{% else %}c.surface{% endif %}
 vim.g.terminal_color_9 = c.red_bright
 vim.g.terminal_color_10 = c.green_bright
 vim.g.terminal_color_11 = c.yellow_bright
@@ -93,7 +93,7 @@ hl("LineNr", { fg = c.fg_dim })
 hl("SignColumn", { bg = c.bg })
 
 hl("Visual", { bg = "{{ui.selection_bg}}", fg = "{{ui.selection_fg}}" })
-hl("Search", { fg = c.bg, bg = c.accent_primary })
+hl("Search", { fg = {% if nvim.search_fg %}"{{nvim.search_fg}}"{% else %}c.bg{% endif %}, bg = {% if nvim.search_bg %}"{{nvim.search_bg}}"{% else %}c.accent_primary{% endif %} })
 hl("IncSearch", { fg = c.bg, bg = c.accent_primary })
 
 hl("MatchParen", { fg = c.cyan_bright, bold = true })

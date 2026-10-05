@@ -44,7 +44,7 @@ perm_write = { fg = "{{status.error}}" }
 perm_exec  = { fg = "{{accent.secondary.base}}" }
 
 progress_normal = { fg = "{{status.success}}", bg = "{{base.surface}}" }
-progress_error  = { fg = "{{status.warning}}", bg = "{{status.error}}" }
+progress_error  = { fg = "{{yazi.progress_error_fg}}", bg = "{{status.error}}" }
 
 # Which menu
 [which]

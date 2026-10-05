@@ -224,6 +224,9 @@ palette value without overriding the template:
 | `btop.highlight` | `accent.secondary.soft` | btop's highlighted keys and graph starts |
 | `wifitui.subtle` | `accent.secondary.soft` | wifitui's subtle text |
 | `qt.highlight` | `accent.secondary.base` | Qt's selection highlight |
+| `qt.placeholder`, `qt.placeholder_disabled`, `qt.highlighted_text_disabled` | `base.foreground_muted`, `base.foreground_dim`, `base.foreground` | Qt's placeholder text and disabled selected text; each has an `_alpha` key, a two-digit hex opacity (`80`, `80`, `66`) |
+| `yazi.progress_error_fg` | `status.warning` | Text on Yazi's error progress bar |
+| `nvim.terminal_color_8`, `nvim.search_fg`, `nvim.search_bg` | empty: the surface color, and the background on the primary accent | Neovim's terminal color 8 and search matches |
 | `gtk.accent`, `gtk.accent_bright` | `accent.secondary.base`, `accent.secondary.bright` | Colloid's accent and links |
 
 For example, a light theme whose soft accents are pale points the btop and
