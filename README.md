@@ -137,6 +137,7 @@ Provided themes:
 - `van-gogh-irises` uses iris blue, leaf teal and marigold on deep green from Van Gogh's *Irises*.
 - `van-gogh-crows` uses wheat yellow, sky blue and the red-brown path on deep blue from *Wheatfield with Crows*.
 - `van-gogh-crabs` uses crab orange, sea green and red shell on dark green from *Two Crabs*.
+- `khnopff-lock-my-door` uses marble, orange lily and wing blue on near-black from Khnopff's *I Lock My Door upon Myself*.
 - `munch-linde-beach` and `munch-sunbathing` take the red hat, sand and sea, and the bright shore, from two Edvard Munch paintings.
 
 Both Vera themes include a plain background matching their palette. Switch
@@ -149,9 +150,10 @@ Starship prompt colors. The *Music* museum image is distributed under
 CC BY-SA 4.0. Each theme's `SOURCES.md` records its painting reference, image
 availability and color adaptations. See [the Klimt theme notes](docs/themes.md#klimt-painting-themes)
 for wallpaper credits and regeneration. The Bonnard, Redon, Klee, Kandinsky, Vrubel,
-Van Gogh and Munch themes follow the same pattern; see
+Van Gogh, Munch and Khnopff themes follow the same pattern; see
 [the other painting themes](docs/themes.md#other-painting-themes). The Bonnard,
-Vrubel and Munch beach photographs are also CC BY-SA 4.0.
+Vrubel and Munch beach photographs are also CC BY-SA 4.0, and the Khnopff
+photograph is CC BY 2.0.
 
 <details>
 <summary>hyprkarl</summary>

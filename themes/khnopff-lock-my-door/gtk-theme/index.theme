@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=khnopff-lock-my-door
+Comment=Generated GTK theme for the khnopff-lock-my-door palette
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+Name=khnopff-lock-my-door
+GtkTheme=hyprkarl
+MetacityTheme=hyprkarl
+IconTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

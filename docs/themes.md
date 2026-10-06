@@ -189,6 +189,7 @@ picked from the painting, the Klimt templates, a Starship palette, and a
 | `van-gogh-irises` | Vincent van Gogh, *Irises*, 1889 | Deep green, iris blue, leaf teal, marigold, earth |
 | `van-gogh-crows` | Vincent van Gogh, *Wheatfield with Crows*, 1890 | Deep sky blue, wheat yellow, sky blue, red-brown path, green |
 | `van-gogh-crabs` | Vincent van Gogh, *Two Crabs*, 1889 | Dark green, crab orange, sea green, red shell, blue shadow |
+| `khnopff-lock-my-door` | Fernand Khnopff, *I Lock My Door upon Myself*, 1891 | Near-black, marble, orange lily, wing blue, gilded ochre |
 | `munch-linde-beach` | Edvard Munch, *Young People on the Beach* (Linde Frieze), 1904 | Dark green, red hat, sand, pale sea, grass |
 | `munch-sunbathing` | Edvard Munch, *Sunbathing*, 1914–15 | Deep blue, sea blue, pink sand, yellow rock, green |
 
@@ -200,8 +201,10 @@ photographs under
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (by Didier
 Descouens, Commons user Mikhisor and Francesco Bini); like the Music image,
 keep their attribution and `ARTWORK-LICENSE.txt`, and share crops and other
-adaptations under the same license. The Redon, Klee, Van Gogh and Munch
-*Sunbathing* files are Commons reproductions tagged PD-Art. Kandinsky's 1942 painting may still be
+adaptations under the same license. The Khnopff image is a photograph by Jean-Pierre Dalbéra under
+[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), which needs
+attribution and a license link but not share-alike. The Redon, Klee, Van Gogh
+and Munch *Sunbathing* files are Commons reproductions tagged PD-Art. Kandinsky's 1942 painting may still be
 under US copyright, so, like Boa, it ships only the plain `01-default.png`.
 
 ### Regenerate the painting themes
@@ -224,7 +227,8 @@ for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele",
              "klee-temple-gardens", "klee-municipal-jewel",
              "kandinsky-intimate-party", "vrubel-demon",
              "van-gogh-irises", "munch-linde-beach", "munch-sunbathing",
-             "van-gogh-crows", "van-gogh-crabs"):
+             "van-gogh-crows", "van-gogh-crabs",
+             "khnopff-lock-my-door"):
     generate.generate(name, root / "themes" / name)
 PY
 ```

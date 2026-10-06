@@ -1,0 +1,105 @@
+[mgr]
+cwd = { fg = "#8aa6f0" }
+
+find_keyword  = { fg = "#f28a64", bold = true }
+find_position = { fg = "#8aa6f0", bold = true }
+
+marker_copied   = { fg = "#b2bc92", bg = "#b2bc92" }
+marker_cut      = { fg = "#f28a64", bg = "#f28a64" }
+marker_marked   = { fg = "#acc0ff", bg = "#acc0ff" }
+marker_selected = { fg = "#d8bc7a", bg = "#d8bc7a" }
+
+border_style = { fg = "#f28a64" }
+
+syntect_theme = ""
+
+# Tabs
+[tabs]
+sep_outer = { open = "", close = "" }
+sep_inner = { open = "", close = "" }
+
+active   = { bg = "#8aa6f0", fg = "#15191a", bold = true }
+inactive = { fg = "#8aa6f0", bg = "#1b2021" }
+
+# Mode
+[mode]
+normal_main = { bg = "#8aa6f0", fg = "#15191a", bold = true }
+normal_alt  = { fg = "#8aa6f0", bg = "#1b2021" }
+
+select_main = { bg = "#f28a64", fg = "#15191a", bold = true }
+select_alt  = { fg = "#f28a64", bg = "#1b2021" }
+
+unset_main = { bg = "#f28a64", fg = "#15191a", bold = true }
+unset_alt  = { fg = "#f28a64", bg = "#1b2021" }
+
+# Status
+[status]
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+perm_sep   = { fg = "#b8b4ac" }
+perm_type  = { fg = "#b2bc92" }
+perm_read  = { fg = "#d8bc7a" }
+perm_write = { fg = "#f28a64" }
+perm_exec  = { fg = "#8aa6f0" }
+
+progress_normal = { fg = "#b2bc92", bg = "#222829" }
+progress_error  = { fg = "#15191a", bg = "#f28a64" }
+
+# Which menu
+[which]
+mask = { bg = "#15191a" }
+cand = { fg = "#8aa6f0" }
+rest = { fg = "#b8b4ac" }
+desc = { fg = "#f28a64" }
+
+# Confirm
+[confirm]
+border = { fg = "#8aa6f0" }
+title  = { fg = "#8aa6f0" }
+
+# Notifications
+[notify]
+title_info  = { fg = "#b2bc92" }
+title_warn  = { fg = "#d8bc7a" }
+title_error = { fg = "#f28a64" }
+
+# Picker
+[pick]
+border = { fg = "#8aa6f0" }
+active = { fg = "#f28a64", bold = true }
+
+# Input
+[input]
+border = { fg = "#8aa6f0" }
+
+# Completion
+[cmp]
+border = { fg = "#8aa6f0" }
+
+# Tasks
+[tasks]
+border  = { fg = "#8aa6f0" }
+hovered = { fg = "#f28a64", bold = true }
+
+# Help
+[help]
+on      = { fg = "#8aa6f0" }
+run     = { fg = "#f28a64" }
+desc    = { fg = "#efe9e0" }
+footer  = { fg = "#15191a", bg = "#efe9e0" }
+
+# Filetypes
+[filetype]
+rules = [
+  { mime = "image/*", fg = "#d8bc7a" },
+  { mime = "{audio,video}/*", fg = "#f28a64" },
+  { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma}", fg = "#f28a64" },
+  { mime = "application/{pdf,doc,rtf}", fg = "#8aa6f0" },
+  { url = "*", is = "exec", fg = "#b2bc92" },
+  { url = "*/", fg = "#8aa6f0" }
+]
+
+# Indicator
+[indicator]
+padding = { open = "█", close = "█" }

@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: Hypnos marble, orange lily, Hypnos wing blue, gilded strip, olive-grey wall; blue cloth and auburn hair surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#15191a'
+color_fg_host = '#15191a'
+color_fg1 = '#efe9e0'
+color_fg2 = '#ffa886'
+color_bg1 = '#5a2e22'  # auburn hair
+color_bg3 = '#28408c'  # blue cloth
+color_magenta = '#c8c4bc'  # Hypnos marble
+color_purple = '#d8a6bc'
+color_orange = '#f28a64'  # orange lily
+color_yellow = '#8aa6f0'  # Hypnos wing blue
+color_aqua = '#d8bc7a'  # gilded strip
+color_blue = '#b2bc92'  # olive-grey wall
+color_green = '#b2bc92'
+color_red = '#f28a64'
