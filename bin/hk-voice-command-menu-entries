@@ -1,16 +1,34 @@
-#!/bin/bash
-# hk-voice-command-menu-entries
-# Print the voice command cheat sheet as dynamic menu rows: the focused app's
-# phrases first, then the ones that work everywhere (hk-voice-command --list).
-# The "In this app" and "Everywhere" headings are disabled rows.
+#!/usr/bin/env python3
+"""Print the voice command cheat sheet as dynamic menu rows.
 
-hk-voice-command --list | jq -R -s -c '
-  split("\n")
-  | map(select(length > 0))
-  | to_entries
-  | map({
-      id: "voice-command.\(.key)",
-      label: .value,
-      disabled: (.value | startswith("──")),
-      action: { type: "dismiss" }
-    })'
+The focused app's phrases come first, then the ones that work everywhere
+(hk-voice-command --list). The "In this app" and "Everywhere" headings are
+disabled rows.
+"""
+
+import json
+import subprocess
+import sys
+
+
+def main() -> int:
+    listing = subprocess.run(
+        ["hk-voice-command", "--list"], stdout=subprocess.PIPE, text=True, check=False
+    ).stdout
+    lines = [line for line in listing.split("\n") if line]
+    entries = [
+        {
+            "id": f"voice-command.{index}",
+            "label": line,
+            "disabled": line.startswith("──"),
+            "action": {"type": "dismiss"},
+        }
+        for index, line in enumerate(lines)
+    ]
+    json.dump(entries, sys.stdout, ensure_ascii=False, separators=(",", ":"))
+    print()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
