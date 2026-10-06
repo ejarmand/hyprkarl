@@ -129,7 +129,7 @@ only for the exact public artwork or plain background files being shipped.
 Ship 3:2 landscape crops and a plain background, not full paintings, to keep
 the repository small; record the exact source file each crop was cut from.
 
-`bonnard-cannet`, `redon-violette`, `klee-wald-bau`, `klee-temple-gardens`,
+`bonnard-cannet`, `bonnard-ete`, `redon-violette`, `klee-wald-bau`, `klee-temple-gardens`,
 `klee-municipal-jewel`, `kandinsky-intimate-party`, `vrubel-demon`,
 `van-gogh-irises`, `van-gogh-crows`, `van-gogh-crabs`, `munch-linde-beach`,
 `munch-sunbathing` and `khnopff-lock-my-door` follow the same pattern and use the Klimt templates. The Bonnard, Vrubel and Munch beach

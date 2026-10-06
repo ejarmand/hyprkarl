@@ -23,6 +23,8 @@ themes/*/wallpapers/*
 # Painting crops and plain backgrounds shipped with the painting themes.
 !themes/bonnard-cannet/wallpapers/01-cannet-crop.jpg
 !themes/bonnard-cannet/wallpapers/02-default.png
+!themes/bonnard-ete/wallpapers/01-ete-crop.jpg
+!themes/bonnard-ete/wallpapers/02-default.png
 !themes/kandinsky-intimate-party/wallpapers/01-default.png
 !themes/khnopff-lock-my-door/wallpapers/01-lock-my-door-crop.jpg
 !themes/khnopff-lock-my-door/wallpapers/02-default.png

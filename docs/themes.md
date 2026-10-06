@@ -179,6 +179,7 @@ picked from the painting, the Klimt templates, a Starship palette, and a
 | Theme | Painting reference | Main colors |
 | --- | --- | --- |
 | `bonnard-cannet` | Pierre Bonnard, *Le Cannet*, 1930 | Shadow blue, orange ground, agave blue, leaf green, oleander pink |
+| `bonnard-ete` | Pierre Bonnard, *L'Été*, 1917 | Deep foliage, lime grass, flame orange, dress blue, foliage teal |
 | `redon-violette` | Odilon Redon, *Portrait of Violette Heymann* | Warm dark, violet, mint, cobalt, peach |
 | `klee-wald-bau` | Paul Klee, *Wald Bau*, 1919 | Near-black, jade, brick, violet-grey, ochre |
 | `klee-temple-gardens` | Paul Klee, *Temple Gardens*, 1920 | Red-brown, temple orange, teal, red, slate blue |
@@ -202,8 +203,8 @@ Descouens, Commons user Mikhisor and Francesco Bini); like the Music image,
 keep their attribution and `ARTWORK-LICENSE.txt`, and share crops and other
 adaptations under the same license. The Khnopff image is a photograph by Jean-Pierre Dalbéra under
 [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), which needs
-attribution and a license link but not share-alike. The Redon, Klee, Van Gogh
-and Munch *Sunbathing* files are Commons reproductions tagged PD-Art. Kandinsky's 1942 painting may still be
+attribution and a license link but not share-alike. The Redon, Klee, Van Gogh,
+Bonnard *L'Été* and Munch *Sunbathing* files are Commons reproductions tagged PD-Art. Kandinsky's 1942 painting may still be
 under US copyright, so, like Boa, it ships only the plain `01-default.png`.
 
 ### Regenerate the painting themes
@@ -222,7 +223,7 @@ root = Path(os.environ["HYPRKARL_PATH"])
 generate.PALETTES_DIR = root / "themes"
 for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele",
              "klimt-virgin", "klimt-fan", "klimt-danae",
-             "bonnard-cannet", "redon-violette", "klee-wald-bau",
+             "bonnard-cannet", "bonnard-ete", "redon-violette", "klee-wald-bau",
              "klee-temple-gardens", "klee-municipal-jewel",
              "kandinsky-intimate-party", "vrubel-demon",
              "van-gogh-irises", "munch-linde-beach", "munch-sunbathing",

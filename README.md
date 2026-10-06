@@ -130,6 +130,7 @@ Provided themes:
 - `klimt-fan` uses yellow, turquoise and coral on kimono navy from *Lady with a Fan*.
 - `klimt-danae` uses gold, copper and veil violet on violet-black from *Danaë*.
 - `bonnard-cannet` uses orange, agave blue and leaf green on shadow blue from Bonnard's *Le Cannet*.
+- `bonnard-ete` uses lime grass, flame orange and dress blue on deep foliage from Bonnard's *L'Été*.
 - `redon-violette` uses violet, mint and cobalt on warm dark from Redon's *Portrait of Violette Heymann*.
 - `klee-wald-bau`, `klee-temple-gardens` and `klee-municipal-jewel` take jade and brick, temple orange and teal, and jewel tones from three Paul Klee paintings.
 - `kandinsky-intimate-party` uses olive-gold, violet and brown-red on slate from Kandinsky's *An Intimate Party*.

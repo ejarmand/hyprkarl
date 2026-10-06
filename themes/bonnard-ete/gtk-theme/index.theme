@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=bonnard-ete
+Comment=Generated GTK theme for the bonnard-ete palette
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+Name=bonnard-ete
+GtkTheme=hyprkarl
+MetacityTheme=hyprkarl
+IconTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: lime grass, blue dress, flame orange, foliage teal, pale meadow; deep shade blue and olive tree surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#121c1e'
+color_fg_host = '#121c1e'
+color_fg1 = '#f0ecdf'
+color_fg2 = '#a8ec74'
+color_bg1 = '#4a4420'  # olive tree
+color_bg3 = '#283c8a'  # deep shade blue
+color_magenta = '#88d84e'  # lime grass
+color_purple = '#bcaaf0'
+color_orange = '#8aa6f2'  # blue dress
+color_yellow = '#f4983c'  # flame orange
+color_aqua = '#6cc4b0'  # foliage teal
+color_blue = '#e8d88a'  # pale meadow
+color_green = '#88d84e'
+color_red = '#f4983c'
