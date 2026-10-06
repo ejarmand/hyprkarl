@@ -126,9 +126,10 @@ overlays live in `~/.config/hyprkarl/themes/<name>/`. The compiler in
 and renders every consumer's files.
 
 This fork adds `vera-light` and `vera-dark`, colored after a private painting
-that must stay out of commits (`.gitignore` covers the reference file); they
-ship only plain backgrounds. Keep `vera-light`'s `mode: light`, which carries
-the GTK light preference and Neovim's light background.
+that must stay out of commits (`.gitignore` ignores the reference file
+anywhere in the tree); they ship only plain backgrounds. Keep `vera-light`'s
+`mode: light`, which carries the GTK light preference and Neovim's light
+background.
 
 `klimt-music`, `klimt-hope`, `klimt-boa` and `klimt-adele` are dark painting
 themes with Starship palettes. Each `SOURCES.md` records the artwork, image

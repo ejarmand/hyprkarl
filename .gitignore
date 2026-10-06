@@ -13,5 +13,6 @@ __pycache__/
 # writes its backup to ~/.config/hyprkarl/; this covers the old in-repo path.
 config/hyprkarl/wispr-dictionary.csv
 
-# Private reference artwork for the Vera themes stays local.
-/2000s_vera_art_0001_a.jpg
+# Private reference artwork for the Vera themes stays local, wherever it is
+# dropped (theme wallpapers are no longer ignored, so this is not anchored).
+2000s_vera_art_0001_a.jpg
