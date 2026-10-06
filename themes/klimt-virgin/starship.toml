@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: violet swirl, orange flowers, emerald, cobalt, pink; deep swirl blue and brown surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#1b1714'
+color_fg_host = '#1b1714'
+color_fg1 = '#eee6da'
+color_fg2 = '#dcb8ff'
+color_bg1 = '#3e2c22'  # background brown
+color_bg3 = '#3a2f78'  # deep swirl blue
+color_magenta = '#b98cf0'  # violet swirl
+color_purple = '#c78cf4'
+color_orange = '#f59050'  # orange flowers
+color_yellow = '#5fc8a0'  # emerald drapery
+color_aqua = '#8a9cfa'  # cobalt
+color_blue = '#f08cc0'  # pink cushion
+color_green = '#6fd0a8'
+color_red = '#f48a5c'
