@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: gold circle, violet, pale blue ring, brown-red, green; slate and maroon surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#161d22'
+color_fg_host = '#161d22'
+color_fg1 = '#ece7dc'
+color_fg2 = '#eed87e'
+color_bg1 = '#4a2a28'  # maroon
+color_bg3 = '#3a4f5c'  # slate
+color_magenta = '#d4c060'  # gold circle
+color_purple = '#b8a0f2'
+color_orange = '#b8a0f2'  # violet
+color_yellow = '#8fc6dc'  # pale blue ring
+color_aqua = '#ec9a7e'  # brown-red
+color_blue = '#9fcf8a'  # green
+color_green = '#9fcf8a'
+color_red = '#ec9a7e'

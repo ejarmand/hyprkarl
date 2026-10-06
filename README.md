@@ -129,6 +129,10 @@ Provided themes:
 - `klimt-virgin` uses violet, cobalt, orange and emerald on warm black from *The Virgin*.
 - `klimt-fan` uses yellow, turquoise and coral on kimono navy from *Lady with a Fan*.
 - `klimt-danae` uses gold, copper and veil violet on violet-black from *Danaë*.
+- `bonnard-cannet` uses orange, agave blue and leaf green on shadow blue from Bonnard's *Le Cannet*.
+- `redon-violette` uses violet, mint and cobalt on warm dark from Redon's *Portrait of Violette Heymann*.
+- `klee-wald-bau`, `klee-temple-gardens` and `klee-municipal-jewel` take jade and brick, temple orange and teal, and jewel tones from three Paul Klee paintings.
+- `kandinsky-intimate-party` uses olive-gold, violet and brown-red on slate from Kandinsky's *An Intimate Party*.
 
 Both Vera themes include a plain background matching their palette. Switch
 with `hk-theme set vera-light` or `hk-theme set vera-dark`. See
@@ -139,7 +143,10 @@ The seven Klimt themes are dark palettes with matching plain backgrounds and
 Starship prompt colors. The *Music* museum image is distributed under
 CC BY-SA 4.0. Each theme's `SOURCES.md` records its painting reference, image
 availability and color adaptations. See [the Klimt theme notes](docs/themes.md#klimt-painting-themes)
-for wallpaper credits and regeneration.
+for wallpaper credits and regeneration. The Bonnard, Redon, Klee and Kandinsky
+themes follow the same pattern; see
+[the other painting themes](docs/themes.md#other-painting-themes). The Bonnard
+photograph is also CC BY-SA 4.0.
 
 <details>
 <summary>hyprkarl</summary>

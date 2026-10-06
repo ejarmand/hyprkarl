@@ -171,7 +171,31 @@ adaptation for UI use, not a calibrated reproduction of the painting. Any
 locally added wallpaper stays ignored; only explicitly listed shipped files
 have `.gitignore` exceptions. Private dictionary photos are never bundled.
 
-### Regenerate the Klimt themes
+## Other painting themes
+
+Six more dark themes follow the same pattern as the Klimt themes: a palette
+picked from the painting, the Klimt templates, a Starship palette, and a
+`SOURCES.md` with the reference, rights and color choices.
+
+| Theme | Painting reference | Main colors |
+| --- | --- | --- |
+| `bonnard-cannet` | Pierre Bonnard, *Le Cannet*, 1930 | Shadow blue, orange ground, agave blue, leaf green, oleander pink |
+| `redon-violette` | Odilon Redon, *Portrait of Violette Heymann* | Warm dark, violet, mint, cobalt, peach |
+| `klee-wald-bau` | Paul Klee, *Wald Bau*, 1919 | Near-black, jade, brick, violet-grey, ochre |
+| `klee-temple-gardens` | Paul Klee, *Temple Gardens*, 1920 | Red-brown, temple orange, teal, red, slate blue |
+| `klee-municipal-jewel` | Paul Klee, *Municipal Jewel*, 1917 | Blue-black, magenta, sapphire, emerald, yellow |
+| `kandinsky-intimate-party` | Wassily Kandinsky, *An Intimate Party*, 1942 | Slate, olive-gold, violet, brown-red, pale blue |
+
+All but Kandinsky ship a 3:2 crop of the painting (`01-*-crop.jpg`), the full
+painting (`02-*`) and a plain `03-default.png`. The Bonnard image is a
+photograph by Didier Descouens under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); like the Music
+image, keep its attribution and `ARTWORK-LICENSE.txt`, and share the crop and
+other adaptations under the same license. The Redon and Klee files are
+Commons reproductions tagged PD-Art. Kandinsky's 1942 painting may still be
+under US copyright, so, like Boa, it ships only the plain `01-default.png`.
+
+### Regenerate the painting themes
 
 Use companion generator commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e`
 with its Python requirements and `sassc`. Run from its checkout, with
@@ -186,7 +210,10 @@ import generate
 root = Path(os.environ["HYPRKARL_PATH"])
 generate.PALETTES_DIR = root / "themes"
 for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele",
-             "klimt-virgin", "klimt-fan", "klimt-danae"):
+             "klimt-virgin", "klimt-fan", "klimt-danae",
+             "bonnard-cannet", "redon-violette", "klee-wald-bau",
+             "klee-temple-gardens", "klee-municipal-jewel",
+             "kandinsky-intimate-party"):
     generate.generate(name, root / "themes" / name)
 PY
 ```
@@ -289,8 +316,8 @@ Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
 layout still works under themes without a `starship.toml` and on machines
 without Hyprkarl. If the layout uses `color_fg_host`, define it in that palette
 too. `klimt-adele` opens on a near-black segment and sets it to near-white. Don't define `[palettes.hyprkarl]` in the layout, because the
-merged file would then contain the table twice. The Vera variants and all seven
-`klimt-*` themes ship a Starship palette.
+merged file would then contain the table twice. The Vera variants and all the
+painting themes ship a Starship palette.
 
 ## Create a New Theme
 

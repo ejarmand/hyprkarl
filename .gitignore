@@ -40,3 +40,21 @@ themes/*/wallpapers/*
 !themes/klimt-danae/wallpapers/01-danae-crop.jpg
 !themes/klimt-danae/wallpapers/02-danae.jpeg
 !themes/klimt-danae/wallpapers/03-default.png
+
+# Public artwork and plain backgrounds shipped with the other painting themes.
+!themes/bonnard-cannet/wallpapers/01-cannet-crop.jpg
+!themes/bonnard-cannet/wallpapers/02-cannet.jpg
+!themes/bonnard-cannet/wallpapers/03-default.png
+!themes/redon-violette/wallpapers/01-violette-crop.jpg
+!themes/redon-violette/wallpapers/02-violette.jpg
+!themes/redon-violette/wallpapers/03-default.png
+!themes/klee-wald-bau/wallpapers/01-wald-bau-crop.jpg
+!themes/klee-wald-bau/wallpapers/02-wald-bau.jpg
+!themes/klee-wald-bau/wallpapers/03-default.png
+!themes/klee-temple-gardens/wallpapers/01-temple-gardens-crop.jpg
+!themes/klee-temple-gardens/wallpapers/02-temple-gardens.jpg
+!themes/klee-temple-gardens/wallpapers/03-default.png
+!themes/klee-municipal-jewel/wallpapers/01-municipal-jewel-crop.jpg
+!themes/klee-municipal-jewel/wallpapers/02-municipal-jewel.jpg
+!themes/klee-municipal-jewel/wallpapers/03-default.png
+!themes/kandinsky-intimate-party/wallpapers/01-default.png

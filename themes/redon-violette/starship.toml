@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: mint dress, violet flowers, peach flower, cobalt flowers, leaf green; taupe ground and auburn hair surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#1d1a17'
+color_fg_host = '#1d1a17'
+color_fg1 = '#efe7da'
+color_fg2 = '#d8b4ff'
+color_bg1 = '#5a3226'  # auburn hair
+color_bg3 = '#4a4236'  # taupe ground
+color_magenta = '#96dcc4'  # mint dress
+color_purple = '#c194f2'
+color_orange = '#c194f2'  # violet flowers
+color_yellow = '#f2a084'  # peach flower
+color_aqua = '#8ea4f4'  # cobalt flowers
+color_blue = '#86d686'  # leaf green
+color_green = '#86d686'
+color_red = '#f2a084'

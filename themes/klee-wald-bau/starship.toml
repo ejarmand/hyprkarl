@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: jade green, brick, violet-grey, ochre, rose; dark forest green and maroon surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#1c1716'
+color_fg_host = '#1c1716'
+color_fg1 = '#efe6dc'
+color_fg2 = '#94eab6'
+color_bg1 = '#4a2a2a'  # maroon
+color_bg3 = '#2f5a48'  # dark forest green
+color_magenta = '#6fd39a'  # jade green
+color_purple = '#e59ab2'
+color_orange = '#ec8a6c'  # brick
+color_yellow = '#a2a6e4'  # violet-grey
+color_aqua = '#e2b86a'  # ochre
+color_blue = '#e59ab2'  # rose
+color_green = '#6fd39a'
+color_red = '#ec8a6c'

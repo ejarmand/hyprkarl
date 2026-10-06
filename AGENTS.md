@@ -127,6 +127,11 @@ public-domain evidence for any other bundled painting file. Private dictionary
 photos must stay out of the repository. Add explicit `.gitignore` exceptions
 only for the exact public artwork or plain background files being shipped.
 
+`bonnard-cannet`, `redon-violette`, `klee-wald-bau`, `klee-temple-gardens`,
+`klee-municipal-jewel` and `kandinsky-intimate-party` follow the same pattern
+and use the Klimt templates. The Bonnard photograph is CC BY-SA 4.0 like the
+Music image. Kandinsky's US status is unresolved, so it ships no painting image.
+
 ### `hk-*` Commands
 
 All user-facing utilities are in `bin/` and follow the `hk-*` naming
