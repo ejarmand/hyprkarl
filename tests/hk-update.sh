@@ -421,7 +421,7 @@ EOF
   check=$(run_apps "$ORIG/bin/hk-update" check 2>/dev/null)
   sed -n '/=== Apps ===/,$p' <<<"$check" | grep -q '^  demo .* v1 .* v2 .*update available' \
     || fail "hk-update check did not report the app update"
-  sed -n '/=== Apps ===/,$p' <<<"$check" | grep -q '^  t3code ' \
+  sed -n '/=== Apps ===/,$p' <<<"$check" | grep -q '^  wispr-flow ' \
     || fail "hk-update check did not list a shipped app recipe"
   assert_equal "$(readlink "$opt/current")" "v1" "hk-update check changed an app"
 

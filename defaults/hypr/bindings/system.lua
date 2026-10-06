@@ -6,7 +6,6 @@ hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("hk-shell launcher toggle"), { descript
 hl.bind("SUPER + ESCAPE", hl.dsp.exec_cmd("hk-shell menu toggle power"), { description = "Power menu" })
 hl.bind("SUPER + K", hl.dsp.exec_cmd("hk-shell menu toggle keybindings"), { description = "View keybinds" })
 hl.bind("SUPER + CTRL + C", hl.dsp.exec_cmd("hk-shell calculator toggle"), { description = "Calculator" })
--- SUPER + CTRL + SPACE is left free: it is Wispr Flow's hands-free shortcut
 
 -- Notifications
 hl.bind("SUPER + COMMA", hl.dsp.exec_cmd("hk-shell notifications dismiss"), { description = "Dismiss last notification" })
@@ -16,9 +15,6 @@ hl.bind("SUPER + SHIFT + ALT + COMMA", hl.dsp.exec_cmd("hk-shell notifications r
 
 -- Toggle nightlight
 hl.bind("SUPER + CTRL + N", hl.dsp.exec_cmd("hk-nightlight"), { description = "Toggle nightlight" })
-
--- Pause or resume the mic mute switch starting Wispr hands-free (hk-wispr-switch)
-hl.bind("SUPER + ALT + D", hl.dsp.exec_cmd("hk-wispr-switch toggle"), { description = "Toggle Wispr mic switch" })
 
 -- Control panels
 hl.bind("SUPER + CTRL + A", hl.dsp.exec_cmd("hk-audio-launch"), { description = "Audio controls" })

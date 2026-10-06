@@ -194,10 +194,7 @@ SUPER + [0-9]          ->  Navigate to workspace
 SUPER + SHIFT + [0-9]  ->  Move window to workspace
 SUPER + F              ->  Fullscreen
 SUPER + T              ->  Toggle tiling/floating
-SUPER + ALT + D        ->  Pause or resume the Wispr mic switch
 ```
-
-`SUPER + CTRL + SPACE` is left unbound for Wispr Flow's hands-free shortcut.
 
 ## Updating
 

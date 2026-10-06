@@ -53,9 +53,8 @@ hl.config({
         col = {
             border_active = activeBorderColor,
             border_inactive = inactiveBorderColor,
-            -- Locked groups get a transparent border
-            border_locked_active = "rgba(00000000)",
-            border_locked_inactive = "rgba(00000000)",
+            border_locked_active = activeBorderColor,
+            border_locked_inactive = inactiveBorderColor,
         },
 
         groupbar = {

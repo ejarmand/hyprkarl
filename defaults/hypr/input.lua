@@ -33,8 +33,8 @@ hl.config({
 			-- Control the speed of your scrolling
 			scroll_factor = 0.4,
 
-			-- Tap, then hold the second tap, to drag
-			tap_and_drag = true,
+			-- Disable tap-and-drag
+			tap_and_drag = false,
 
 			-- Don't disable while typing
 			disable_while_typing = false,
