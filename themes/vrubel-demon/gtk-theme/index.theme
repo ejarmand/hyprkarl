@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=vrubel-demon
+Comment=Generated GTK theme for the vrubel-demon palette
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+Name=vrubel-demon
+GtkTheme=hyprkarl
+MetacityTheme=hyprkarl
+IconTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

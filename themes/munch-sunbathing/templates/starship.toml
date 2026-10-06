@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: yellow rock, sea blue, pink sand, green, red figure; deep sea and plum shadow surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#5a3248'  # plum shadow
+color_bg3 = '#2a3f8a'  # deep sea
+color_magenta = '#f0d468'  # yellow rock
+color_purple = '{{ansi.magenta}}'
+color_orange = '#86a8f6'  # sea blue
+color_yellow = '#f0a8c0'  # pink sand
+color_aqua = '#92d27c'  # green
+color_blue = '#f48e70'  # red figure
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

@@ -1,0 +1,13 @@
+* {
+    font: "JetBrainsMonoNL Nerd Font Propo 12";
+
+    background:      #141b17FF;
+    background-alt:  #212b25FF;
+    foreground:      #f1ebddFF;
+    accent:          #4d362dFF;
+
+    highlight:        #86c8c0FF;
+
+    active:          #74c97eFF;
+    urgent:          #fa866eFF;
+}

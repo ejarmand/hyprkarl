@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: sea, red hat, sand, grass, pink rock; dark grass and dark coats surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#3a2a26'  # dark coats
+color_bg3 = '#24462f'  # dark grass
+color_magenta = '#9ab4e0'  # sea
+color_purple = '{{ansi.magenta}}'
+color_orange = '#fa866e'  # red hat
+color_yellow = '#e8c27a'  # sand
+color_aqua = '#74c97e'  # grass
+color_blue = '#e6a0b0'  # pink rock
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

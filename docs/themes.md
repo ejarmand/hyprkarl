@@ -173,7 +173,7 @@ have `.gitignore` exceptions. Private dictionary photos are never bundled.
 
 ## Other painting themes
 
-Six more dark themes follow the same pattern as the Klimt themes: a palette
+These dark themes follow the same pattern as the Klimt themes: a palette
 picked from the painting, the Klimt templates, a Starship palette, and a
 `SOURCES.md` with the reference, rights and color choices.
 
@@ -185,14 +185,21 @@ picked from the painting, the Klimt templates, a Starship palette, and a
 | `klee-temple-gardens` | Paul Klee, *Temple Gardens*, 1920 | Red-brown, temple orange, teal, red, slate blue |
 | `klee-municipal-jewel` | Paul Klee, *Municipal Jewel*, 1917 | Blue-black, magenta, sapphire, emerald, yellow |
 | `kandinsky-intimate-party` | Wassily Kandinsky, *An Intimate Party*, 1942 | Slate, olive-gold, violet, brown-red, pale blue |
+| `vrubel-demon` | Mikhail Vrubel, *Demon Seated*, 1890 | Blue-black, coral sky, robe blue, crystal lilac, sunset gold |
+| `van-gogh-irises` | Vincent van Gogh, *Irises*, 1889 | Deep green, iris blue, leaf teal, marigold, earth |
+| `munch-linde-beach` | Edvard Munch, *Young People on the Beach* (Linde Frieze), 1904 | Dark green, red hat, sand, pale sea, grass |
+| `munch-sunbathing` | Edvard Munch, *Sunbathing*, 1914–15 | Deep blue, sea blue, pink sand, yellow rock, green |
 
-All but Kandinsky ship a 3:2 crop of the painting (`01-*-crop.jpg`), the full
-painting (`02-*`) and a plain `03-default.png`. The Bonnard image is a
-photograph by Didier Descouens under
-[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); like the Music
-image, keep its attribution and `ARTWORK-LICENSE.txt`, and share the crop and
-other adaptations under the same license. The Redon and Klee files are
-Commons reproductions tagged PD-Art. Kandinsky's 1942 painting may still be
+Most ship a 3:2 crop of the painting (`01-*-crop.jpg`), the full painting
+(`02-*`) and a plain `03-default.png`. The two Munch sources show the painting
+in its frame, so those themes ship only the crop, cut inside the frame, and a
+plain `02-default.png`. The Bonnard, Vrubel and Munch beach images are
+photographs under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (by Didier
+Descouens, Commons user Mikhisor and Francesco Bini); like the Music image,
+keep their attribution and `ARTWORK-LICENSE.txt`, and share crops and other
+adaptations under the same license. The Redon, Klee, Van Gogh and Munch
+*Sunbathing* files are Commons reproductions tagged PD-Art. Kandinsky's 1942 painting may still be
 under US copyright, so, like Boa, it ships only the plain `01-default.png`.
 
 ### Regenerate the painting themes
@@ -213,7 +220,8 @@ for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele",
              "klimt-virgin", "klimt-fan", "klimt-danae",
              "bonnard-cannet", "redon-violette", "klee-wald-bau",
              "klee-temple-gardens", "klee-municipal-jewel",
-             "kandinsky-intimate-party"):
+             "kandinsky-intimate-party", "vrubel-demon",
+             "van-gogh-irises", "munch-linde-beach", "munch-sunbathing"):
     generate.generate(name, root / "themes" / name)
 PY
 ```

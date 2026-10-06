@@ -133,6 +133,9 @@ Provided themes:
 - `redon-violette` uses violet, mint and cobalt on warm dark from Redon's *Portrait of Violette Heymann*.
 - `klee-wald-bau`, `klee-temple-gardens` and `klee-municipal-jewel` take jade and brick, temple orange and teal, and jewel tones from three Paul Klee paintings.
 - `kandinsky-intimate-party` uses olive-gold, violet and brown-red on slate from Kandinsky's *An Intimate Party*.
+- `vrubel-demon` uses coral sky, robe blue and crystal lilac on blue-black from Vrubel's *Demon Seated*.
+- `van-gogh-irises` uses iris blue, leaf teal and marigold on deep green from Van Gogh's *Irises*.
+- `munch-linde-beach` and `munch-sunbathing` take the red hat, sand and sea, and the bright shore, from two Edvard Munch paintings.
 
 Both Vera themes include a plain background matching their palette. Switch
 with `hk-theme set vera-light` or `hk-theme set vera-dark`. See
@@ -143,10 +146,10 @@ The seven Klimt themes are dark palettes with matching plain backgrounds and
 Starship prompt colors. The *Music* museum image is distributed under
 CC BY-SA 4.0. Each theme's `SOURCES.md` records its painting reference, image
 availability and color adaptations. See [the Klimt theme notes](docs/themes.md#klimt-painting-themes)
-for wallpaper credits and regeneration. The Bonnard, Redon, Klee and Kandinsky
-themes follow the same pattern; see
-[the other painting themes](docs/themes.md#other-painting-themes). The Bonnard
-photograph is also CC BY-SA 4.0.
+for wallpaper credits and regeneration. The Bonnard, Redon, Klee, Kandinsky, Vrubel,
+Van Gogh and Munch themes follow the same pattern; see
+[the other painting themes](docs/themes.md#other-painting-themes). The Bonnard,
+Vrubel and Munch beach photographs are also CC BY-SA 4.0.
 
 <details>
 <summary>hyprkarl</summary>

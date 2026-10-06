@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: coral sky, robe blue, sunset gold, crystal lilac, leaf green; deep robe blue and umber surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#4a2e2a'  # umber
+color_bg3 = '#2e3a6e'  # deep robe blue
+color_magenta = '#f28a72'  # coral sky
+color_purple = '{{ansi.magenta}}'
+color_orange = '#86a4ee'  # robe blue
+color_yellow = '#f2b866'  # sunset gold
+color_aqua = '#c4b2e0'  # crystal lilac
+color_blue = '#8cc0a0'  # leaf green
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

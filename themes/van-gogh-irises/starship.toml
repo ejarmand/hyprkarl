@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: iris blue, marigold, leaf green, earth, white iris; deep iris and earth brown surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#141c1b'
+color_fg_host = '#141c1b'
+color_fg1 = '#efeadc'
+color_fg2 = '#b2bcff'
+color_bg1 = '#4a3a24'  # earth brown
+color_bg3 = '#2f3f8a'  # deep iris
+color_magenta = '#98a6f6'  # iris blue
+color_purple = '#b89af0'
+color_orange = '#f2a65a'  # marigold
+color_yellow = '#88c4aa'  # leaf green
+color_aqua = '#ee9670'  # earth
+color_blue = '#e8e2d4'  # white iris
+color_green = '#88c4aa'
+color_red = '#ee9670'
