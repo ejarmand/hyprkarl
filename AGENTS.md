@@ -116,7 +116,8 @@ background when editing it. Its GTK CSS is compiled from Colloid's Light
 entrypoints; the companion generator currently defaults to Dark. See
 `docs/themes.md` for regeneration instructions.
 
-`klimt-music`, `klimt-hope`, `klimt-boa` and `klimt-adele` are dark painting
+`klimt-music`, `klimt-hope`, `klimt-boa`, `klimt-adele`, `klimt-virgin`,
+`klimt-fan` and `klimt-danae` are dark painting
 palettes with generator sources in `palette.yaml` and `templates/`, plus
 Starship colors. Keep their source overrides consistent with generated files.
 Each `SOURCES.md` records the artwork, image provenance and color adaptations.

@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: turquoise bird, yellow field, coral bird, lotus pink, leaf green; kimono blue and kimono brown surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#171a24'
+color_fg_host = '#171a24'
+color_fg1 = '#f3ead6'
+color_fg2 = '#ffe27a'
+color_bg1 = '#4a3424'  # kimono brown
+color_bg3 = '#2f3f7a'  # kimono blue
+color_magenta = '#6ec4c8'  # turquoise bird
+color_purple = '#eaa0c0'
+color_orange = '#f2cd4a'  # yellow field
+color_yellow = '#f7926a'  # coral bird
+color_aqua = '#eaa0c0'  # lotus pink
+color_blue = '#8fc77a'  # leaf green
+color_green = '#9fd08a'
+color_red = '#f7926a'

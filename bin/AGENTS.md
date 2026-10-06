@@ -40,7 +40,7 @@ file — prefer targeted edits to full-file rewrites in the `hk-menu-*` scripts.
 ## Theme selection
 
 `hk-theme-list` discovers theme directories, including the Vera variants and
-the four `klimt-*` painting themes; new themes need no command-specific
+the seven `klimt-*` painting themes; new themes need no command-specific
 registration. `hk-theme-set`
 uses the theme's `light.mode` marker to select GNOME's light preference.
 Keep mode and palette choices in the theme files.

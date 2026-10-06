@@ -127,7 +127,7 @@ the installed theme directories.
 
 ## Klimt painting themes
 
-These four dark themes adapt painting colors for readable desktop text,
+These seven dark themes adapt painting colors for readable desktop text,
 terminal output and status indicators. Each keeps its source in `palette.yaml`
 and `templates/` and includes a Starship palette.
 
@@ -137,13 +137,18 @@ and `templates/` and includes a Starship palette.
 | `klimt-hope` | *Hope II*, 1907–08 | Olive, gold, orange and textile accents |
 | `klimt-boa` | *Lady with a Hat and Feather Boa*, 1909 | Warm black, violet, copper and ivory |
 | `klimt-adele` | *Portrait of Adele Bloch-Bauer II*, 1912 | Deep green, coral, sage, lilac and cream |
+| `klimt-virgin` | *The Virgin*, 1913 | Warm black, violet, cobalt, orange and emerald |
+| `klimt-fan` | *Lady with a Fan*, 1917–18 | Kimono navy, yellow, turquoise, coral and lotus pink |
+| `klimt-danae` | *Danaë*, 1907–08 | Violet-black, gold, copper and veil violet |
 
 Switch with `hk-theme set klimt-music`, or substitute any name from the table.
-All four cover the same applications as Vera dark and retain the default bar
+All seven cover the same applications as Vera dark and retain the default bar
 layout. Music, Hope and Adele default to their painting and also ship a
 matching plain background, numbered last. Hope and Adele default to 3:2
 landscape crops (`01-hope-figure.jpg`, `01-adele-portrait.jpg`) and keep a
-second Hope crop and the full paintings as alternatives. Boa ships only the plain
+second Hope crop and the full paintings as alternatives. Virgin, Fan and Danaë
+follow the same pattern: a 3:2 crop (`01-*-crop.jpg`), the full painting
+(`02-*`) and the plain `03-default.png`. Boa ships only the plain
 `01-default.png`.
 
 The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
@@ -156,7 +161,8 @@ Hope II and Adele II ship the specific Commons reproductions documented in
 their `SOURCES.md`. Those file pages identify the paintings and faithful
 reproductions as public domain, including US pre-1931 publication statements.
 The statements are recorded source evidence, not independently reconstructed
-publication histories. Boa ships its plain background; its reference file's
+publication histories. Virgin, Fan and Danaë ship Commons reproductions tagged
+PD-Art, recorded the same way. Boa ships its plain background; its reference file's
 US public-domain basis remains unresolved.
 
 Each theme's `SOURCES.md` records its exact reference image, bundled files,
@@ -179,7 +185,8 @@ import generate
 
 root = Path(os.environ["HYPRKARL_PATH"])
 generate.PALETTES_DIR = root / "themes"
-for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele"):
+for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele",
+             "klimt-virgin", "klimt-fan", "klimt-danae"):
     generate.generate(name, root / "themes" / name)
 PY
 ```
@@ -282,7 +289,7 @@ Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
 layout still works under themes without a `starship.toml` and on machines
 without Hyprkarl. If the layout uses `color_fg_host`, define it in that palette
 too. `klimt-adele` opens on a near-black segment and sets it to near-white. Don't define `[palettes.hyprkarl]` in the layout, because the
-merged file would then contain the table twice. The Vera variants and all four
+merged file would then contain the table twice. The Vera variants and all seven
 `klimt-*` themes ship a Starship palette.
 
 ## Create a New Theme

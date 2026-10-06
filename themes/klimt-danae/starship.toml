@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: copper hair, violet veil, gold coins, sage, pale skin; deep veil violet and dark bronze surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#19151f'
+color_fg_host = '#19151f'
+color_fg1 = '#f1e8dc'
+color_fg2 = '#ffd874'
+color_bg1 = '#4a3a20'  # dark bronze
+color_bg3 = '#45306a'  # deep veil violet
+color_magenta = '#eb9a5c'  # copper hair
+color_purple = '#bd96ee'
+color_orange = '#bd96ee'  # violet veil
+color_yellow = '#ecc04a'  # gold coins
+color_aqua = '#a8c890'  # sage edge
+color_blue = '#e8dccb'  # pale skin
+color_green = '#a8c890'
+color_red = '#eb9a5c'
