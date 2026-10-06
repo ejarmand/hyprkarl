@@ -135,6 +135,8 @@ Provided themes:
 - `kandinsky-intimate-party` uses olive-gold, violet and brown-red on slate from Kandinsky's *An Intimate Party*.
 - `vrubel-demon` uses coral sky, robe blue and crystal lilac on blue-black from Vrubel's *Demon Seated*.
 - `van-gogh-irises` uses iris blue, leaf teal and marigold on deep green from Van Gogh's *Irises*.
+- `van-gogh-crows` uses wheat yellow, sky blue and the red-brown path on deep blue from *Wheatfield with Crows*.
+- `van-gogh-crabs` uses crab orange, sea green and red shell on dark green from *Two Crabs*.
 - `munch-linde-beach` and `munch-sunbathing` take the red hat, sand and sea, and the bright shore, from two Edvard Munch paintings.
 
 Both Vera themes include a plain background matching their palette. Switch

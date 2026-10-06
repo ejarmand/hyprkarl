@@ -129,8 +129,8 @@ only for the exact public artwork or plain background files being shipped.
 
 `bonnard-cannet`, `redon-violette`, `klee-wald-bau`, `klee-temple-gardens`,
 `klee-municipal-jewel`, `kandinsky-intimate-party`, `vrubel-demon`,
-`van-gogh-irises`, `munch-linde-beach` and `munch-sunbathing` follow the same
-pattern and use the Klimt templates. The Bonnard, Vrubel and Munch beach
+`van-gogh-irises`, `van-gogh-crows`, `van-gogh-crabs`, `munch-linde-beach` and
+`munch-sunbathing` follow the same pattern and use the Klimt templates. The Bonnard, Vrubel and Munch beach
 photographs are CC BY-SA 4.0 like the Music image. Kandinsky's US status is unresolved, so it ships no painting image.
 
 ### `hk-*` Commands

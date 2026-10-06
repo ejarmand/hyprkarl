@@ -1,0 +1,58 @@
+theme[main_fg]       = "#f1ebdf"
+theme[main_bg]       = "#10201c"
+theme[title]         = "#92e4da"
+theme[hi_fg]         = "#66c6b0"
+
+theme[selected_bg]   = "#1d312c"
+theme[selected_fg]   = "#f1ebdf"
+theme[inactive_fg]   = "#b9b4a9"
+
+theme[cpu_box]       = "#b9b4a9"
+theme[mem_box]       = "#b9b4a9"
+theme[net_box]       = "#b9b4a9"
+theme[proc_box]      = "#b9b4a9"
+theme[div_line]      = "#b9b4a9"
+
+theme[graph_text]    = "#ffa48a"
+theme[proc_misc]     = "#ffa48a"
+
+# temperature gradient (semantic → keep warning scale)
+theme[temp_start]    = "#10201c"
+theme[temp_mid]      = "#f2a85a"
+theme[temp_end]      = "#ffc482"
+
+# cpu (hot → critical)
+theme[cpu_start]     = "#fa9478"
+theme[cpu_mid]       = "#ffa48a"
+theme[cpu_end]       = "#ffc482"
+
+# memory (capacity / availability → calm/positive)
+theme[free_start]        = "#162924"
+theme[free_mid]          = "#fa9478"
+theme[free_end]          = "#ffa48a"
+
+theme[cached_start]      = "#162924"
+theme[cached_mid]        = "#fa9478"
+theme[cached_end]        = "#ffa48a"
+
+theme[available_start]   = "#162924"
+theme[available_mid]     = "#fa9478"
+theme[available_end]     = "#ffa48a"
+
+theme[used_start]        = "#66c6b0"
+theme[used_mid]          = "#66c6b0"
+theme[used_end]          = "#92e4da"
+
+# network (distinct but not semantic-danger)
+theme[download_start]    = "#66c6b0"
+theme[download_mid]      = "#66c6b0"
+theme[download_end]      = "#f2a85a"
+
+theme[upload_start]      = "#4a3d33"
+theme[upload_mid]        = "#fa9478"
+theme[upload_end]        = "#ffc482"
+
+# process (neutral activity → use secondary)
+theme[process_start]     = "#66c6b0"
+theme[process_mid]       = "#66c6b0"
+theme[process_end]       = "#92e4da"

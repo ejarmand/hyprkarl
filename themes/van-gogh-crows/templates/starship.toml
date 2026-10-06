@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: sky blue, wheat, path, grass, cloud; deep sky and path shadow surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#5a3220'  # path shadow
+color_bg3 = '#24398a'  # deep sky
+color_magenta = '#86a8f4'  # sky blue
+color_purple = '{{ansi.magenta}}'
+color_orange = '#f0d050'  # wheat
+color_yellow = '#ef8e62'  # path
+color_aqua = '#8fcf6a'  # grass
+color_blue = '#c8e4ec'  # cloud
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

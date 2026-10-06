@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: crab orange, sea-green ground, red shell, pale claw, blue shadow; deep green and dark shell red surfaces.
+[palettes.hyprkarl]
+color_fg0 = '#10201c'
+color_fg_host = '#10201c'
+color_fg1 = '#f1ebdf'
+color_fg2 = '#ffc482'
+color_bg1 = '#5a2418'  # dark shell red
+color_bg3 = '#1f5a44'  # deep green
+color_magenta = '#f2a85a'  # crab orange
+color_purple = '#e8a2b6'
+color_orange = '#66c6b0'  # sea-green ground
+color_yellow = '#f78c70'  # red shell
+color_aqua = '#ecdcc0'  # pale claw
+color_blue = '#92aef2'  # blue shadow
+color_green = '#9ad488'
+color_red = '#fa9478'

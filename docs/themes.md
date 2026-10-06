@@ -187,6 +187,8 @@ picked from the painting, the Klimt templates, a Starship palette, and a
 | `kandinsky-intimate-party` | Wassily Kandinsky, *An Intimate Party*, 1942 | Slate, olive-gold, violet, brown-red, pale blue |
 | `vrubel-demon` | Mikhail Vrubel, *Demon Seated*, 1890 | Blue-black, coral sky, robe blue, crystal lilac, sunset gold |
 | `van-gogh-irises` | Vincent van Gogh, *Irises*, 1889 | Deep green, iris blue, leaf teal, marigold, earth |
+| `van-gogh-crows` | Vincent van Gogh, *Wheatfield with Crows*, 1890 | Deep sky blue, wheat yellow, sky blue, red-brown path, green |
+| `van-gogh-crabs` | Vincent van Gogh, *Two Crabs*, 1889 | Dark green, crab orange, sea green, red shell, blue shadow |
 | `munch-linde-beach` | Edvard Munch, *Young People on the Beach* (Linde Frieze), 1904 | Dark green, red hat, sand, pale sea, grass |
 | `munch-sunbathing` | Edvard Munch, *Sunbathing*, 1914–15 | Deep blue, sea blue, pink sand, yellow rock, green |
 
@@ -221,7 +223,8 @@ for name in ("klimt-music", "klimt-hope", "klimt-boa", "klimt-adele",
              "bonnard-cannet", "redon-violette", "klee-wald-bau",
              "klee-temple-gardens", "klee-municipal-jewel",
              "kandinsky-intimate-party", "vrubel-demon",
-             "van-gogh-irises", "munch-linde-beach", "munch-sunbathing"):
+             "van-gogh-irises", "munch-linde-beach", "munch-sunbathing",
+             "van-gogh-crows", "van-gogh-crabs"):
     generate.generate(name, root / "themes" / name)
 PY
 ```
