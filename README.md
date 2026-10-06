@@ -67,13 +67,30 @@ Hyprkarl. This fork adds:
 - `klimt-hope`: olive, gold and textile accents from *Hope II*.
 - `klimt-boa`: warm black, violet and copper from *Lady with a Hat and Feather Boa*.
 - `klimt-adele`: deep green, coral, sage and lilac from *Adele Bloch-Bauer II*.
+- `klimt-virgin`: violet, cobalt, orange and emerald on warm black from *The Virgin*.
+- `klimt-fan`: yellow, turquoise and coral on kimono navy from *Lady with a Fan*.
+- `klimt-danae`: gold, copper and veil violet on violet-black from *Danaë*.
+- `bonnard-cannet`: orange, agave blue and leaf green on shadow blue from Bonnard's *Le Cannet*.
+- `bonnard-ete`: lime grass, flame orange and dress blue on deep foliage from Bonnard's *L'Été*.
+- `redon-violette`: violet, mint and cobalt on warm dark from Redon's *Portrait of Violette Heymann*.
+- `klee-wald-bau`, `klee-temple-gardens` and `klee-municipal-jewel`: jade and brick, temple orange and teal, and jewel tones from three Paul Klee paintings.
+- `kandinsky-intimate-party`: olive-gold, violet and brown-red on slate from Kandinsky's *An Intimate Party*.
+- `vrubel-demon`: coral sky, robe blue and crystal lilac on blue-black from Vrubel's *Demon Seated*.
+- `van-gogh-irises`: iris blue, leaf teal and marigold on deep green from Van Gogh's *Irises*.
+- `van-gogh-crows`: wheat yellow, sky blue and the red-brown path on deep blue from *Wheatfield with Crows*.
+- `van-gogh-crabs`: crab orange, sea green and red shell on dark green from *Two Crabs*.
+- `munch-linde-beach` and `munch-sunbathing`: the red hat, sand and sea, and the bright shore, from two Edvard Munch paintings.
+- `khnopff-lock-my-door`: marble, orange lily and wing blue on near-black from Khnopff's *I Lock My Door upon Myself*.
 
 Both Vera themes include a plain background matching their palette; see [the
-Vera theme notes](docs/themes.md#vera-light-and-dark). The four Klimt themes
-are dark palettes with matching plain backgrounds and Starship prompt colors.
-The *Music* museum image is distributed under CC BY-SA 4.0. Each theme's
+Vera theme notes](docs/themes.md#vera-light-and-dark). The Klimt and
+other painting themes are dark palettes with Starship prompt colors, 3:2 crops
+of their paintings and matching plain backgrounds. The *Music* museum image
+and the Bonnard *Le Cannet*, Vrubel and Munch beach photographs are distributed
+under CC BY-SA 4.0, and the Khnopff photograph under CC BY 2.0. Each theme's
 `SOURCES.md` records its painting reference, image availability and color
-adaptations; see [the Klimt theme notes](docs/themes.md#klimt-painting-themes). Switch from
+adaptations; see [the Klimt theme notes](docs/themes.md#klimt-painting-themes)
+and [the other painting themes](docs/themes.md#other-painting-themes). Switch from
 `Hyprkarl Menu -> Config -> Theme` or with `hk-theme set <name>`. A theme is one `theme.yaml`; add your own, or override
 part of a shipped one, under `~/.config/hyprkarl/themes/`. See
 [Themes](docs/themes.md).

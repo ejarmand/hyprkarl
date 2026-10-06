@@ -30,8 +30,9 @@ hk-theme list
 ```
 
 Hyprkarl ships `hyprkarl`, `everforest`, `gruvbox`, `loam`, and
-`tokyo-night`; this fork adds [`vera-light` and `vera-dark`](#vera-light-and-dark)
-and [four Klimt painting themes](#klimt-painting-themes). The Tokyo Night source uses the original dark Night variant.
+`tokyo-night`; this fork adds [`vera-light` and `vera-dark`](#vera-light-and-dark),
+[seven Klimt painting themes](#klimt-painting-themes), and [other painting
+themes](#other-painting-themes). The Tokyo Night source uses the original dark Night variant.
 Loam uses warm brown surfaces and a narrow olive, ochre, and bark palette. It
 began as an adaptation of Melange and retains the upstream attribution in its
 source directory.
@@ -78,7 +79,7 @@ your own wallpaper, select the theme, then run `hk-wallpaper add <image>`.
 
 ## Klimt painting themes
 
-These four dark themes adapt painting colors for readable desktop text,
+These seven dark themes adapt painting colors for readable desktop text,
 terminal output and status indicators. Each is a `theme.yaml` with a Starship
 palette in `overrides/starship.toml`, and sets the same consumer color roles
 as Vera dark, plus btop's main text, opaque Qt placeholder text, and dark text
@@ -90,14 +91,18 @@ on Yazi's error progress.
 | `klimt-hope` | *Hope II*, 1907–08 | Olive, gold, orange and textile accents |
 | `klimt-boa` | *Lady with a Hat and Feather Boa*, 1909 | Warm black, violet, copper and ivory |
 | `klimt-adele` | *Portrait of Adele Bloch-Bauer II*, 1912 | Deep green, coral, sage, lilac and cream |
+| `klimt-virgin` | *The Virgin*, 1913 | Warm black, violet, cobalt, orange and emerald |
+| `klimt-fan` | *Lady with a Fan*, 1917–18 | Kimono navy, yellow, turquoise, coral and lotus pink |
+| `klimt-danae` | *Danaë*, 1907–08 | Violet-black, gold, copper and veil violet |
 
 Switch with `hk-theme set klimt-music`, or substitute any name from the table.
 Music, Hope and Adele ship 3:2 landscape crops of their painting, numbered
 first, and a matching plain background, numbered last; the full paintings are
 not shipped, to keep the repository small. Music uses `01-music-crop.jpg`, Hope
 has two crops (`01-hope-figure.jpg`, `02-hope-lower.jpg`) and `03-default.png`,
-and Adele uses `01-adele-portrait.jpg` and `02-default.png`. Boa ships only the
-plain `01-default.png`.
+and Adele uses `01-adele-portrait.jpg` and `02-default.png`. Virgin, Fan and Danaë
+use `01-*-crop.jpg` and `02-default.png`. Boa ships only the plain
+`01-default.png`.
 
 The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
 under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the
@@ -111,13 +116,54 @@ Hope II and Adele II ship crops of the specific Commons reproductions
 documented in their `SOURCES.md`. Those file pages identify the paintings and faithful
 reproductions as public domain, including US pre-1931 publication statements.
 The statements are recorded source evidence, not independently reconstructed
-publication histories. Boa ships its plain background; its reference file's
+publication histories. Virgin, Fan and Danaë ship crops of Commons
+reproductions tagged PD-Art, recorded the same way. Boa ships its plain background; its reference file's
 US public-domain basis remains unresolved.
 
 Each theme's `SOURCES.md` records its exact reference image, bundled files,
 source rights statements, dimensions and palette choices. A palette is an
 adaptation for UI use, not a calibrated reproduction of the painting. Private
 dictionary photos are never bundled.
+
+## Other painting themes
+
+These dark themes follow the same pattern as the Klimt themes: a palette
+picked from the painting, the same consumer color roles, a Starship palette in
+`overrides/starship.toml`, and a `SOURCES.md` with the reference, rights and
+color choices.
+
+| Theme | Painting reference | Main colors |
+| --- | --- | --- |
+| `bonnard-cannet` | Pierre Bonnard, *Le Cannet*, 1930 | Shadow blue, orange ground, agave blue, leaf green, oleander pink |
+| `bonnard-ete` | Pierre Bonnard, *L'Été*, 1917 | Deep foliage, lime grass, flame orange, dress blue, foliage teal |
+| `redon-violette` | Odilon Redon, *Portrait of Violette Heymann* | Warm dark, violet, mint, cobalt, peach |
+| `klee-wald-bau` | Paul Klee, *Wald Bau*, 1919 | Near-black, jade, brick, violet-grey, ochre |
+| `klee-temple-gardens` | Paul Klee, *Temple Gardens*, 1920 | Red-brown, temple orange, teal, red, slate blue |
+| `klee-municipal-jewel` | Paul Klee, *Municipal Jewel*, 1917 | Blue-black, magenta, sapphire, emerald, yellow |
+| `kandinsky-intimate-party` | Wassily Kandinsky, *An Intimate Party*, 1942 | Slate, olive-gold, violet, brown-red, pale blue |
+| `vrubel-demon` | Mikhail Vrubel, *Demon Seated*, 1890 | Blue-black, coral sky, robe blue, crystal lilac, sunset gold |
+| `van-gogh-irises` | Vincent van Gogh, *Irises*, 1889 | Deep green, iris blue, leaf teal, marigold, earth |
+| `van-gogh-crows` | Vincent van Gogh, *Wheatfield with Crows*, 1890 | Deep sky blue, wheat yellow, sky blue, red-brown path, green |
+| `van-gogh-crabs` | Vincent van Gogh, *Two Crabs*, 1889 | Dark green, crab orange, sea green, red shell, blue shadow |
+| `munch-linde-beach` | Edvard Munch, *Young People on the Beach* (Linde Frieze), 1904 | Dark green, red hat, sand, pale sea, grass |
+| `munch-sunbathing` | Edvard Munch, *Sunbathing*, 1914–15 | Deep blue, sea blue, pink sand, yellow rock, green |
+| `khnopff-lock-my-door` | Fernand Khnopff, *I Lock My Door upon Myself*, 1891 | Near-black, marble, orange lily, wing blue, gilded ochre |
+
+Like the Klimt themes, each ships a 3:2 crop of the painting
+(`01-*-crop.jpg`) and a plain `02-default.png`, without the full painting.
+The two Munch sources show the painting in its frame, so their crops are cut
+inside the frame. The Bonnard *Le Cannet*, Vrubel and Munch beach images are
+photographs under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (by Didier
+Descouens, Commons user Mikhisor and Francesco Bini); like the Music image,
+keep their attribution and `ARTWORK-LICENSE.txt`, and share crops and other
+adaptations under the same license. The Khnopff image is a photograph by
+Jean-Pierre Dalbéra under
+[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), which needs
+attribution and a license link but not share-alike. The Redon, Klee, Van Gogh,
+Bonnard *L'Été* and Munch *Sunbathing* files are Commons reproductions tagged
+PD-Art. Kandinsky's 1942 painting may still be under US copyright, so, like
+Boa, it ships only the plain `01-default.png`.
 
 ## Source layout
 

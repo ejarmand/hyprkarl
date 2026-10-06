@@ -131,8 +131,8 @@ anywhere in the tree); they ship only plain backgrounds. Keep `vera-light`'s
 `mode: light`, which carries the GTK light preference and Neovim's light
 background.
 
-`klimt-music`, `klimt-hope`, `klimt-boa` and `klimt-adele` are dark painting
-themes with Starship palettes. Each `SOURCES.md` records the artwork, image
+`klimt-music`, `klimt-hope`, `klimt-boa`, `klimt-adele`, `klimt-virgin`,
+`klimt-fan` and `klimt-danae` are dark painting themes with Starship palettes. Each `SOURCES.md` records the artwork, image
 provenance and color adaptations; keep it current when changing a theme. The
 Music wallpaper is CC BY-SA 4.0: preserve its attribution and
 `ARTWORK-LICENSE.txt`, and apply share-alike terms to artwork adaptations.
@@ -141,6 +141,16 @@ keep private photos (such as dictionary photos) out of the repository.
 Ship 3:2 landscape crops and a plain background, numbered last, rather than
 full paintings, to keep the repository small; record the exact source file
 each crop was cut from.
+
+`bonnard-cannet`, `bonnard-ete`, `redon-violette`, `klee-wald-bau`,
+`klee-temple-gardens`, `klee-municipal-jewel`, `kandinsky-intimate-party`,
+`vrubel-demon`, `van-gogh-irises`, `van-gogh-crows`, `van-gogh-crabs`,
+`munch-linde-beach`, `munch-sunbathing` and `khnopff-lock-my-door` follow the
+same pattern and share the Klimt themes' consumer color roles. The Bonnard
+*Le Cannet*, Vrubel and Munch beach photographs are CC BY-SA 4.0 like the
+Music image; the Khnopff photograph is CC BY 2.0 (attribution and license
+link, no share-alike). Kandinsky's US status is unresolved, so it ships no
+painting image.
 
 `hk-theme set <name>` builds into `~/.local/state/hyprkarl/themes/<name>.<timestamp>`,
 points the `current/theme` symlink at it, deletes older builds, copies the GTK
