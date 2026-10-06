@@ -1,4 +1,4 @@
-# Starship palette, merged into ~/.config/starship.toml by hk-starship-reload.
+# Merged with the user's prompt by hk-starship-reload.
 # Deep segments carry cream text; the trailing surface segments carry dark blue.
 [palettes.hyprkarl]
 color_fg0 = '#f6f3e9'
