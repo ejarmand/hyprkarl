@@ -1,0 +1,29 @@
+# Klimt The Virgin
+
+## Artwork and image
+
+Gustav Klimt, *The Virgin* (*Die Jungfrau*, also *The Maiden*), 1913, oil on canvas, National Gallery Prague, inventory O 4152. Source: the [Wikimedia Commons file](https://commons.wikimedia.org/wiki/File:KlimtDieJungfrau.jpg), credited to the [National Gallery Prague collection record](http://sbirky.ngprague.cz/dielo/CZE:NG.O_4152).
+
+Commons tags the file PD-Art: the painting is public domain (Klimt died in 1918) and the faithful two-dimensional reproduction adds no new copyright. Credit: Gustav Klimt, *The Virgin*, National Gallery Prague / Wikimedia Commons.
+
+The Commons original is 24943 × 23842 pixels (230,335,418 bytes, SHA-1 `b50bf79a6ce31c9a86623175c93afe046dba1b80`). The crop below was cut from the 3840 × 3670 rendering that Commons serves of that file, retrieved 2026-10-06. The full image is not shipped.
+
+The default wallpaper, `wallpapers/01-virgin-crop.jpg`, is a 3:2 landscape crop of that rendering: its top 3840 × 2560 pixels (the sleeping faces and the violet swirls), scaled to 2880 × 1920 and re-encoded as JPEG. SHA-256: `9eaadc161e15a01688c018298a2f5372a68b20f281518cdf10555d1d5a6a9c32`.
+
+The matching plain background is `wallpapers/02-default.png`.
+
+## Palette
+
+The warm near-black background (`#1b1714`) comes from the painting's dark field. Violet (`#c78cf4`) and cobalt (`#8a9cfa`) come from the swirling robe, orange (`#f48a5c`) from the flower clusters, emerald (`#6fd0a8`) from the green drapery, and the pale text (`#eee6da`) from the sleeping figures. The violet is the primary accent. These colors were picked by eye and checked as swatches beside the painting element each is named for; they are lightened from the painting where needed for readable text, not pigment measurements.
+
+## Generation and compatibility
+
+`theme.yaml` is the source. Besides `mode: dark` and the palette, it sets the same consumer color roles as the other Klimt themes: selection colors in the terminals, Qt and Neovim, btop's main text and highlight, opaque Qt placeholder and disabled text, dark text on Yazi's error progress, Neovim's terminal color 8, and primary-accent GTK links. `overrides/starship.toml` is the Starship palette template. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
+
+Hyprkarl's theme compiler builds the theme from `theme.yaml` (`hk-theme set klimt-virgin`). It was first generated for the AGS-era layout with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6), using the Klimt templates. The 1.x port renders the same terminal, btop, wifitui, Yazi, Qt, GTK and Starship colors as that build, so the checks below, made on that build, still describe it.
+
+Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are the violet swirl, the orange flowers, the emerald drapery, cobalt and the pink cushion, with dark text; the trailing segments are the deep blue of the swirls and the background's brown.
+
+## Validation
+
+The generator run, including GTK 3/4 compilation, succeeded, and the generated files contain no unresolved template expressions. Contrast uses WCAG relative luminance from linear sRGB. Main text on the background is **14.39:1**; muted and dim text on the lightest surface are **7.54:1** and **5.85:1**; selection is **7.20:1**. Every terminal color except ANSI black is at least **4.77:1** on every surface. Starship segment text is at least **6.64:1**, every colored segment is at least **6.85:1** against the background, and prompt glyphs, including the Vim visual-mode glyph, are at least **7.20:1**. No desktop theme was activated.
