@@ -65,7 +65,7 @@ def notify(icon, text):
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(description="Export Wispr Flow dictation history.")
     parser.add_argument("dir", nargs="?", help="output directory")
     parser.add_argument("--no-audio", action="store_true", help="skip the recordings")
@@ -116,7 +116,8 @@ def main():
         since=f" since {args.since}" if args.since else ""))
     print(f"Exported {count} dictations ({with_audio} recordings) to {out}")
     notify(1, f"{count} dictations to {out}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

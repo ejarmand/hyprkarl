@@ -163,7 +163,7 @@ def set_correction(on):
     fail("Could not find the Correct a misspelling checkbox.")
 
 
-def main():
+def main() -> int:
     correction = "--correction" in sys.argv[1:]
     # A hidden Hub still shows up over AT-SPI, but Chromium stalls its updates,
     # so it has to be on screen first.
@@ -186,7 +186,8 @@ def main():
         fail("Could not find the word field in the dialog.")
     focus_hub()
     field[0].get_component_iface().grab_focus()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
