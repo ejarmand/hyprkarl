@@ -41,6 +41,11 @@ wallpaper:
 
 # Colors some consumers take by role. A theme points one at another palette
 # value when the default role does not suit its palette.
+hyprland:
+  # Window borders. Unfocused windows keep a dimmer shade of the accent.
+  active_border: "{{accent.primary.base}}"
+  inactive_border: "{{mix(base.background, accent.primary.base, 50)}}"
+
 terminal:
   # Selected text in foot and Ghostty
   selection_fg: "{{base.background}}"

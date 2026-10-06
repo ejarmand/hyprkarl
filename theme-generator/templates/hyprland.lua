@@ -2,7 +2,13 @@
 hl.config({
     general = {
         col = {
-            active_border = "{{hyprrgb(accent.primary.base)}}",
+            active_border = "{{hyprrgb(hyprland.active_border)}}",
+            inactive_border = "{{hyprrgb(hyprland.inactive_border)}}",
+        },
+    },
+    group = {
+        col = {
+            border_inactive = "{{hyprrgb(hyprland.inactive_border)}}",
         },
     },
 })

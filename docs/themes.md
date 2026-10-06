@@ -288,6 +288,7 @@ palette value without overriding the template:
 
 | Key | Default | Used for |
 |---|---|---|
+| `hyprland.active_border`, `hyprland.inactive_border` | `accent.primary.base`, the accent mixed 50% into `base.background` | Hyprland borders of the focused and unfocused windows; the inactive color also borders unfocused windows in a group |
 | `terminal.selection_fg`, `terminal.selection_bg` | `base.background`, `ui.cursor` | Selected text in foot and Ghostty |
 | `btop.main_fg` | empty (btop's own) | btop's text |
 | `btop.highlight` | `accent.secondary.soft` | btop's highlighted keys and graph starts |
