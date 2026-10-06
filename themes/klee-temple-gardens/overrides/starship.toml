@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: temple orange, slate blue, red, teal arches, ochre; deep slate and burnt red-brown surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#5a2a1e'  # burnt red-brown
+color_bg3 = '#2f4a5a'  # deep slate
+color_magenta = '#f3a64a'  # temple orange
+color_purple = '{{ansi.magenta}}'
+color_orange = '#93a8d4'  # slate blue
+color_yellow = '#f28462'  # red
+color_aqua = '#6fc8b8'  # teal arches
+color_blue = '#ecc66a'  # ochre
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

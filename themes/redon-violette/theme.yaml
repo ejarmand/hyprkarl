@@ -1,0 +1,94 @@
+# Inspired by Odilon Redon; see SOURCES.md for the artwork and palette decisions.
+mode: dark
+
+desktop:
+  icon_theme: Adwaita
+
+base:
+  background: '#1d1a17'
+  layer0: '{{base.background}}'
+  layer1: '#24201c'
+  layer2: '#2c2722'
+  layer3: '#352f29'
+  layer4: '#3e3730'
+  surface_soft: '{{base.layer1}}'
+  surface: '{{base.layer2}}'
+  surface_alt: '{{base.layer4}}'
+  foreground: '#efe7da'
+  foreground_muted: '#d4cbbd'
+  foreground_dim: '#b9b0a2'
+ansi:
+  black: '#1d1a17'
+  red: '#f2a084'
+  green: '#86d686'
+  yellow: '#e4c56a'
+  blue: '#8ea4f4'
+  magenta: '#c194f2'
+  cyan: '#96dcc4'
+  white: '#ddd5c8'
+bright:
+  black: '#b9b0a2'
+  red: '#ffbca2'
+  green: '#a8ecaa'
+  yellow: '#f8dc8e'
+  blue: '#b0c0ff'
+  magenta: '#d8b4ff'
+  cyan: '#b6f0dc'
+  white: '#fff7ea'
+accent:
+  primary:
+    base: '{{ansi.magenta}}'
+    soft: '{{mix(base.background, ansi.magenta, 25)}}'
+    bright: '{{bright.magenta}}'
+  secondary:
+    base: '{{ansi.cyan}}'
+    soft: '{{mix(base.background, ansi.cyan, 25)}}'
+    bright: '{{bright.cyan}}'
+  tertiary:
+    base: '{{ansi.blue}}'
+    soft: '{{mix(base.background, ansi.blue, 25)}}'
+    bright: '{{bright.blue}}'
+status:
+  success: '{{ansi.green}}'
+  warning: '{{ansi.yellow}}'
+  error: '{{ansi.red}}'
+  urgent: '{{bright.red}}'
+ui:
+  cursor: '{{accent.primary.base}}'
+  text: '{{base.foreground}}'
+  text_secondary: '{{base.foreground_muted}}'
+  selection_bg: '{{accent.primary.base}}'
+  selection_fg: '{{base.background}}'
+  panel: '{{base.surface}}'
+  border: '{{accent.primary.base}}'
+  border_inner: '{{base.foreground_dim}}'
+  border_soft: '{{accent.primary.soft}}'
+  highlight: '{{accent.primary.bright}}'
+
+# The Vera and Klimt themes route these consumers to other palette colors than
+# the shared defaults (see "Generated bundle" in docs/themes.md).
+terminal:
+  selection_fg: '{{ui.selection_fg}}'
+  selection_bg: '{{ui.selection_bg}}'
+btop:
+  main_fg: '{{base.foreground}}'
+  highlight: '{{accent.secondary.base}}'
+wifitui:
+  subtle: '{{base.foreground_muted}}'
+qt:
+  highlight: '{{ui.selection_bg}}'
+  # Opaque placeholder and disabled selected text, for contrast
+  placeholder_alpha: 'ff'
+  placeholder_disabled: '{{base.foreground_dim}}'
+  placeholder_disabled_alpha: 'ff'
+  highlighted_text_disabled: '{{base.foreground}}'
+  highlighted_text_disabled_alpha: 'ff'
+gtk:
+  accent: '{{accent.primary.base}}'
+  accent_bright: '{{accent.primary.bright}}'
+nvim:
+  terminal_color_8: '{{bright.black}}'
+  search_fg: '{{ui.selection_fg}}'
+  search_bg: '{{ui.selection_bg}}'
+yazi:
+  progress_error_fg: '{{base.background}}'

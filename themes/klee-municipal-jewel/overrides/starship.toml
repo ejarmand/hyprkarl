@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: magenta pink, sapphire, emerald, yellow, violet; deep sapphire and deep ruby surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#6a1f2e'  # deep ruby
+color_bg3 = '#283a8a'  # deep sapphire
+color_magenta = '#f286c6'  # magenta pink
+color_purple = '{{ansi.magenta}}'
+color_orange = '#8a9df4'  # sapphire
+color_yellow = '#6fd2a2'  # emerald
+color_aqua = '#ecd06a'  # yellow
+color_blue = '#c098ee'  # violet
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

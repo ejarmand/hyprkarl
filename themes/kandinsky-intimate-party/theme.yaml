@@ -1,0 +1,94 @@
+# Inspired by Wassily Kandinsky; see SOURCES.md for the artwork and palette decisions.
+mode: dark
+
+desktop:
+  icon_theme: Adwaita
+
+base:
+  background: '#161d22'
+  layer0: '{{base.background}}'
+  layer1: '#1c252b'
+  layer2: '#232d34'
+  layer3: '#2b363e'
+  layer4: '#333f48'
+  surface_soft: '{{base.layer1}}'
+  surface: '{{base.layer2}}'
+  surface_alt: '{{base.layer4}}'
+  foreground: '#ece7dc'
+  foreground_muted: '#d1ccc1'
+  foreground_dim: '#b6b2a8'
+ansi:
+  black: '#161d22'
+  red: '#ec9a7e'
+  green: '#9fcf8a'
+  yellow: '#d4c060'
+  blue: '#8fa8ec'
+  magenta: '#b8a0f2'
+  cyan: '#8fc6dc'
+  white: '#dad6cc'
+bright:
+  black: '#b6b2a8'
+  red: '#f8aa90'
+  green: '#bce6aa'
+  yellow: '#eed87e'
+  blue: '#b0c4ff'
+  magenta: '#d2bcff'
+  cyan: '#b0dcee'
+  white: '#fbf8ef'
+accent:
+  primary:
+    base: '{{ansi.yellow}}'
+    soft: '{{mix(base.background, ansi.yellow, 25)}}'
+    bright: '{{bright.yellow}}'
+  secondary:
+    base: '{{ansi.magenta}}'
+    soft: '{{mix(base.background, ansi.magenta, 25)}}'
+    bright: '{{bright.magenta}}'
+  tertiary:
+    base: '{{ansi.red}}'
+    soft: '{{mix(base.background, ansi.red, 25)}}'
+    bright: '{{bright.red}}'
+status:
+  success: '{{ansi.green}}'
+  warning: '{{ansi.yellow}}'
+  error: '{{ansi.red}}'
+  urgent: '{{bright.red}}'
+ui:
+  cursor: '{{accent.primary.base}}'
+  text: '{{base.foreground}}'
+  text_secondary: '{{base.foreground_muted}}'
+  selection_bg: '{{accent.primary.base}}'
+  selection_fg: '{{base.background}}'
+  panel: '{{base.surface}}'
+  border: '{{accent.primary.base}}'
+  border_inner: '{{base.foreground_dim}}'
+  border_soft: '{{accent.primary.soft}}'
+  highlight: '{{accent.primary.bright}}'
+
+# The Vera and Klimt themes route these consumers to other palette colors than
+# the shared defaults (see "Generated bundle" in docs/themes.md).
+terminal:
+  selection_fg: '{{ui.selection_fg}}'
+  selection_bg: '{{ui.selection_bg}}'
+btop:
+  main_fg: '{{base.foreground}}'
+  highlight: '{{accent.secondary.base}}'
+wifitui:
+  subtle: '{{base.foreground_muted}}'
+qt:
+  highlight: '{{ui.selection_bg}}'
+  # Opaque placeholder and disabled selected text, for contrast
+  placeholder_alpha: 'ff'
+  placeholder_disabled: '{{base.foreground_dim}}'
+  placeholder_disabled_alpha: 'ff'
+  highlighted_text_disabled: '{{base.foreground}}'
+  highlighted_text_disabled_alpha: 'ff'
+gtk:
+  accent: '{{accent.primary.base}}'
+  accent_bright: '{{accent.primary.bright}}'
+nvim:
+  terminal_color_8: '{{bright.black}}'
+  search_fg: '{{ui.selection_fg}}'
+  search_bg: '{{ui.selection_bg}}'
+yazi:
+  progress_error_fg: '{{base.background}}'
