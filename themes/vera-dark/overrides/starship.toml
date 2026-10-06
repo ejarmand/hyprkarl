@@ -2,6 +2,7 @@
 # Pastel segments carry dark text; the trailing surface segments carry cream.
 [palettes.hyprkarl]
 color_fg0 = '#141e2a'
+color_fg_host = '#141e2a'
 color_fg1 = '#edeade'
 color_fg2 = '#a3cdf0'
 color_bg1 = '#263747'

@@ -92,20 +92,23 @@ on Yazi's error progress.
 | `klimt-adele` | *Portrait of Adele Bloch-Bauer II*, 1912 | Deep green, coral, sage, lilac and cream |
 
 Switch with `hk-theme set klimt-music`, or substitute any name from the table.
-Music, Hope and Adele default to their painting and also ship a matching plain
-background, numbered last. Hope and Adele default to 3:2 landscape crops
-(`01-hope-figure.jpg`, `01-adele-portrait.jpg`) and keep a second Hope crop and
-the full paintings as alternatives. Boa ships only the plain `01-default.png`.
+Music, Hope and Adele ship 3:2 landscape crops of their painting, numbered
+first, and a matching plain background, numbered last; the full paintings are
+not shipped, to keep the repository small. Music uses `01-music-crop.jpg`, Hope
+has two crops (`01-hope-figure.jpg`, `02-hope-lower.jpg`) and `03-default.png`,
+and Adele uses `01-adele-portrait.jpg` and `02-default.png`. Boa ships only the
+plain `01-default.png`.
 
 The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
 under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the
-license text is `themes/klimt-music/ARTWORK-LICENSE.txt`. Preserve its
+license text is `themes/klimt-music/ARTWORK-LICENSE.txt`. The shipped crop is
+an adaptation of that image and is shared under the same license. Preserve its
 attribution and license when redistributing it, state any image changes, and
 share artwork adaptations under the same license. This image license does not
 change the license of unrelated desktop configuration files.
 
-Hope II and Adele II ship the specific Commons reproductions documented in
-their `SOURCES.md`. Those file pages identify the paintings and faithful
+Hope II and Adele II ship crops of the specific Commons reproductions
+documented in their `SOURCES.md`. Those file pages identify the paintings and faithful
 reproductions as public domain, including US pre-1931 publication statements.
 The statements are recorded source evidence, not independently reconstructed
 publication histories. Boa ships its plain background; its reference file's
@@ -338,6 +341,7 @@ palettes define these keys:
 | Key | Use |
 | --- | --- |
 | `color_fg0` | Text on the colored segments |
+| `color_fg_host` | Text on the first (host) segment; usually the same as `color_fg0` |
 | `color_fg1` | Text on the time segment (`color_bg1`) |
 | `color_fg2` | Text on the Docker and Conda segments (`color_bg3`) |
 | `color_bg1`, `color_bg3` | Surface segments at the end of the line |
@@ -346,8 +350,12 @@ palettes define these keys:
 
 Keep the layout's own palette, such as `[palettes.gruvbox_dark]`, so the
 layout still works under themes without a Starship palette and on machines
-without Hyprkarl. Don't define `[palettes.hyprkarl]` in the layout, because the
-merged file would then contain the table twice.
+without Hyprkarl. If the layout uses `color_fg_host`, for example
+`bg:color_magenta fg:color_fg_host` on the host segment, define it in that
+palette too. `klimt-adele` opens on a near-black segment and sets it to
+near-white. Don't define `[palettes.hyprkarl]` in the layout, because the
+merged file would then contain the table twice. The Vera variants and the
+painting themes ship a Starship palette.
 
 ## GTK output
 

@@ -138,6 +138,9 @@ Music wallpaper is CC BY-SA 4.0: preserve its attribution and
 `ARTWORK-LICENSE.txt`, and apply share-alike terms to artwork adaptations.
 Record the public-domain evidence for any other bundled painting file, and
 keep private photos (such as dictionary photos) out of the repository.
+Ship 3:2 landscape crops and a plain background, numbered last, rather than
+full paintings, to keep the repository small; record the exact source file
+each crop was cut from.
 
 `hk-theme set <name>` builds into `~/.local/state/hyprkarl/themes/<name>.<timestamp>`,
 points the `current/theme` symlink at it, deletes older builds, copies the GTK

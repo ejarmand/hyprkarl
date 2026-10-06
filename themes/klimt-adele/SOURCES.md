@@ -6,7 +6,7 @@ Source image: [Wikimedia Commons file page](https://commons.wikimedia.org/wiki/F
 
 The file page includes a US pre-1931 publication/registration statement and PD-Art for the faithful reproduction. These are recorded source assertions; the historical publication event has not been independently reconstructed. Credit: Gustav Klimt, *Portrait of Adele Bloch-Bauer II*, The Yorck Project / Wikimedia Commons.
 
-The unchanged reproduction is `wallpapers/02-adele.jpg`, retrieved 2026-10-05. SHA-256: `8c49d204cbb2ed3955be283998cba8c7573a21cdd3a32bbac6890b84bf1d787c`. The matching plain background is `wallpapers/03-default.png`.
+The reproduction was retrieved 2026-10-05 (SHA-256 `8c49d204cbb2ed3955be283998cba8c7573a21cdd3a32bbac6890b84bf1d787c`); the full image is not shipped. The matching plain background is `wallpapers/02-default.png`.
 
 The default wallpaper, `wallpapers/01-adele-portrait.jpg`, is a landscape crop of that same file: its top 1575 × 1050 pixels, a 3:2 frame of the hat, face and red wall, made by the repository owner and re-encoded as JPEG. It changes only the framing, so it remains a faithful reproduction of the public-domain painting. SHA-256: `18fce17b4dded783abccd247ab553ce7d60f3011919a6d32e246a823019d21ab`.
 
@@ -14,20 +14,20 @@ The default wallpaper, `wallpapers/01-adele-portrait.jpg`, is a landscape crop o
 
 Green from the floral backdrop, coral from the upper wall and flowers, rose and lilac from the side panels and floor, and cream from the dress. These are visual adaptations rather than exact pigment measurements. Surfaces are darkened, text is lifted toward cream, and terminal and status colours are brightened to remain readable. Some subdued cool hues are extended into blue and cyan terminal roles so commands and diagnostics retain distinct colours.
 
-`theme.yaml` is the colour source. Besides `mode: dark` and the palette, it sets the consumer colour roles that keep the earlier look (selection, btop text, opaque Qt placeholders, Yazi error progress, Neovim search, primary-accent GTK links). `overrides/starship.toml` is a Starship template whose segment colors are picked from the painting. Neovim keeps a dark background.
+`theme.yaml` is the colour source. Besides `mode: dark` and the palette, it sets the consumer colour roles that keep the earlier look (selection, btop text, opaque Qt placeholders, Yazi error progress, Neovim search, primary-accent GTK links). `overrides/starship.toml` is the Starship palette, with segment colors picked from the painting; its values are the repository owner's hand edit of the generated prompt, kept as literal colours. Neovim keeps a dark background.
 
 ## Generation and checks
 
 Hyprkarl's theme compiler builds the theme from `theme.yaml` (`hk-theme set klimt-adele`). It was first generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` for the AGS-era layout. The 1.x port renders the same terminal, btop, wifitui, Yazi, Qt, GTK and Starship colours as that build, so the checks below, made on that build, still describe it.
 
-Regenerate the plain background with ImageMagick using `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png` from this theme directory.
+Regenerate the plain background with ImageMagick using `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png` from this theme directory.
 
 Generation completed successfully, including GTK 3 and GTK 4 CSS. Generated TOML files parse, generated configuration has no unresolved template expressions, and bar layout matches Vera-dark.
 
-Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 4.75:1. Unlike the other Klimt prompts, Adele uses cream text on deep colors so it can open on the indigo sash: indigo sash, rose panel, pavilion ochre, garden green and horse slate, then the hat's brown and the wall red. Being deep, these segments stand out from the dark green background by hue rather than brightness (at least 1.86:1). Prompt glyphs are at least 10.44:1 against the background.
+Contrast was calculated independently with WCAG relative luminance from linear sRGB. Across all five dark surface layers, minimum text/status contrast is 4.72:1. Selection contrast is 9.15:1. Starship segment text is at least 5.84:1. The prompt opens on the near-black indigo of the sash with near-white text, set through `color_fg_host`. Then come garden green, the ivory dress, the horses' blue-grey and the dusty rose panel with dark text, and the trailing segments are the hat's brown and the pavilion roof's brown. Prompt glyphs are at least 10.44:1 against the background.
 
 Yazi's error-progress text uses the dark background colour on the error fill, giving 8.11:1. Btop explicitly uses the primary foreground. Qt active and inactive placeholders use the opaque secondary foreground, with at least 6.09:1 across the theme surfaces.
 
-All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph. The ochre segment is dark enough for cream text, so that glyph is only 2.40:1 against the background. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
+All listed pairs meet 4.5:1. The prompt layout reuses `color_yellow` for the directory segment and the Vim visual-mode glyph; both are readable. These checks cover opaque palette colours; wallpaper overlays and application-specific opacity can change effective contrast.
 
 The plain background is 3840 × 2160 pixels, filled with `#17231f`. No active theme was switched.
