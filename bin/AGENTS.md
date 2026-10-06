@@ -42,7 +42,9 @@ without good reason.
   keep-or-revert trial's watchdog is a separate process so a lost shell cannot
   strand an unconfirmed layout.
 - **`hk-open-with`** is the one Gio boundary for MIME lookup, default apps, and
-  file-aware launching; QML must not duplicate it.
+  file-aware launching; QML must not duplicate it. `hk-voice-launch` reads
+  `Gio.AppInfo` directly as a deliberate exception: it matches app names, with
+  no file or MIME type, so `hk-open-with` has no operation for it.
 - **Updates.** `hk-update` treats `config/`, `defaults/`, and `themes/` as
   upstream-owned and never generates or replaces personal files.
   See `docs/updating.md`. `hk-config-seed` copies an application's starting
