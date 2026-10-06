@@ -6,11 +6,11 @@ Gustav Klimt, *Lady with a Fan* (*Dame mit Fächer*), 1917–18, oil on canvas, 
 
 Commons tags the file PD-Art and PD-old-70-expired: Klimt died in 1918, so the painting's copyright has expired, and the faithful two-dimensional reproduction adds no new copyright. These are recorded source statements; the painting's publication history has not been independently reconstructed. Credit: Gustav Klimt, *Lady with a Fan* / Wikimedia Commons.
 
-The unchanged Commons JPEG is `wallpapers/02-fan.jpeg`, 2772 × 2760 pixels, 4,722,516 bytes, retrieved 2026-10-06 (SHA-1 `040a8abb2dca3af3558aa886378c278119339f59`, matching Commons). SHA-256: `7fd43a9405cd6f66f6bd9810b157d1a89e3484cf822f1353d88d5026bdac453d`.
+The crop below was cut from the unchanged Commons JPEG, 2772 × 2760 pixels, 4,722,516 bytes, retrieved 2026-10-06 (SHA-1 `040a8abb2dca3af3558aa886378c278119339f59`, matching Commons). The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-fan-crop.jpg`, is a 3:2 landscape crop of that file: 2772 × 1848 pixels starting 60 pixels from the top (her face, the birds and the top of the fan), re-encoded as JPEG. SHA-256: `ab978a89a47fc7064a676b4865ba1ab38bbaa2be27962069a82b632588883eaf`.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The dark navy background (`#171a24`) comes from the kimono. The saturated yellow
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the other Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the other Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are the turquoise bird, the yellow field, the coral bird, lotus pink and leaf green, with dark text; the trailing segments are the kimono's blue and brown.
 

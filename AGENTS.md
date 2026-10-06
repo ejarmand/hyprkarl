@@ -126,6 +126,8 @@ license, and apply share-alike terms to artwork adaptations. Record the
 public-domain evidence for any other bundled painting file. Private dictionary
 photos must stay out of the repository. Add explicit `.gitignore` exceptions
 only for the exact public artwork or plain background files being shipped.
+Ship 3:2 landscape crops and a plain background, not full paintings, to keep
+the repository small; record the exact source file each crop was cut from.
 
 `bonnard-cannet`, `redon-violette`, `klee-wald-bau`, `klee-temple-gardens`,
 `klee-municipal-jewel`, `kandinsky-intimate-party`, `vrubel-demon`,

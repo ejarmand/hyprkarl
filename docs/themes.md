@@ -143,13 +143,12 @@ and `templates/` and includes a Starship palette.
 
 Switch with `hk-theme set klimt-music`, or substitute any name from the table.
 All seven cover the same applications as Vera dark and retain the default bar
-layout. Music, Hope and Adele default to their painting and also ship a
-matching plain background, numbered last. Hope and Adele default to 3:2
-landscape crops (`01-hope-figure.jpg`, `01-adele-portrait.jpg`) and keep a
-second Hope crop and the full paintings as alternatives. Virgin, Fan and Danaë
-follow the same pattern: a 3:2 crop (`01-*-crop.jpg`), the full painting
-(`02-*`) and the plain `03-default.png`. Boa ships only the plain
-`01-default.png`.
+layout. Each painting theme ships 3:2 landscape crops of its painting,
+numbered first, and a matching plain background numbered last; full
+paintings are not shipped, to keep the repository small. Hope has two crops
+(`01-hope-figure.jpg`, `02-hope-lower.jpg`) and `03-default.png`; Adele uses
+`01-adele-portrait.jpg`; the others use `01-*-crop.jpg`, followed by
+`02-default.png`. Boa ships only the plain `01-default.png`.
 
 The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
 under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
@@ -193,10 +192,10 @@ picked from the painting, the Klimt templates, a Starship palette, and a
 | `munch-linde-beach` | Edvard Munch, *Young People on the Beach* (Linde Frieze), 1904 | Dark green, red hat, sand, pale sea, grass |
 | `munch-sunbathing` | Edvard Munch, *Sunbathing*, 1914–15 | Deep blue, sea blue, pink sand, yellow rock, green |
 
-Most ship a 3:2 crop of the painting (`01-*-crop.jpg`), the full painting
-(`02-*`) and a plain `03-default.png`. The two Munch sources show the painting
-in its frame, so those themes ship only the crop, cut inside the frame, and a
-plain `02-default.png`. The Bonnard, Vrubel and Munch beach images are
+Like the Klimt themes, each ships a 3:2 crop of the painting
+(`01-*-crop.jpg`) and a plain `02-default.png`, without the full painting.
+The two Munch sources show the painting in its frame, so their crops are cut
+inside the frame. The Bonnard, Vrubel and Munch beach images are
 photographs under
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (by Didier
 Descouens, Commons user Mikhisor and Francesco Bini); like the Music image,

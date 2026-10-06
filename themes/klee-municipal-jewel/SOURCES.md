@@ -6,11 +6,11 @@ Paul Klee, *Municipal Jewel*, 1917, The Metropolitan Museum of Art, The Berggrue
 
 Commons tags the file PD-Art with `PD-old-auto-expired` (Klee died in 1940): the work is public domain and the faithful two-dimensional reproduction adds no new copyright. Credit: Paul Klee, *Municipal Jewel*, The Metropolitan Museum of Art / Wikimedia Commons.
 
-The unchanged Commons JPEG is `wallpapers/02-municipal-jewel.jpg`, 4000 × 2109 pixels, 2,458,877 bytes, retrieved 2026-10-06 (SHA-1 `caffc6ea1ba1becdd214ff4d7c0358c2d68fbfd5`, matching Commons). SHA-256: `c7c6ed9fbee03d931e639927a6ac33a4994ad7c289a2017207657849fad81586`.
+The crop below was cut from the unchanged Commons JPEG, 4000 × 2109 pixels, 2,458,877 bytes, retrieved 2026-10-06 (SHA-1 `caffc6ea1ba1becdd214ff4d7c0358c2d68fbfd5`, matching Commons). The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-municipal-jewel-crop.jpg`, is a 3:2 crop of the painted area: 2850 × 1900 pixels starting 575 pixels from the left and 20 from the top, re-encoded as JPEG. SHA-256: `cd06f27ac7d01702d2f651dfadd1673692f0b665b79725becf25b99580f3a943`.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The blue-black background (`#15161d`) comes from the dark planes. Magenta pink (
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are magenta pink, sapphire, emerald, yellow and violet, with dark text; the trailing segments are deep sapphire and deep ruby.
 

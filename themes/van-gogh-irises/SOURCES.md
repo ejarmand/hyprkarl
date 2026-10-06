@@ -6,11 +6,11 @@ Vincent van Gogh, *Irises*, 1889, oil on canvas, 74.3 × 94.3 cm, J. Paul Getty 
 
 Commons tags the file PD-Art with `PD-old-auto-expired` (Van Gogh died in 1890): the painting is public domain and the faithful two-dimensional reproduction adds no new copyright. Credit: Vincent van Gogh, *Irises*, J. Paul Getty Museum / Wikimedia Commons.
 
-The Commons original is 9600 × 7413 pixels (29,674,196 bytes, SHA-1 `a9a4abf694de994b39d8e4a441c89b027582adf2`). The shipped full painting, `wallpapers/02-irises.jpg`, is the 3840 × 2965 rendering that Commons serves of that file, retrieved 2026-10-06. SHA-256: `97d421fbfc16f70fe39263c63f2d716e4ae03cf49c8e05506fd989222fd9898c`.
+The Commons original is 9600 × 7413 pixels (29,674,196 bytes, SHA-1 `a9a4abf694de994b39d8e4a441c89b027582adf2`). The crop below was cut from the 3840 × 2965 rendering that Commons serves of that file, retrieved 2026-10-06. The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-irises-crop.jpg`, is a 3:2 crop of that rendering: 3840 × 2560 pixels starting 200 pixels from the top, scaled to 2880 × 1920 and re-encoded as JPEG. SHA-256: `aa222c47e72a1c5730fa80a8324510a1099424619ec2e3cd3e1355813d2360c8`.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The deep green background (`#141c1b`) darkens the leaves. The irises' violet-blu
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are iris blue, marigold, leaf green, earth and white iris, with dark text; the trailing segments are deep iris and earth brown.
 

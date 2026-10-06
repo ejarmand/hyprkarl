@@ -6,11 +6,11 @@ Paul Klee, *Temple Gardens*, 1920, gouache and ink on paper, 18.4 × 26.7 cm, Th
 
 Commons tags the file PD-Art (Klee died in 1940; tagged `PD-old-auto-1923`): the work is public domain and the faithful two-dimensional reproduction adds no new copyright. Credit: Paul Klee, *Temple Gardens*, The Metropolitan Museum of Art / Wikimedia Commons.
 
-The unchanged Commons JPEG is `wallpapers/02-temple-gardens.jpg`, 1519 × 1233 pixels, 636,084 bytes, retrieved 2026-10-06 (SHA-1 `ad64bb856b91cd368cfee7bc2267e6dfab254993`, matching Commons). SHA-256: `22fa2b3121b1f46df4ec30c0c1da5ab5ba2453976418b69d59601f12c6be6723`.
+The crop below was cut from the unchanged Commons JPEG, 1519 × 1233 pixels, 636,084 bytes, retrieved 2026-10-06 (SHA-1 `ad64bb856b91cd368cfee7bc2267e6dfab254993`, matching Commons). The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-temple-gardens-crop.jpg`, is a 3:2 crop of that file inside the paper border: 1440 × 960 pixels starting 40 pixels from the left and top, re-encoded as JPEG. SHA-256: `963c2cfefb871f97c621872e4c110294f4075b53b36a097092bb343652d96688`. The source is small, so this wallpaper is upscaled on most screens.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The dark red-brown background (`#1f1714`) deepens the painting's shadows. Temple
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are temple orange, slate blue, red, teal arches and ochre, with dark text; the trailing segments are deep slate and burnt red-brown.
 

@@ -6,11 +6,9 @@ Gustav Klimt, *Hope, II* (1907–08), oil, gold and platinum on canvas, The Muse
 
 Commons labels the artwork public domain and the faithful two-dimensional reproduction PD-Art / [Public Domain Mark 1.0](https://creativecommons.org/publicdomain/mark/1.0/). That label is a rights-status statement, not a Creative Commons license. Credit: Gustav Klimt, *Hope, II*, MoMA; Google Art Project / Wikimedia Commons. Commons notes that faithful reproduction rights may differ between jurisdictions; the record expressly treats the reproduction as public domain in the United States.
 
-[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/03-hope.jpg`.
+[Original Commons JPEG](https://upload.wikimedia.org/wikipedia/commons/7/7c/Gustav_Klimt_-_Hope%2C_II_-_Google_Art_Project.jpg), 3648 × 3699 pixels, 4,159,432 bytes, retrieved 2026-10-05 (SHA-256 `73dca708334a72258153d8fa7bdad84ddbbbeadbac1c0d67dbce3a1ab35c563e`). The full image is not shipped.
 
-SHA-256: `73dca708334a72258153d8fa7bdad84ddbbbeadbac1c0d67dbce3a1ab35c563e`.
-
-Two landscape crops of that same file are also shipped. They change only the framing, orientation and encoding, so they remain faithful reproductions of the public-domain painting:
+Two landscape crops of that file are shipped. They change only the framing, orientation and encoding, so they remain faithful reproductions of the public-domain painting:
 
 - `wallpapers/01-hope-figure.jpg`, the default: the upper figure at full resolution, cropped to 2700 × 1800 (3:2) from the top of the original, about 480 pixels from the left edge. SHA-256: `d2a7fca204719c5e26e71122538fab3cf1c50212b2844723d91dc845ff5340d2`.
 - `wallpapers/02-hope-lower.jpg`: the lower half of the painting, with its mosaic robe and three bowed heads, rotated 90° and scaled to 2046 × 1364 (3:2). SHA-256: `fe3d810107dd5d3c6ee569aeb0b9b38c254bfff5fe262c3d89310f0bdcd23620`.

@@ -6,9 +6,9 @@ Fernand Khnopff, *I Lock My Door upon Myself*, 1891, oil on canvas, Neue Pinakot
 
 The painting is public domain: Khnopff died in 1921. The photograph is a separate work by [Jean-Pierre Dalbéra](https://www.flickr.com/photos/dalbera/40377462213/), licensed [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/). Credit: Fernand Khnopff, *I Lock My Door upon Myself* (1891), Neue Pinakothek; photograph by Jean-Pierre Dalbéra, CC BY 2.0, via Wikimedia Commons. CC BY 2.0 requires attribution and a link to the license, which this file provides; it does not require share-alike.
 
-The Commons original is 4576 × 2297 pixels (6,602,031 bytes, SHA-1 `eced76555f448000bd657912f631030a0e284ac2`), retrieved 2026-10-06. Changes for the shipped wallpapers: `wallpapers/02-lock-my-door.jpg` is the whole photograph scaled to 3840 × 1928 and re-encoded as JPEG (SHA-256 `da286c8bb747ad1fbbf63a209cad8fc4b901e8fe566c2eaa7e38befb7418f3cf`). The default, `wallpapers/01-lock-my-door-crop.jpg`, is a 3:2 crop of the original around the figure: 3446 × 2297 pixels starting 300 pixels from the left, scaled to 2880 × 1920 and re-encoded as JPEG (SHA-256 `dc163d52a0b055e4be25bb3591da69598451c364fd9355de6aab6cf19a16af5c`).
+The Commons original is 4576 × 2297 pixels (6,602,031 bytes, SHA-1 `eced76555f448000bd657912f631030a0e284ac2`), retrieved 2026-10-06. Changes for the shipped wallpaper, `wallpapers/01-lock-my-door-crop.jpg`, is a 3:2 crop of the original around the figure: 3446 × 2297 pixels starting 300 pixels from the left, scaled to 2880 × 1920 and re-encoded as JPEG (SHA-256 `dc163d52a0b055e4be25bb3591da69598451c364fd9355de6aab6cf19a16af5c`).
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -16,7 +16,7 @@ The near-black background (`#15191a`) comes from the dark foreground drape. The 
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are Hypnos marble, orange lily, Hypnos wing blue, gilded strip and olive-grey wall, with dark text; the trailing segments are blue cloth and auburn hair.
 

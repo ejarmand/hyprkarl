@@ -4,9 +4,9 @@
 
 Gustav Klimt, *Die Musik* (1895), Bayerische Staatsgemäldesammlungen – Neue Pinakothek München, inventory 8195. The [museum object record](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5) supplies the title, attribution and downloadable image under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Image credit: Bayerische Staatsgemäldesammlungen. Preserve this credit, source link and license when sharing the reproduction; adaptations of the image must use the same license.
 
-[Original museum JPEG](https://cdn.thenetexperts.info/image/authenticated/s--avOTlP_v--/q_80/artworks/GUSTAV-KLIMT-1862_DIE-MUSIK-8195_936137_CC-BY-SA_BSTGS.jpg), 3000 × 2345 pixels, 1,097,957 bytes, retrieved 2026-10-05. The unchanged image is `wallpapers/01-music.jpg`; its license applies to that reproduction separately from the theme configuration.
+[Original museum JPEG](https://cdn.thenetexperts.info/image/authenticated/s--avOTlP_v--/q_80/artworks/GUSTAV-KLIMT-1862_DIE-MUSIK-8195_936137_CC-BY-SA_BSTGS.jpg), 3000 × 2345 pixels, 1,097,957 bytes, retrieved 2026-10-05 (SHA-256 `5474ed50bfa5edeb829d2b0d5c2294a42a014c3ead8b305d38568b92cdf9651e`). The full image is not shipped.
 
-SHA-256: `5474ed50bfa5edeb829d2b0d5c2294a42a014c3ead8b305d38568b92cdf9651e`.
+The wallpaper, `wallpapers/01-music-crop.jpg`, is a 3:2 crop of that image: its top 3000 × 2000 pixels, re-encoded as JPEG. As an adaptation of the CC BY-SA 4.0 image, it is shared under the same license, with the credit above. Changes from the original: cropped and re-encoded. SHA-256: `6fc8f41872badcfd58435e647ce01cf9b72de52405f38483b99fc33d08369893`. Its license applies to the image separately from the theme configuration.
 
 The full image license is preserved in `ARTWORK-LICENSE.txt`, downloaded from the [official CC BY-SA 4.0 legal text](https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt). The matching plain background is `wallpapers/02-default.png`.
 

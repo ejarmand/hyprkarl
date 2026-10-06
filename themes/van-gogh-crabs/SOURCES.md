@@ -6,11 +6,11 @@ Vincent van Gogh, *Two Crabs*, January 1889, oil on canvas, 47 × 61 cm, private
 
 Commons tags the file PD-Art (Van Gogh died in 1890; tagged `PD-old-auto-1923`): the painting is public domain and the faithful two-dimensional reproduction adds no new copyright. Credit: Vincent van Gogh, *Two Crabs*, National Gallery, London / Wikimedia Commons.
 
-The Commons original is 6000 × 4226 pixels (8,959,921 bytes, SHA-1 `6b8a9b25d2cbf71f709ff20c7303c931e8104daa`). The shipped full painting, `wallpapers/02-crabs.jpg`, is the 3840 × 2705 rendering that Commons serves of that file, retrieved 2026-10-06. SHA-256: `896325e0f168f0055cfa5417e21ff6bcef7fba9bec8de41b56133be18f3e2ece`.
+The Commons original is 6000 × 4226 pixels (8,959,921 bytes, SHA-1 `6b8a9b25d2cbf71f709ff20c7303c931e8104daa`). The crop below was cut from the 3840 × 2705 rendering that Commons serves of that file, retrieved 2026-10-06. The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-crabs-crop.jpg`, is a 3:2 crop of that rendering: 3840 × 2560 pixels starting 72 pixels from the top, scaled to 2880 × 1920 and re-encoded as JPEG. SHA-256: `44ee865b03967e94d87b17b36ee63f9ff8b0a89e09681155264a5cabf4124398`.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The dark green background (`#10201c`) deepens the ground. The crabs' orange (`#f
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are crab orange, sea-green ground, red shell, pale claw and blue shadow, with dark text; the trailing segments are deep green and dark shell red.
 

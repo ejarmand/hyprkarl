@@ -6,11 +6,11 @@ Gustav Klimt, *Danaë*, 1907–08, oil on canvas, private collection. Source: th
 
 Commons tags the file PD-Art: the painting is public domain (Klimt died in 1918) and the faithful two-dimensional reproduction adds no new copyright. Credit: Gustav Klimt, *Danaë* / Wikimedia Commons.
 
-The unchanged Commons JPEG is `wallpapers/02-danae.jpeg`, 2694 × 2502 pixels, 4,634,008 bytes, retrieved 2026-10-06 (SHA-1 `91c35726311237c9ce1623f45c4a48dacdfe87b3`, matching Commons). SHA-256: `700c5a4d05e8a63c335d6b36930124bfeb586fcdbda9203f81e8278316be3260`.
+The crop below was cut from the unchanged Commons JPEG, 2694 × 2502 pixels, 4,634,008 bytes, retrieved 2026-10-06 (SHA-1 `91c35726311237c9ce1623f45c4a48dacdfe87b3`, matching Commons). The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-danae-crop.jpg`, is a 3:2 landscape crop of that file: its top 2694 × 1796 pixels (her face, hair and the gold rain), re-encoded as JPEG. SHA-256: `c80733f2bc510a3220feb73b88d23b055e46b9805cdbfecdae033a53e39b9ed2`. The painting is a nude, and every landscape crop of it includes nudity.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The violet-black background (`#19151f`) comes from the dark corner and the veil.
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the other Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the other Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are copper hair, the violet veil, the gold coins, the sage at the top edge and pale skin, with dark text; the trailing segments are the veil's deep violet and a dark bronze.
 

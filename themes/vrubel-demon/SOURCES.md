@@ -6,11 +6,11 @@ Mikhail Vrubel, *Demon Seated*, 1890, oil on canvas, State Tretyakov Gallery, Mo
 
 The painting is public domain: Vrubel died in 1910. The photograph is a separate work by Wikimedia Commons user [Mikhisor](https://commons.wikimedia.org/wiki/User:Mikhisor), dated 2020-10-21 and licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Credit: Mikhail Vrubel, *Demon Seated* (1890); photograph by Mikhisor, CC BY-SA 4.0, via Wikimedia Commons. The full license text is in `ARTWORK-LICENSE.txt`. The crop below is an adaptation of the photograph and is shared under the same license.
 
-The Commons original is 6144 × 3261 pixels (18,909,483 bytes, SHA-1 `43b22bb32293a83b84c9335f779777e60ea6dc5a`). The shipped full image, `wallpapers/02-demon.jpg`, is the 3840 × 2038 rendering that Commons serves of that file, retrieved 2026-10-06. SHA-256: `e3b6abd89160d460fecf5947e158bb79a8d694e819c886a25051a56895bcfda4`.
+The Commons original is 6144 × 3261 pixels (18,909,483 bytes, SHA-1 `43b22bb32293a83b84c9335f779777e60ea6dc5a`). The crop below was cut from the 3840 × 2038 rendering that Commons serves of that file, retrieved 2026-10-06. The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-demon-crop.jpg`, is a 3:2 crop of that rendering: 3057 × 2038 pixels starting 200 pixels from the left, scaled to 2880 × 1920 and re-encoded as JPEG. Changes from the original: cropped, scaled and re-encoded. SHA-256: `678e4be9ba43d4bfbd7cb9b3ec1b5e71651315b10ed496835b30b358ff3bb456`.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The blue-black background (`#18171f`) comes from the darkest shadows. The coral 
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are coral sky, robe blue, sunset gold, crystal lilac and leaf green, with dark text; the trailing segments are deep robe blue and umber.
 

@@ -6,11 +6,11 @@ Paul Klee, *Wald Bau* (*Forest Construction*), 1919, Museo del Novecento, Milan.
 
 Commons tags the file PD-Art with `PD-old-auto-expired` (Klee died in 1940): the work is public domain and the faithful two-dimensional reproduction adds no new copyright. Credit: Paul Klee, *Wald Bau*, Museo del Novecento / Google Arts & Culture / Wikimedia Commons.
 
-The Commons original is 19931 × 21142 pixels (175,937,375 bytes, SHA-1 `d4be84ed7f67a48e5153c5da3cfcdbce1ab5adfc`). The shipped full painting, `wallpapers/02-wald-bau.jpg`, is the 3840 × 4073 rendering that Commons serves of that file, retrieved 2026-10-06. SHA-256: `30674ad7fe5220758edf2fd7b6e6ac8355b1b9dd4795e968a880aa627fe2b2a7`.
+The Commons original is 19931 × 21142 pixels (175,937,375 bytes, SHA-1 `d4be84ed7f67a48e5153c5da3cfcdbce1ab5adfc`). The crop below was cut from the 3840 × 4073 rendering that Commons serves of that file, retrieved 2026-10-06. The full image is not shipped.
 
 The default wallpaper, `wallpapers/01-wald-bau-crop.jpg`, is a 3:2 crop from the middle of that rendering: 3840 × 2560 pixels starting 756 pixels from the top, scaled to 2880 × 1920 and re-encoded as JPEG. SHA-256: `ed46c4b2e63adf5f46a12f6ba35e6f2ddfd6466f8bd7ad50d565a6e94992bf8f`.
 
-The matching plain background is `wallpapers/03-default.png`.
+The matching plain background is `wallpapers/02-default.png`.
 
 ## Palette
 
@@ -18,7 +18,7 @@ The near-black background (`#1c1716`) comes from the dark corners. Jade green (`
 
 ## Generation and compatibility
 
-Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/03-default.png`.
+Generated with [hyprkarl-theme-generator](https://github.com/KarlJussila/hyprkarl-theme-generator) commit `2645fecd819980f7f1c4482cc52deaeb5fc4ee6e` and sassc 3.6.2 (LibSass 3.6.6). `palette.yaml` and `templates/` are the regeneration inputs; see "Regenerate the painting themes" in `docs/themes.md`. The templates are copied from `klimt-hope`, so the bar layout, GTK installation name `hyprkarl`, Foot color sections, Qt paths (`/home/earmand/.config/qt{5,6}ct/`) and other overrides match the Klimt themes. The plain background is 3840 × 2160 pixels in `base.background`: `magick -size 3840x2160 xc:<base.background> wallpapers/02-default.png`.
 
 Starship includes only the palette and leaves the user's prompt layout intact. Its colored segments are jade green, brick, violet-grey, ochre and rose, with dark text; the trailing segments are dark forest green and maroon.
 
