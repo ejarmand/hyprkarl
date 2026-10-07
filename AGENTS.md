@@ -125,35 +125,6 @@ overlays live in `~/.config/hyprkarl/themes/<name>/`. The compiler in
 `theme-generator/` merges its defaults, the theme, and any personal overlay,
 and renders every consumer's files.
 
-This fork adds `vera-light` and `vera-dark`, colored after a private painting
-that must stay out of commits (`.gitignore` ignores the reference file
-anywhere in the tree); they ship only plain backgrounds. Keep `vera-light`'s
-`mode: light`, which carries the GTK light preference and Neovim's light
-background.
-
-`klimt-music`, `klimt-hope`, `klimt-boa`, `klimt-adele`, `klimt-virgin`,
-`klimt-fan`, `klimt-danae`, `klimt-judith`, `klimt-beer` and
-`klimt-adele-gold` are dark painting themes with Starship palettes. Each `SOURCES.md` records the artwork, image
-provenance and color adaptations; keep it current when changing a theme.
-`klimt-adele` is *Adele Bloch-Bauer II*; `klimt-adele-gold` is the golden
-*Adele I*. The Music and Judith wallpapers are CC BY-SA 4.0: preserve its attribution and
-`ARTWORK-LICENSE.txt`, and apply share-alike terms to artwork adaptations.
-Record the public-domain evidence for any other bundled painting file, and
-keep private photos (such as dictionary photos) out of the repository.
-Ship 3:2 landscape crops and a plain background, numbered last, rather than
-full paintings, to keep the repository small; record the exact source file
-each crop was cut from.
-
-`bonnard-cannet`, `bonnard-ete`, `redon-violette`, `klee-wald-bau`,
-`klee-temple-gardens`, `klee-municipal-jewel`, `kandinsky-intimate-party`,
-`vrubel-demon`, `van-gogh-irises`, `van-gogh-crows`, `van-gogh-crabs`,
-`munch-linde-beach`, `munch-sunbathing` and `khnopff-lock-my-door` follow the
-same pattern and share the Klimt themes' consumer color roles. The Bonnard
-*Le Cannet*, Vrubel and Munch beach photographs are CC BY-SA 4.0 like the
-Music image; the Khnopff photograph is CC BY 2.0 (attribution and license
-link, no share-alike). Kandinsky's US status is unresolved, so it ships no
-painting image.
-
 `hk-theme set <name>` builds into `~/.local/state/hyprkarl/themes/<name>.<timestamp>`,
 points the `current/theme` symlink at it, deletes older builds, copies the GTK
 theme to `~/.local/share/themes/hyprkarl/` (GTK does not follow symlinked theme

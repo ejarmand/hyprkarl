@@ -314,6 +314,14 @@ To ship wallpapers and preview screenshots with the theme, add:
 - `themes/<name>/wallpapers/` — wallpaper images linked into the
   generated theme. By convention `01-*` is the primary wallpaper. **Only
   include images you have the right to redistribute.**
+- `themes/<name>/SOURCES.md` — for a theme drawn from artwork: the work,
+  the exact source file of each bundled image and its license or
+  public-domain evidence, and how the colors were adapted. Keep it current.
+  Preserve attribution and license files (`ARTWORK-LICENSE.txt`); a CC BY-SA
+  image makes crops of it share-alike too. Ship a 3:2 landscape crop and a
+  plain background numbered last, not the full painting, to keep the
+  repository small. Leave out an image whose status is unclear, and keep
+  private artwork and photos out of commits.
 - `themes/<name>/previews/` — `busy.png`, `launcher.png`, `menu.png`, and
   `wallpapers.png`; these become `screenshots/` in the generated bundle.
 
