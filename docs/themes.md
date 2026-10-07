@@ -31,7 +31,7 @@ hk-theme list
 
 Hyprkarl ships `hyprkarl`, `everforest`, `gruvbox`, `loam`, and
 `tokyo-night`; this fork adds [`vera-light` and `vera-dark`](#vera-light-and-dark),
-[seven Klimt painting themes](#klimt-painting-themes), and [other painting
+[ten Klimt painting themes](#klimt-painting-themes), and [other painting
 themes](#other-painting-themes). The Tokyo Night source uses the original dark Night variant.
 Loam uses warm brown surfaces and a narrow olive, ochre, and bark palette. It
 began as an adaptation of Melange and retains the upstream attribution in its
@@ -79,7 +79,7 @@ your own wallpaper, select the theme, then run `hk-wallpaper add <image>`.
 
 ## Klimt painting themes
 
-These seven dark themes adapt painting colors for readable desktop text,
+These ten dark themes adapt painting colors for readable desktop text,
 terminal output and status indicators. Each is a `theme.yaml` with a Starship
 palette in `overrides/starship.toml`, and sets the same consumer color roles
 as Vera dark, plus btop's main text, opaque Qt placeholder text, and dark text
@@ -94,14 +94,17 @@ on Yazi's error progress.
 | `klimt-virgin` | *The Virgin*, 1913 | Warm black, violet, cobalt, orange and emerald |
 | `klimt-fan` | *Lady with a Fan*, 1917–18 | Kimono navy, yellow, turquoise, coral and lotus pink |
 | `klimt-danae` | *Danaë*, 1907–08 | Violet-black, gold, copper and veil violet |
+| `klimt-judith` | *Judith II (Salome)*, 1909 | Warm black, vermilion, gold leaf, poppy pink and shawl cobalt |
+| `klimt-beer` | *Portrait of Friederike Maria Beer*, 1916 | Blue-green, rose, jade, lemon and dress blue |
+| `klimt-adele-gold` | *Portrait of Adele Bloch-Bauer I*, 1907 | Dark brown, gold leaf, lapis, green floor and red squares |
 
 Switch with `hk-theme set klimt-music`, or substitute any name from the table.
 Music, Hope and Adele ship 3:2 landscape crops of their painting, numbered
 first, and a matching plain background, numbered last; the full paintings are
 not shipped, to keep the repository small. Music uses `01-music-crop.jpg`, Hope
 has two crops (`01-hope-figure.jpg`, `02-hope-lower.jpg`) and `03-default.png`,
-and Adele uses `01-adele-portrait.jpg` and `02-default.png`. Virgin, Fan and Danaë
-use `01-*-crop.jpg` and `02-default.png`. Boa ships only the plain
+and Adele uses `01-adele-portrait.jpg` and `02-default.png`. Virgin, Fan, Danaë,
+Judith, Beer and Adele I use `01-*-crop.jpg` and `02-default.png`. Boa ships only the plain
 `01-default.png`.
 
 The Music painting comes from [Neue Pinakothek, inventory 8195](https://www.sammlung.pinakothek.de/en/artwork/PdxzY1k4w5),
@@ -109,14 +112,18 @@ under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the
 license text is `themes/klimt-music/ARTWORK-LICENSE.txt`. The shipped crop is
 an adaptation of that image and is shared under the same license. Preserve its
 attribution and license when redistributing it, state any image changes, and
-share artwork adaptations under the same license. This image license does not
-change the license of unrelated desktop configuration files.
+share artwork adaptations under the same license. The Judith II crop is cut
+from Didier Descouens's photograph of the painting in its gilded frame, also
+CC BY-SA 4.0, with
+the license text in `themes/klimt-judith/ARTWORK-LICENSE.txt`; the same terms
+apply. These image licenses do not change the license of unrelated desktop
+configuration files.
 
 Hope II and Adele II ship crops of the specific Commons reproductions
 documented in their `SOURCES.md`. Those file pages identify the paintings and faithful
 reproductions as public domain, including US pre-1931 publication statements.
 The statements are recorded source evidence, not independently reconstructed
-publication histories. Virgin, Fan and Danaë ship crops of Commons
+publication histories. Virgin, Fan, Danaë, Beer and Adele I ship crops of Commons
 reproductions tagged PD-Art, recorded the same way. Boa ships its plain background; its reference file's
 US public-domain basis remains unresolved.
 

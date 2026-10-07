@@ -132,9 +132,11 @@ anywhere in the tree); they ship only plain backgrounds. Keep `vera-light`'s
 background.
 
 `klimt-music`, `klimt-hope`, `klimt-boa`, `klimt-adele`, `klimt-virgin`,
-`klimt-fan` and `klimt-danae` are dark painting themes with Starship palettes. Each `SOURCES.md` records the artwork, image
-provenance and color adaptations; keep it current when changing a theme. The
-Music wallpaper is CC BY-SA 4.0: preserve its attribution and
+`klimt-fan`, `klimt-danae`, `klimt-judith`, `klimt-beer` and
+`klimt-adele-gold` are dark painting themes with Starship palettes. Each `SOURCES.md` records the artwork, image
+provenance and color adaptations; keep it current when changing a theme.
+`klimt-adele` is *Adele Bloch-Bauer II*; `klimt-adele-gold` is the golden
+*Adele I*. The Music and Judith wallpapers are CC BY-SA 4.0: preserve its attribution and
 `ARTWORK-LICENSE.txt`, and apply share-alike terms to artwork adaptations.
 Record the public-domain evidence for any other bundled painting file, and
 keep private photos (such as dictionary photos) out of the repository.

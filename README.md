@@ -70,6 +70,9 @@ Hyprkarl. This fork adds:
 - `klimt-virgin`: violet, cobalt, orange and emerald on warm black from *The Virgin*.
 - `klimt-fan`: yellow, turquoise and coral on kimono navy from *Lady with a Fan*.
 - `klimt-danae`: gold, copper and veil violet on violet-black from *Danaë*.
+- `klimt-judith`: vermilion, gold leaf and poppy pink on warm black from *Judith II*.
+- `klimt-beer`: rose, jade and lemon on blue-green from *Portrait of Friederike Maria Beer*.
+- `klimt-adele-gold`: gold leaf, lapis and the green floor on dark brown from *Adele Bloch-Bauer I*.
 - `bonnard-cannet`: orange, agave blue and leaf green on shadow blue from Bonnard's *Le Cannet*.
 - `bonnard-ete`: lime grass, flame orange and dress blue on deep foliage from Bonnard's *L'Été*.
 - `redon-violette`: violet, mint and cobalt on warm dark from Redon's *Portrait of Violette Heymann*.
@@ -86,7 +89,7 @@ Both Vera themes include a plain background matching their palette; see [the
 Vera theme notes](docs/themes.md#vera-light-and-dark). The Klimt and
 other painting themes are dark palettes with Starship prompt colors, 3:2 crops
 of their paintings and matching plain backgrounds. The *Music* museum image
-and the Bonnard *Le Cannet*, Vrubel and Munch beach photographs are distributed
+and the Klimt *Judith II*, Bonnard *Le Cannet*, Vrubel and Munch beach photographs are distributed
 under CC BY-SA 4.0, and the Khnopff photograph under CC BY 2.0. Each theme's
 `SOURCES.md` records its painting reference, image availability and color
 adaptations; see [the Klimt theme notes](docs/themes.md#klimt-painting-themes)
