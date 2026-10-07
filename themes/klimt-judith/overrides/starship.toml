@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Opens on the painting's deep vermilion with cream text, then dark text on alternating cool and warm colors: shawl cobalt, gold leaf, the silver robe, ivory skin; crimson poppies and deep shawl blue surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.foreground}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#2e3770'  # deep shawl blue
+color_bg3 = '#7a1e2e'  # crimson poppies
+color_magenta = '#a8381a'  # deep vermilion ground
+color_purple = '{{ansi.magenta}}'
+color_orange = '#92a6ec'  # shawl cobalt
+color_yellow = '#e3be52'  # gold leaf
+color_aqua = '#bcc0cc'  # silver robe
+color_blue = '#e8dccb'  # ivory skin
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

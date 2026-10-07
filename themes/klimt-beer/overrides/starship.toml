@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Dark text on painting colors, in prompt order: rose kimono, dress blue, lemon backdrop, jade warriors, grey fur; deep magenta and dark jade surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.background}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#24443c'  # dark jade
+color_bg3 = '#5a2f52'  # deep magenta
+color_magenta = '#e19ccb'  # rose kimono
+color_purple = '{{ansi.magenta}}'
+color_orange = '#98aaf2'  # dress blue
+color_yellow = '#e4d47a'  # lemon backdrop
+color_aqua = '#8ccaa2'  # jade warriors
+color_blue = '#e2e0d8'  # grey fur
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'

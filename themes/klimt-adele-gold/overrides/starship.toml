@@ -1,0 +1,17 @@
+# Merged with the user's prompt by hk-starship-reload.
+# Opens on deep lapis with cream text, then dark text on gold leaf, the lapis inlays, silver and pale skin; deep lapis and dark crimson surfaces.
+[palettes.hyprkarl]
+color_fg0 = '{{base.background}}'
+color_fg_host = '{{base.foreground}}'
+color_fg1 = '{{base.foreground}}'
+color_fg2 = '{{accent.primary.bright}}'
+color_bg1 = '#5a1a10'  # dark crimson
+color_bg3 = '#263a8a'  # deep lapis
+color_magenta = '#263a8a'  # deep lapis
+color_purple = '{{ansi.magenta}}'
+color_orange = '#e8bc4c'  # gold leaf
+color_yellow = '#93a8ec'  # lapis inlays
+color_aqua = '#c8c2b2'  # silver
+color_blue = '#e8dcc6'  # pale skin
+color_green = '{{ansi.green}}'
+color_red = '{{ansi.red}}'
