@@ -60,6 +60,8 @@ and are not for editing:
 - `calculator-history.json` keeps the calculator's last five results.
 - `starship.toml` is your Starship layout merged with the theme's palette
   (`hk-starship-reload`).
+- `application-launches.json` counts launches from the app launcher, which
+  its search ranking uses.
 
 `hk-update apply` links Hyprkarl's agent skill into the skill folders of
 coding agents (`~/.agents`, `~/.claude`, `~/.codex`), creating them, so an
