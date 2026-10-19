@@ -170,7 +170,9 @@ not in place.
 | Yazi | Linked `~/.config/yazi/theme.toml`, which selects the `hyprkarl` flavor in the linked `flavors/hyprkarl.yazi/` |
 
 These links are there even next to a btop, Neovim, or Yazi config of your
-own.
+own, unless its whole directory is a link, for example into a dotfiles
+checkout. Hyprkarl does not write into that, so a linked config picks its own
+colors.
 
 **Starting configs.** btop, Neovim, and Yazi cannot load Hyprkarl's
 defaults next to a file of yours, so `hk-update apply` copies Hyprkarl's

@@ -78,6 +78,8 @@ Each top-level directory says how its files reach the user:
 - `config/` is linked into `~/.config/` by GNU Stow, all of it. Editing a
   linked file edits the live config. Renaming or deleting one leaves a stale
   symlink, which `hk-update apply` (or `hk-update remove-stale`) prunes.
+  A top-level directory the user has linked elsewhere, such as
+  `~/.config/nvim` pointing into a dotfiles checkout, is skipped.
 - `defaults/config/` and `defaults/share/` are fallbacks: `config/uwsm/env`
   puts them on `XDG_CONFIG_DIRS` and `XDG_DATA_DIRS`, so a user's own file of
   the same name replaces Hyprkarl's.

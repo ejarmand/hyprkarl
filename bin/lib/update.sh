@@ -88,8 +88,25 @@ _stow_conflicts() {
   stow -n -v "$@" 2>&1 | grep -E '^(CONFLICT:|[[:space:]]+\* )'
 }
 
+# Prints a Stow --ignore for each top-level config directory the user has
+# linked elsewhere, such as ~/.config/nvim pointing into a dotfiles checkout.
+# Stow refuses to place files through such a link, and Hyprkarl should not
+# write into another checkout.
+_linked_config_ignores() {
+  local app
+  for app in "$HYPRKARL_PATH"/config/*/; do
+    app=$(basename "$app")
+    if [[ -L "$HOME/.config/$app" ]] \
+        && [[ "$(readlink -f "$HOME/.config/$app")" != "$(readlink -f "$HYPRKARL_PATH/config/$app")" ]]; then
+      printf -- '--ignore=^%s$\n' "$app"
+    fi
+  done
+}
+
 check_config_conflicts() {
-  _stow_conflicts --restow --no-folding \
+  local ignores
+  mapfile -t ignores < <(_linked_config_ignores)
+  _stow_conflicts --restow --no-folding "${ignores[@]}" \
     --dir="$HYPRKARL_PATH" \
     --target="$HOME/.config" \
     config
@@ -108,7 +125,9 @@ move_config_conflicts() {
 }
 
 stow_restow_config() {
-  stow --restow --no-folding \
+  local ignores
+  mapfile -t ignores < <(_linked_config_ignores)
+  stow --restow --no-folding "${ignores[@]}" \
     --dir="$HYPRKARL_PATH" \
     --target="$HOME/.config" \
     config
