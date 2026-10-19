@@ -18,6 +18,7 @@ explaining what goes there.
 | Lifecycle hooks | `~/.config/hyprkarl/hooks/<event>.d/` |
 | Session variables | `~/.config/uwsm/env.local` |
 | Personal commands | `~/.local/bin/` |
+| Application credentials | `~/.local/share/keyrings/` |
 | fastfetch | The theme: its `fastfetch` keys in a theme overlay, or your own `~/.config/fastfetch/config.jsonc` |
 | btop, Neovim, Yazi | Their own `~/.config/<app>/`, copied from Hyprkarl once |
 | AppImage recipes (`hk-app`) | `~/.config/hyprkarl/apps/<id>.conf` |
@@ -31,16 +32,19 @@ The checkout at `~/.local/share/hyprkarl/` belongs to Hyprkarl; updates replace
 it. Its main parts:
 
 - `bin/`: the `hk-*` commands, put on `PATH` after `~/.local/bin`.
-- `config/`: configs linked into `~/.config` by GNU Stow, and the starting
-  configs for btop, Neovim, and Yazi.
-- `defaults/`: the shell's `shell.json` and `menu.json`, Hyprland's modules
-  under `hypr/`, XDG defaults under `config/` and `share/`, and the agent
-  skill under `skills/`.
+- `config/`: configs linked into `~/.config` by GNU Stow, all of it.
+- `defaults/`: fallbacks that your own file of the same name replaces, under
+  `config/` (found through `XDG_CONFIG_DIRS`) and `share/` (`XDG_DATA_DIRS`).
+- `templates/`: files Hyprkarl copies rather than links. `config/` holds the
+  personal files that linked configs include, at their `~/.config` paths;
+  each is created when missing. `starter/` holds
+  the starting configs for btop, Neovim, and Yazi. `system/` holds system
+  configs that migrations install, and `docker/` the Docker service
+  definitions.
+- `skills/`: the agent skill, linked into coding agents' skill folders.
 - `themes/` and `theme-generator/`: theme sources and their compiler.
 - `packages/` and `migrations/`: what `hk-update apply` installs and the
   one-time changes it runs.
-- `templates/`: files Hyprkarl writes from, such as the personal files it
-  creates, system configs for migrations, and Docker service definitions.
 - `data/`: generated data, such as the icon picker's list.
 - `vendor/wispr-flow-helper/`: a Git submodule, the Wispr Flow helper fork
   that `hk-wispr-helper-install` builds. It is fetched on first use.
@@ -76,7 +80,7 @@ also writes outside that folder: the GTK theme to
 Hyprland is configured in Lua. `~/.config/hypr/hyprland.lua` links to
 Hyprkarl's bootstrap, which loads, in order:
 
-1. Hyprkarl's modules from `defaults/hypr/`: `envs`, `autostart`, `monitors`,
+1. Hyprkarl's modules, linked next to it: `envs`, `autostart`, `monitors`,
    `permissions`, `looknfeel`, `animations`, `gum`, `windows` (which includes
    `windows/*.lua`), `input`, and `bindings` (which includes `bindings/*.lua`);
 2. the theme's `hyprland.lua`;
@@ -161,6 +165,12 @@ not in place.
 | File chooser | Linked `xdg-desktop-portal-termfilechooser/config`, which opens Yazi in your terminal |
 | fastfetch | The theme's whole config, found through `XDG_CONFIG_DIRS`; your own `~/.config/fastfetch/config.jsonc` replaces it |
 | Starship | `hk-starship-reload` merges your `~/.config/starship.toml` with the theme's palette into `~/.local/state/hyprkarl/starship.toml`, where `STARSHIP_CONFIG` points |
+| btop | Linked `~/.config/btop/themes/current.theme`, selected by `color_theme = "current"` in `btop.conf` |
+| Neovim | Linked `~/.config/nvim/colors/hyprkarl.lua`, and `lua/plugins/colorscheme.lua`, which selects it for LazyVim |
+| Yazi | Linked `~/.config/yazi/theme.toml`, which selects the `hyprkarl` flavor in the linked `flavors/hyprkarl.yazi/` |
+
+These links are there even next to a btop, Neovim, or Yazi config of your
+own.
 
 **Starting configs.** btop, Neovim, and Yazi cannot load Hyprkarl's
 defaults next to a file of yours, so `hk-update apply` copies Hyprkarl's
@@ -168,12 +178,12 @@ complete config when you have none of their files. A config directory that
 is a link, for example into a dotfiles checkout, counts as yours even while
 its target is missing. The copy is yours; updates
 never change it. Delete it to get Hyprkarl's current version on the next
-update. Their theme colors stay linked to the active theme.
+update. Their colors come from the theme files above.
 
 ## Shell and themes
 
-The shell's behavior comes from `defaults/shell.json` and `menu.json` with your
-files merged over them, and its appearance from the theme. See [Shell
+The shell's behavior comes from `~/.config/quickshell/defaults/shell.json` and
+`menu.json` with your files merged over them, and its appearance from the theme. See [Shell
 configuration](shell-configuration.md), [Menu
 configuration](menu-configuration.md), [Themes](themes.md), and
 [Authentication](authentication-surfaces.md).

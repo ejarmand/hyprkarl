@@ -4,6 +4,33 @@ Notable changes to Hyprkarl. Releases are annotated git tags on `main`;
 entries here are written by hand when a release is cut. From v1.0.0, a
 breaking change bumps the major version and is called out explicitly.
 
+## Unreleased
+
+- btop follows the theme on fresh installs. The installer kept CachyOS's
+  btop config, which used Noctalia's colors; it is now backed up and replaced
+  with Hyprkarl's, and an update points btop's color theme at the theme.
+- btop, Neovim, and Yazi's theme files are linked like Hyprkarl's other
+  configs, even next to a config of your own, and Yazi's `theme.toml` now
+  comes from the theme. These files belong to the theme: change colors
+  through a theme. An update backs up a file of yours at one of their paths
+  to `~/.local/state/hyprkarl/replaced-configs-*`.
+- The checkout is reorganized so each folder says how its files reach you:
+  `config/` is all linked, `defaults/` holds only fallbacks your own file
+  replaces, and `templates/` holds what is copied. Hyprland's modules are
+  linked next to `hyprland.lua` again, and the shell's `shell.json` and
+  `menu.json` defaults are linked in `~/.config/quickshell/defaults/`. If an
+  update reports that a file blocks a Hyprkarl link in `~/.config/hypr/`,
+  rename your file.
+- Yazi's starting config drops the unused smart-filter plugin.
+
+- GNOME Keyring provides persistent application credentials.
+  Installs and updates enable its user service and create a
+  passwordless default keyring when none exists.
+- Restart and Shut Down from the menu still go through after an NVIDIA driver
+  update. The closing screen can't start until you reboot onto the new driver,
+  so they now skip it and restart or shut down directly instead of closing
+  your apps and stopping there.
+
 ## v1.1.1 (2026-10-06)
 
 - The app launcher ranks its results instead of listing every match

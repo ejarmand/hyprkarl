@@ -70,7 +70,6 @@ Item {
     MouseArea {
       anchors.fill: parent
       cursorShape: Qt.PointingHandCursor
-      // Hyprland's Lua config takes dispatch arguments as Lua expressions
       onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspaceButton.workspace.id} })`)
     }
   }
