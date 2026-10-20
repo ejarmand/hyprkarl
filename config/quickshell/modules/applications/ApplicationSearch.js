@@ -61,12 +61,24 @@ function score(entry, query, terms, launches) {
   return total + Math.min(30, 10 * Math.log2(1 + (launches[entry.id] || 0)))
 }
 
-// Entries keep their order when the query is empty.
+// With an empty query, the most launched entries come first and the rest keep
+// their order.
+function byLaunches(entries, launches) {
+  return entries
+    .map(function(entry, index) {
+      return { "entry": entry, "index": index, "launches": launches[entry.id] || 0 }
+    })
+    .sort(function(left, right) {
+      return right.launches - left.launches || left.index - right.index
+    })
+    .map(function(result) { return result.entry })
+}
+
 function rank(entries, query, launches) {
   var normalized = normalize(query).trim()
   var terms = normalized.split(/\s+/)
     .filter(function(term) { return term.length > 0 })
-  if (terms.length === 0) return entries
+  if (terms.length === 0) return byLaunches(entries, launches || {})
   return entries
     .map(function(entry) {
       return { "entry": entry, "score": score(entry, normalized, terms, launches || {}) }

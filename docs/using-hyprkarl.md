@@ -37,9 +37,10 @@ of its declared descendants. Escape, lowercase Q, or clicking outside closes
 the whole menu; Left on an empty query goes to the parent and
 closes at the root. Choosing `Launch` opens the application picker, where Left
 on an empty query returns to the same selected entry and scroll
-position in the menu. The picker ranks matches in the app's name first, then
-its generic name, keywords, command, and categories, and moves apps you
-launch often up among similar matches. Submenu back-navigation restores the
+position in the menu. Before you type, the picker lists the apps you launch
+most first. It ranks matches in the app's name first, then its generic name,
+keywords, command, and categories, and moves apps you launch often up among
+similar matches. Submenu back-navigation restores the
 same state. Open
 any menu directly with `hk-shell menu open <menu-id>`.
 

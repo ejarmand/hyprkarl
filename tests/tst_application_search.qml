@@ -39,6 +39,12 @@ TestCase {
     compare(ApplicationSearch.rank(entries, "  ", {}), entries)
   }
 
+  function test_emptyQueryPutsMostLaunchedFirst() {
+    const ranked = names("", { "spotify": 2, "steam": 5 })
+    compare(ranked.slice(0, 3), ["Steam", "Spotify", "Chromium"])
+    compare(ranked.length, entries.length)
+  }
+
   function test_nameBeforeKeyword() {
     compare(names("steam"), ["Steam", "SteamTinkerLaunch", "Protontricks"])
   }

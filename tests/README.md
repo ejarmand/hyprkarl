@@ -77,10 +77,11 @@ QT_QPA_PLATFORM=offscreen /usr/lib/qt6/bin/qmltestrunner \
 
 ## `tst_application_search.qml`
 
-Checks the launcher's search ranking: name matches before keyword matches,
-launch counts breaking ties without lifting weaker matches over names, word
-starts and abbreviations, low-ranked category matches, and no matches from
-letters scattered through a name.
+Checks the launcher's search ranking: the most launched apps first on an
+empty query, name matches before keyword matches, launch counts breaking ties
+without lifting weaker matches over names, word starts and abbreviations,
+low-ranked category matches, and no matches from letters scattered through a
+name.
 
 ```bash
 QT_QPA_PLATFORM=offscreen /usr/lib/qt6/bin/qmltestrunner \

@@ -6,6 +6,11 @@ breaking change bumps the major version and is called out explicitly.
 
 ## Unreleased
 
+- Screenshots open in satty to annotate before saving: Enter copies and
+  saves, Esc discards.
+- The app launcher lists the apps you launch most first before you type,
+  instead of alphabetically.
+
 - btop follows the theme on fresh installs. The installer kept CachyOS's
   btop config, which used Noctalia's colors; it is now backed up and replaced
   with Hyprkarl's, and an update points btop's color theme at the theme.
