@@ -117,9 +117,11 @@ stable](updating.md#what-updates-keep-stable).
 ### Screenshots
 
 - `hk-screenshot <window|output|region> [hyprshot options]`
-  Capture with Hyprshot while preserving an open Quickshell feature panel.
-  Additional options pass through to Hyprshot. The default `Print` bindings
-  use this command for window, display, and region capture.
+  Capture with Hyprshot while preserving an open Quickshell feature panel,
+  then open the capture in satty: Enter copies and saves, Ctrl+C copies,
+  Ctrl+S saves, and Esc discards. Saves to `HYPRSHOT_DIR`, falling back to
+  `XDG_PICTURES_DIR`. Additional options pass through to Hyprshot. The default
+  `Print` bindings use this command for window, display, and region capture.
 
 ## Themes and Wallpapers
 
