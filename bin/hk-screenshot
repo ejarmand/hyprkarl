@@ -24,7 +24,9 @@ capture=$(mktemp --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" hk-screenshot.XXXXXX.png)
 # dismisses an open panel. Release the grab first and restore it after capture.
 qs -p "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell" ipc call screenshot begin >/dev/null 2>&1
 trap 'restore_panel_focus; rm -f "$capture"' EXIT
-hyprshot -m "$mode" --raw "$@" > "$capture"
+# Hyprshot exits once the picker closes and leaves grim writing in the
+# background; reading through a pipe waits for the whole image.
+hyprshot -m "$mode" --raw "$@" | cat > "$capture"
 restore_panel_focus
 
 # A cancelled selection captures nothing.
