@@ -16,12 +16,14 @@
 # running before Wispr launches (autostart orders it so). After restarting
 # this, restart Wispr too.
 #
-# Usage: hk-wispr-switch [run|on|off|toggle|status]
+# Usage: hk-wispr-switch [run|on|off|toggle|status|press]
 #   run       Listen to the mic (the default; autostart runs this)
 #   on | off | toggle
 #             Resume or pause the switch without stopping the listener;
 #             resets to on at the next login
 #   status    Print on or off
+#   press     Start or stop hands-free now, as unmuting or muting would; for
+#             a key or mouse button bound in Hyprland. Works while paused.
 #
 # The mics are $HK_WISPR_SWITCH_SOURCE (space-separated PipeWire source
 # names, see `pactl list sources short`), set in ~/.config/uwsm/env.local to
@@ -30,6 +32,7 @@
 import fcntl
 import json
 import os
+import signal
 import struct
 import subprocess
 import sys
@@ -44,7 +47,9 @@ SOURCES = os.environ.get(
     "alsa_input.usb-Andrea_Electronics_Andrea_Comm_USB-SA_Headset_SEP_2015-00.analog-stereo",
 ).split()
 NAME = "hk-wispr-switch"
-OFF_FLAG = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / f"{NAME}.off"
+RUNTIME = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp"))
+OFF_FLAG = RUNTIME / f"{NAME}.off"
+PID_FILE = RUNTIME / f"{NAME}.pid"     # where `press` finds the listener
 
 RATE = 16000
 BLOCK = RATE // 50              # 20 ms of samples
@@ -191,6 +196,12 @@ def follow(keyboard, source):
 def run():
     keyboard = Keyboard()
     OFF_FLAG.unlink(missing_ok=True)
+    # `press` asks with SIGUSR1: only this process's keyboard reaches Wispr
+    def press(*_):
+        keyboard.press_hands_free()
+        log("press: toggled hands-free")
+    signal.signal(signal.SIGUSR1, press)
+    PID_FILE.write_text(f"{os.getpid()}\n")
     threads = [threading.Thread(target=follow, args=(keyboard, source), daemon=True)
                for source in SOURCES]
     try:
@@ -199,6 +210,7 @@ def run():
         for thread in threads:
             thread.join()
     finally:
+        PID_FILE.unlink(missing_ok=True)
         keyboard.close()
 
 
@@ -227,8 +239,14 @@ def main() -> int:
         set_enabled(OFF_FLAG.exists())
     elif action == "status":
         print("off" if OFF_FLAG.exists() else "on")
+    elif action == "press":
+        # The file outlives a killed listener; never signal a reused PID
+        pid = PID_FILE.read_text().strip()
+        if NAME.encode() not in Path(f"/proc/{pid}/cmdline").read_bytes():
+            raise SystemExit(f"{NAME}: the listener is not running")
+        os.kill(int(pid), signal.SIGUSR1)
     else:
-        print(f"Usage: {NAME} [run|on|off|toggle|status]", file=sys.stderr)
+        print(f"Usage: {NAME} [run|on|off|toggle|status|press]", file=sys.stderr)
         return 1
     return 0
 
