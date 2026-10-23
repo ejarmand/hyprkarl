@@ -391,7 +391,7 @@ a locally built helper swapped in. Login starts it in the tray, after
 - `hk-wispr-transcripts [--no-audio] [--since YYYY-MM-DD] [DIR]`
   Export Wispr's dictation history (raw speech recognition, cleaned and pasted
   text, audio) to `~/Documents/wispr-exports/` for review.
-- `hk-wispr-switch [run|on|off|toggle|status]`
+- `hk-wispr-switch [run|on|off|toggle|status|press]`
   Make USB mics' hardware mute switches drive Wispr hands-free: unmuting starts
   it, muting stops it (by pressing Ctrl+Super+Space on a virtual keyboard, which
   is why that shortcut is left unbound). It hears the switch as exact digital
@@ -401,7 +401,9 @@ a locally built helper swapped in. Login starts it in the tray, after
   (`Super+Alt+D`) pause it until the next login. The mics are
   `$HK_WISPR_SWITCH_SOURCE`, space-separated PipeWire source names (default:
   the Jounivo JV601 and the Andrea Comm USB-SA headset); each is followed
-  while plugged in. It logs to `journalctl --user -t hk-wispr-switch`.
+  while plugged in. `press` starts or stops hands-free the way the switch
+  would, for a key or mouse button bound in Hyprland, even while paused. It
+  logs to `journalctl --user -t hk-wispr-switch`.
 
 ## Internal Helpers
 
