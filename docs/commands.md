@@ -392,15 +392,16 @@ a locally built helper swapped in. Login starts it in the tray, after
   Export Wispr's dictation history (raw speech recognition, cleaned and pasted
   text, audio) to `~/Documents/wispr-exports/` for review.
 - `hk-wispr-switch [run|on|off|toggle|status]`
-  Make a USB mic's hardware mute switch drive Wispr hands-free: unmuting starts
+  Make USB mics' hardware mute switches drive Wispr hands-free: unmuting starts
   it, muting stops it (by pressing Ctrl+Super+Space on a virtual keyboard, which
   is why that shortcut is left unbound). It hears the switch as exact digital
   silence, stays out of the way while another app records from the mic, and
   ignores software mutes. Login starts it before Wispr, whose helper only finds
   keyboards at launch; restart Wispr after restarting it. `off` and `toggle`
-  (`Super+Alt+D`) pause it until the next login. The mic is
-  `$HK_WISPR_SWITCH_SOURCE` (default: the Jounivo JV601); it logs to
-  `journalctl --user -t hk-wispr-switch`.
+  (`Super+Alt+D`) pause it until the next login. The mics are
+  `$HK_WISPR_SWITCH_SOURCE`, space-separated PipeWire source names (default:
+  the Jounivo JV601 and the Andrea Comm USB-SA headset); each is followed
+  while plugged in. It logs to `journalctl --user -t hk-wispr-switch`.
 
 ## Internal Helpers
 

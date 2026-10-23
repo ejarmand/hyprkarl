@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Turn a microphone's hardware mute switch into Wispr Flow's hands-free
+# Turn microphones' hardware mute switches into Wispr Flow's hands-free
 # control: unmuting starts hands-free dictation, muting stops it.
 #
 # The switch is invisible to the computer except in the audio: a muted mic
@@ -23,8 +23,9 @@
 #             resets to on at the next login
 #   status    Print on or off
 #
-# The mic is $HK_WISPR_SWITCH_SOURCE (a PipeWire source name, see
-# `pactl list sources short`), set in ~/.config/uwsm/env.local to use another.
+# The mics are $HK_WISPR_SWITCH_SOURCE (space-separated PipeWire source
+# names, see `pactl list sources short`), set in ~/.config/uwsm/env.local to
+# use others. Each one is listened to while it is plugged in.
 
 import fcntl
 import json
@@ -33,11 +34,15 @@ import struct
 import subprocess
 import sys
 import syslog
+import threading
 import time
 from pathlib import Path
 
-SOURCE = os.environ.get("HK_WISPR_SWITCH_SOURCE",
-                        "alsa_input.usb-0c76_JOUNIVO_MICROPHONE-00.mono-fallback")
+SOURCES = os.environ.get(
+    "HK_WISPR_SWITCH_SOURCE",
+    "alsa_input.usb-0c76_JOUNIVO_MICROPHONE-00.mono-fallback "
+    "alsa_input.usb-Andrea_Electronics_Andrea_Comm_USB-SA_Headset_SEP_2015-00.analog-stereo",
+).split()
 NAME = "hk-wispr-switch"
 OFF_FLAG = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / f"{NAME}.off"
 
@@ -80,6 +85,7 @@ class Keyboard:
         setup = struct.pack("HHHH80sI", BUS_VIRTUAL, 0, 0, 1, NAME.encode(), 0)
         fcntl.ioctl(self.fd, UI_DEV_SETUP, setup)
         fcntl.ioctl(self.fd, UI_DEV_CREATE)
+        self.lock = threading.Lock()   # one chord at a time across mics
 
     def _emit(self, key, value):
         os.write(self.fd, struct.pack("llHHi", 0, 0, EV_KEY, key, value))
@@ -87,18 +93,19 @@ class Keyboard:
         time.sleep(0.02)
 
     def press_hands_free(self):
-        for key in (KEY_LEFTCTRL, KEY_LEFTMETA, KEY_SPACE):
-            self._emit(key, 1)
-        for key in (KEY_SPACE, KEY_LEFTMETA, KEY_LEFTCTRL):
-            self._emit(key, 0)
+        with self.lock:
+            for key in (KEY_LEFTCTRL, KEY_LEFTMETA, KEY_SPACE):
+                self._emit(key, 1)
+            for key in (KEY_SPACE, KEY_LEFTMETA, KEY_LEFTCTRL):
+                self._emit(key, 0)
 
     def close(self):
         fcntl.ioctl(self.fd, UI_DEV_DESTROY)
         os.close(self.fd)
 
 
-def soft_muted():
-    out = subprocess.run(["pactl", "get-source-mute", SOURCE], capture_output=True,
+def soft_muted(source):
+    out = subprocess.run(["pactl", "get-source-mute", source], capture_output=True,
                          text=True, check=False).stdout
     return "yes" in out
 
@@ -110,7 +117,7 @@ def is_wispr(pid):
         return False
 
 
-def recorders(own_pid):
+def recorders(source, own_pid):
     """(wispr, others): whether Wispr, and whether any other app besides this
     listener, is recording from the mic."""
     out = subprocess.run(["pactl", "-f", "json", "list", "source-outputs"],
@@ -118,7 +125,7 @@ def recorders(own_pid):
     sources = subprocess.run(["pactl", "list", "sources", "short"], capture_output=True,
                              text=True, check=False).stdout
     index = next((line.split()[0] for line in sources.splitlines()
-                  if line.split()[1:2] == [SOURCE]), None)
+                  if line.split()[1:2] == [source]), None)
     wispr = others = False
     for stream in json.loads(out or "[]"):
         pid = stream["properties"].get("application.process.id", "")
@@ -131,12 +138,13 @@ def recorders(own_pid):
     return wispr, others
 
 
-def listen(keyboard):
+def listen(keyboard, source):
     """Follow the mic until its stream ends (unplugged, PipeWire restart)."""
     rec = subprocess.Popen(
-        ["parec", "--raw", f"--device={SOURCE}", "--format=s16le", "--channels=1",
+        ["parec", "--raw", f"--device={source}", "--format=s16le", "--channels=1",
          f"--rate={RATE}", "--latency-msec=20", f"--client-name={NAME}",
-         "--property=node.dont-reconnect=true"],
+         # A mic that is not plugged in must not fall back to the default one
+         "--property=node.dont-reconnect=true", "--property=node.dont-fallback=true"],
         stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     muted, run, soft = None, 0, False
     try:
@@ -152,35 +160,44 @@ def listen(keyboard):
                 continue
             muted, run = silent, 0
             if muted:
-                soft = soft_muted()
-                if not soft and not OFF_FLAG.exists() and recorders(rec.pid)[0]:
+                soft = soft_muted(source)
+                if not soft and not OFF_FLAG.exists() and recorders(source, rec.pid)[0]:
                     keyboard.press_hands_free()
-                    log("switch muted: stopped hands-free")
+                    log(f"{source}: switch muted: stopped hands-free")
                 continue
             if soft:
-                log("software unmute: left alone")
+                log(f"{source}: software unmute: left alone")
                 continue
             if OFF_FLAG.exists():
-                log("switch unmuted while paused: left alone")
+                log(f"{source}: switch unmuted while paused: left alone")
                 continue
-            wispr, others = recorders(rec.pid)
+            wispr, others = recorders(source, rec.pid)
             if others:
-                log("switch unmuted while another app records: left alone")
+                log(f"{source}: switch unmuted while another app records: left alone")
             elif not wispr:
                 keyboard.press_hands_free()
-                log("switch unmuted: started hands-free")
+                log(f"{source}: switch unmuted: started hands-free")
     finally:
         rec.kill()
+
+
+def follow(keyboard, source):
+    log(f"listening to {source}")
+    while True:
+        listen(keyboard, source)
+        time.sleep(3)                 # mic missing: wait for it to come back
 
 
 def run():
     keyboard = Keyboard()
     OFF_FLAG.unlink(missing_ok=True)
-    log(f"listening to {SOURCE}")
+    threads = [threading.Thread(target=follow, args=(keyboard, source), daemon=True)
+               for source in SOURCES]
     try:
-        while True:
-            listen(keyboard)
-            time.sleep(3)             # mic missing: wait for it to come back
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
     finally:
         keyboard.close()
 
