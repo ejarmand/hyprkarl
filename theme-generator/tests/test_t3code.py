@@ -48,6 +48,31 @@ class T3CodeThemeTests(unittest.TestCase):
 
         self.assertTrue(theme["css"].endswith("\nbody{opacity:1}"))
 
+    def test_artwork_survives_removing_its_wallpaper_from_the_rotation(self):
+        directory = Path(tempfile.mkdtemp(prefix="t3code-theme-"))
+        self.addCleanup(shutil.rmtree, directory, ignore_errors=True)
+        overlay = directory / "overlay"
+        overlay.mkdir()
+        (overlay / ".wallpapers-disabled").write_text("01-crabs-crop.jpg\n")
+        output = directory / "output"
+        build_theme("van-gogh-crabs", output, overlay_source=overlay)
+
+        self.assertFalse((output / "wallpapers" / "01-crabs-crop.jpg").exists())
+        self.assertIn("data:image/webp", json.loads((output / "t3code.json").read_text())["css"])
+
+    def test_any_t3_sidebar_color_works_with_artwork(self):
+        theme = json.loads(
+            self.build(
+                "van-gogh-crabs", 't3code:\n  colors:\n    sidebar: "oklch(0.3 0.04 160)"\n'
+            ).read_text()
+        )
+
+        self.assertIn("color-mix(in srgb,oklch(0.3 0.04 160) 30%,transparent)", theme["css"])
+
+    def test_css_over_t3_limit_is_an_error(self):
+        with self.assertRaisesRegex(GenerationError, "T3 Code's limits"):
+            self.build("van-gogh-crabs", f't3code:\n  css: "/*{"x" * 10000}*/"\n')
+
     def test_unknown_artwork_wallpaper_is_an_error(self):
         with self.assertRaisesRegex(GenerationError, "artwork.wallpaper"):
             self.build("gruvbox", "artwork:\n  wallpaper: missing.jpg\n")

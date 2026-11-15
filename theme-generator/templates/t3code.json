@@ -3,7 +3,7 @@
 {%- set file = dict(t3code) -%}
 {%- if artwork_uri -%}
 {%- set sidebar = t3code.colors.sidebar -%}
-{%- set painting = '[data-slot="sidebar-inner"]{background:linear-gradient(to bottom,' ~ rgba(sidebar, 0.3) ~ ' 0,' ~ rgba(sidebar, 0.75) ~ ' 110px,' ~ sidebar ~ ' 190px),url(' ~ artwork_uri ~ ') top center/100% auto no-repeat,' ~ sidebar ~ ' !important}' -%}
+{%- set painting = '[data-slot="sidebar-inner"]{background:linear-gradient(to bottom,color-mix(in srgb,' ~ sidebar ~ ' 30%,transparent) 0,color-mix(in srgb,' ~ sidebar ~ ' 75%,transparent) 110px,' ~ sidebar ~ ' 190px),url(' ~ artwork_uri ~ ') top center/100% auto no-repeat,' ~ sidebar ~ ' !important}' -%}
 {%- set _ = file.update(css=painting ~ ('\n' ~ t3code.css if t3code.css is defined else '')) -%}
 {%- endif -%}
 {{ file | tojson(indent=2) }}{{ "\n" }}

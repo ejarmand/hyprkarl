@@ -413,8 +413,10 @@ artwork:
 A crop about 6:5 in pixels fills the sidebar's top; on a 3:2 image that is a
 height of 1.25 times the width. Put the subject in its upper part, where the
 fade is lightest. The compiler embeds the crop as a WebP of about 10 KB,
-since T3 Code takes at most 20,000 characters of custom styles. Without
-`artwork`, the theme sets colors only. A personal overlay can set or change
+since T3 Code takes at most 20,000 characters of custom styles; a theme
+whose T3 file goes over T3's limits fails to build with a message, and the
+previous theme stays. Removing the wallpaper from the rotation keeps the
+crop. Without `artwork`, the theme sets colors only. A personal overlay can set or change
 `artwork` for a built-in theme, using its own wallpapers or the theme's.
 
 ## Starship prompt

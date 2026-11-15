@@ -45,6 +45,10 @@ ASSET_DIRECTORIES = {
     "previews": "screenshots",
     "icons": "icons",
 }
+# T3 Code ignores a theme file over these limits.
+T3CODE_MAX_FILE_BYTES = 32768
+T3CODE_MAX_CSS_CHARACTERS = 20000
+
 REQUIRED_BUNDLE_FILES = (
     "theme.yaml",
     "quickshell.json",
@@ -224,10 +228,15 @@ def _link_assets(sources: tuple[Path, ...], output_root: Path) -> None:
             destination.symlink_to(source.resolve())
 
 
+# Artwork names a source file, so a wallpaper removed from the rotation
+# (.wallpapers-disabled) still supplies it.
 def _artwork_uri(artwork: dict, sources: tuple[Path, ...]) -> str:
     if not artwork["wallpaper"]:
         return ""
-    path = _asset_files(sources, "wallpapers").get(Path(artwork["wallpaper"]))
+    files: dict[Path, Path] = {}
+    for source in sources:
+        files.update(_scan_files(source / "wallpapers"))
+    path = files.get(Path(artwork["wallpaper"]))
     if path is None:
         raise GenerationError(f"artwork.wallpaper is not one of the theme's wallpapers: {artwork['wallpaper']}")
     try:
@@ -266,6 +275,15 @@ def validate_bundle(bundle_root: Path) -> None:
         json.loads((bundle_root / "quickshell.json").read_text())
     except (json.JSONDecodeError, OSError) as error:
         raise GenerationError("Theme bundle has invalid quickshell.json") from error
+
+    t3code = bundle_root / "t3code.json"
+    css = json.loads(t3code.read_text()).get("css", "")
+    if len(css) > T3CODE_MAX_CSS_CHARACTERS or t3code.stat().st_size > T3CODE_MAX_FILE_BYTES:
+        raise GenerationError(
+            f"t3code.json is over T3 Code's limits ({len(css)} of {T3CODE_MAX_CSS_CHARACTERS} "
+            f"CSS characters, {t3code.stat().st_size} of {T3CODE_MAX_FILE_BYTES} bytes); "
+            "shorten t3code.css or clear artwork.wallpaper"
+        )
 
 
 def _render_theme(sources: ThemeSources, output_root: Path, theme_name: str) -> None:
