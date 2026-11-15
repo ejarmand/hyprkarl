@@ -9,6 +9,7 @@ from typing import Iterable
 
 import yaml
 
+from .artwork import artwork_data_uri
 from .gtk import COLLOID_INTERNAL_TEMPLATE, ColloidBuildError, build_colloid_theme
 from .theme import load_theme_layers, render_template, write_atomic_text
 from .wallpaper import DEFAULT_WALLPAPER_NAME, generate_default_wallpaper
@@ -55,6 +56,7 @@ REQUIRED_BUNDLE_FILES = (
     "ghostty.conf",
     "kitty.conf",
     "wifitui.toml",
+    "t3code.json",
     "config/fastfetch/config.jsonc",
     "yazi.toml",
     "yazi/theme.toml",
@@ -197,16 +199,21 @@ def _disabled_wallpapers(source: Path) -> list[Path]:
     return [Path(line.strip()) for line in marker.read_text().splitlines() if line.strip()]
 
 
+def _asset_files(sources: tuple[Path, ...], source_name: str) -> dict[Path, Path]:
+    files: dict[Path, Path] = {}
+    for source in sources:
+        files.update(_scan_files(source / source_name))
+        if source_name == "wallpapers":
+            for disabled in _disabled_wallpapers(source):
+                files.pop(disabled, None)
+    return files
+
+
 # Assets are linked, not copied, so a large wallpaper collection costs nothing
 # per build. An authored file replaces a generated one of the same name.
 def _link_assets(sources: tuple[Path, ...], output_root: Path) -> None:
     for source_name, output_name in ASSET_DIRECTORIES.items():
-        files: dict[Path, Path] = {}
-        for source in sources:
-            files.update(_scan_files(source / source_name))
-            if source_name == "wallpapers":
-                for disabled in _disabled_wallpapers(source):
-                    files.pop(disabled, None)
+        files = _asset_files(sources, source_name)
 
         destination_root = output_root / output_name
         destination_root.mkdir(parents=True, exist_ok=True)
@@ -215,6 +222,18 @@ def _link_assets(sources: tuple[Path, ...], output_root: Path) -> None:
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.unlink(missing_ok=True)
             destination.symlink_to(source.resolve())
+
+
+def _artwork_uri(artwork: dict, sources: tuple[Path, ...]) -> str:
+    if not artwork["wallpaper"]:
+        return ""
+    path = _asset_files(sources, "wallpapers").get(Path(artwork["wallpaper"]))
+    if path is None:
+        raise GenerationError(f"artwork.wallpaper is not one of the theme's wallpapers: {artwork['wallpaper']}")
+    try:
+        return artwork_data_uri(path, artwork["crop"])
+    except ValueError as error:
+        raise GenerationError(str(error)) from error
 
 
 def _render_gtk_metadata(files: dict[Path, Path], context: dict, bundle_root: Path) -> None:
@@ -255,6 +274,7 @@ def _render_theme(sources: ThemeSources, output_root: Path, theme_name: str) -> 
     context = dict(theme)
     context["theme_name"] = theme_name
     context["icon_theme_name"] = _icon_theme_name(files, context)
+    context["artwork_uri"] = _artwork_uri(theme["artwork"], sources.layers)
 
     output_root.mkdir(parents=True, exist_ok=True)
     _render_files(files, context, output_root)

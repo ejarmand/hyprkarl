@@ -82,6 +82,62 @@ gtk:
   accent: "{{accent.secondary.base}}"
   accent_bright: "{{accent.secondary.bright}}"
 
+# A small crop of the theme's painting, for consumers that show a piece of it
+# (T3 Code's sidebar). wallpaper names a file in the theme's wallpapers; empty
+# shows none. crop is left, top, width, and height as fractions of the image.
+artwork:
+  wallpaper: ""
+  crop: [0, 0, 1, 1]
+
+# T3 Code's theme file. T3 derives a palette from canvas and accent and tints
+# its surfaces with the accent; colors pins the surfaces to the theme's own
+# layers so the painting's ground shows. Any other T3 role or a css key can be
+# added.
+t3code:
+  version: 1
+  name: "Hyprkarl"
+  appearance: "{{mode}}"
+  canvas: "{{base.background}}"
+  accent: "{{accent.primary.bright}}"
+  colors:
+    chrome: "{{base.background}}"
+    toolbar: "{{base.background}}"
+    surface: "{{base.layer1}}"
+    surfaceRaised: "{{base.layer2}}"
+    surfaceOverlay: "{{base.layer2}}"
+    text: "{{base.foreground}}"
+    textMuted: "{{base.foreground_muted}}"
+    border: "{{base.layer4}}"
+    input: "{{base.layer4}}"
+    focus: "{{accent.primary.bright}}"
+    muted: "{{base.layer2}}"
+    mutedForeground: "{{base.foreground_muted}}"
+    secondary: "{{base.layer3}}"
+    secondaryForeground: "{{base.foreground}}"
+    accentSurface: "{{accent.primary.soft}}"
+    accentSurfaceForeground: "{{base.foreground}}"
+    messageSurface: "{{accent.primary.soft}}"
+    messageForeground: "{{base.foreground}}"
+    messageAction: "{{accent.secondary.bright}}"
+    messageActionForeground: "{{base.background}}"
+    messageActionHover: "{{accent.secondary.base}}"
+    codeBackground: "{{base.layer1}}"
+    codeForeground: "{{base.foreground}}"
+    sidebar: "{{base.layer1}}"
+    sidebarForeground: "{{base.foreground}}"
+    sidebarMutedForeground: "{{base.foreground_muted}}"
+    sidebarControlSurface: "{{base.layer2}}"
+    sidebarRowHover: "{{base.layer2}}"
+    sidebarRowActive: "{{base.layer3}}"
+    sidebarRowSelected: "{{accent.primary.soft}}"
+    sidebarBorder: "{{base.layer3}}"
+    error: "{{status.error}}"
+    warning: "{{status.warning}}"
+    terminalBackground: "{{base.background}}"
+    terminalForeground: "{{base.foreground}}"
+    terminalCursor: "{{ui.cursor}}"
+    terminalSelection: "{{base.layer4}}"
+
 fastfetch:
   logo:
     mark: "{{accent.primary.bright}}"

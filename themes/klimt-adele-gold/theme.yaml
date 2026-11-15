@@ -92,3 +92,7 @@ nvim:
   search_bg: '{{ui.selection_bg}}'
 yazi:
   progress_error_fg: '{{base.background}}'
+
+artwork:
+  wallpaper: 01-adele-gold-crop.jpg
+  crop: [0.35, 0, 0.42, 0.525]

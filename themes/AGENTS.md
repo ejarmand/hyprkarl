@@ -322,6 +322,11 @@ To ship wallpapers and preview screenshots with the theme, add:
   plain background numbered last, not the full painting, to keep the
   repository small. Leave out an image whose status is unclear, and keep
   private artwork and photos out of commits.
+- `artwork` in `theme.yaml` — for a theme drawn from artwork, the primary
+  wallpaper and a crop of its subject, about 6:5 in pixels with the subject
+  near the top. T3 Code shows it at the top of its sidebar; see the T3 Code
+  section of `docs/themes.md`. Check the crop at sidebar size, and prefer a
+  face or motif that reads small over a busy or revealing region.
 - `themes/<name>/previews/` — `busy.png`, `launcher.png`, `menu.png`, and
   `wallpapers.png`; these become `screenshots/` in the generated bundle.
 

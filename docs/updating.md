@@ -51,8 +51,8 @@ and `hk-update all` brings it forward like any update. Set
    (`hk-config-seed`);
 6. restows shipped links, removes stale ones, and links the agent skill;
 7. rebuilds the selected theme;
-8. restores the wallpaper, reloads Hyprland, terminals, and Btop, and
-   rebuilds the Starship prompt;
+8. restores the wallpaper, reloads Hyprland, terminals, and Btop,
+   rebuilds the Starship prompt, and publishes the T3 Code theme;
 9. starts Quickshell again, whether or not the steps succeeded.
 
 The applied revision is recorded only when every step succeeds. If one fails,

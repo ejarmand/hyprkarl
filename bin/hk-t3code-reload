@@ -1,0 +1,35 @@
+#!/bin/bash
+# hk-t3code-reload
+# Publish the active theme to T3 Code as its "hyprkarl" theme.
+#
+# Usage:
+#   hk-t3code-reload
+#
+# T3 Code watches its themes directory and restyles open windows that use a
+# theme when its file changes, so this only copies the active theme's
+# t3code.json there. It does not select the theme: pick "Hyprkarl" in T3
+# Code's settings, or run `t3 theme set hyprkarl`, once. T3 refuses symlinked
+# theme files, so this writes a copy. Does nothing without T3 Code's data
+# directory.
+
+# --- Constants ---
+
+THEME_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/hyprkarl/current/theme/t3code.json"
+THEMES_DIR="${T3CODE_HOME:-$HOME/.t3}/userdata/themes"
+OUTPUT="$THEMES_DIR/hyprkarl.json"
+
+# --- Script Body ---
+
+if [[ ! -d "${T3CODE_HOME:-$HOME/.t3}/userdata" ]]; then
+  exit 0
+fi
+
+mkdir -p "$THEMES_DIR"
+# T3 reads only *.json, so it skips the temporary file.
+tmp=$(mktemp "$OUTPUT.XXXXXX") || exit 1
+if ! cp "$THEME_FILE" "$tmp"; then
+  rm -f "$tmp"
+  exit 1
+fi
+chmod 644 "$tmp"
+mv "$tmp" "$OUTPUT"

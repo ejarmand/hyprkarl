@@ -348,6 +348,10 @@ shell.
   active theme's palette. `hk-theme set`, `hk-update apply`, and login run it;
   run it yourself after editing `~/.config/starship.toml`. See
   [Themes](themes.md#starship-prompt).
+- `hk-t3code-reload`
+  Publish the active theme to T3 Code as its `hyprkarl` theme. `hk-theme set`
+  and `hk-update apply` run it; it does nothing without T3 Code. See
+  [Themes](themes.md#t3-code).
 
 ## Voice Commands (Wispr Flow)
 

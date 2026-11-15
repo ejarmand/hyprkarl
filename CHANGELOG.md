@@ -10,6 +10,10 @@ breaking change bumps the major version and is called out explicitly.
   saves, Esc discards.
 - The app launcher lists the apps you launch most first before you type,
   instead of alphabetically.
+- T3 Code follows the theme. Each theme switch publishes it to T3 Code as
+  "Hyprkarl"; select that theme in T3 Code once. Painting themes also show a
+  piece of their painting at the top of T3 Code's sidebar, set by a new
+  `artwork` theme key.
 
 - btop follows the theme on fresh installs. The installer kept CachyOS's
   btop config, which used Noctalia's colors; it is now backed up and replaced
