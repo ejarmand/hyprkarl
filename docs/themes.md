@@ -326,6 +326,7 @@ The compiler renders the resolved graph into consumer files for:
 - Quickshell (including the lock screen), Hyprland, and Hyprtoolkit;
 - Alacritty, foot, Ghostty, Kitty, `btop`, `wifitui`, Yazi, and Neovim;
 - fastfetch's whole config, logo included;
+- T3 Code's theme file;
 - Qt 5 and Qt 6 palettes and settings;
 - GTK 3 and GTK 4, including a palette-derived Colloid theme;
 - the cursor theme name, theme metadata, icons, wallpapers, and previews.
@@ -364,11 +365,59 @@ wifitui:
   subtle: "{{base.foreground_muted}}"
 ```
 
+The `t3code` key is T3 Code's theme file itself; see [T3 Code](#t3-code).
+
 `mode: light` also selects Neovim's light background and gives foot a matching
 `[colors-light]` section.
 
 The generated `theme.yaml` contains the fully merged and resolved graph for
 inspection. It is output, not the next authoring source.
+
+## T3 Code
+
+Each theme renders `t3code.json` from its `t3code` key, and `hk-theme set`
+and `hk-update apply` copy it to T3 Code's
+`~/.t3/userdata/themes/hyprkarl.json` (under `$T3CODE_HOME` when that is
+set). T3 Code restyles open windows when that file changes. Select
+**Hyprkarl** in T3 Code's appearance settings, or run
+`t3 theme set hyprkarl`, once; after that it follows every theme switch.
+Without T3 Code installed, nothing is written.
+
+T3 Code derives its palette from `canvas` and `accent` and tints its
+surfaces with the accent, so `colors` pins the sidebar, panels, and code
+blocks to the theme's surface layers, your messages to the soft primary
+accent, and the send button to the secondary accent. Every theme gets this
+without anything T3-specific in its source. A theme or overlay can repoint
+any role, add any other T3 role, or add a `css` key with T3's custom
+styles. T3 Code's theme guide, which agents in T3 Code read with its
+`t3_theme_read` tool, lists the roles. For example:
+
+```yaml
+t3code:
+  accent: "{{accent.secondary.bright}}"
+  colors:
+    sidebar: "{{base.layer2}}"
+```
+
+A theme drawn from a painting can show a piece of it at the top of T3
+Code's sidebar, fading into the sidebar color. `artwork` names one of the
+theme's wallpapers and the crop, as left, top, width, and height fractions of
+the image:
+
+```yaml
+artwork:
+  wallpaper: 01-crabs-crop.jpg
+  crop: [0.02, 0.02, 0.55, 0.6875]
+```
+
+A crop about 6:5 in pixels fills the sidebar's top; on a 3:2 image that is a
+height of 1.25 times the width. Put the subject in its upper part, where the
+fade is lightest. The compiler embeds the crop as a WebP of about 10 KB,
+since T3 Code takes at most 20,000 characters of custom styles; a theme
+whose T3 file goes over T3's limits fails to build with a message, and the
+previous theme stays. Removing the wallpaper from the rotation keeps the
+crop. Without `artwork`, the theme sets colors only. A personal overlay can set or change
+`artwork` for a built-in theme, using its own wallpapers or the theme's.
 
 ## Starship prompt
 

@@ -18,6 +18,10 @@ contract.
   setup and complete-set preview publication.
 - `theme_generator/wallpaper.py` owns the optional palette-derived default
   wallpaper.
+- `theme_generator/artwork.py` owns the small embedded crop of a theme's
+  `artwork`, sized for T3 Code's custom-style limit. The renderer finds the
+  wallpaper with the usual asset precedence and passes the data URI to
+  templates as `artwork_uri`.
 - `theme_generator/validation.py` owns whole-repository build validation.
 - `theme_generator/cli.py` is the single command-line boundary.
 - `defaults/theme.yaml` owns shared typed tokens and final consumer defaults.

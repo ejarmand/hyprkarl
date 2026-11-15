@@ -1,0 +1,9 @@
+{#- T3 Code's theme file: the t3code token, plus the artwork crop at the top of
+    the sidebar, fading into the sidebar color, when the theme names one. -#}
+{%- set file = dict(t3code) -%}
+{%- if artwork_uri -%}
+{%- set sidebar = t3code.colors.sidebar -%}
+{%- set painting = '[data-slot="sidebar-inner"]{background:linear-gradient(to bottom,color-mix(in srgb,' ~ sidebar ~ ' 30%,transparent) 0,color-mix(in srgb,' ~ sidebar ~ ' 75%,transparent) 110px,' ~ sidebar ~ ' 190px),url(' ~ artwork_uri ~ ') top center/100% auto no-repeat,' ~ sidebar ~ ' !important}' -%}
+{%- set _ = file.update(css=painting ~ ('\n' ~ t3code.css if t3code.css is defined else '')) -%}
+{%- endif -%}
+{{ file | tojson(indent=2) }}{{ "\n" }}

@@ -114,6 +114,7 @@ bundle under `${XDG_STATE_HOME:-$HOME/.local/state}/hyprkarl`, then:
 - updates GNOME and Qt themes
 - reloads Hyprland, terminals, `btop`, and the bar
 - rebuilds the Starship prompt colors (`hk-starship-reload`)
+- publishes the T3 Code theme (`hk-t3code-reload`)
 
 Some changes may not take effect everywhere immediately, but most of the theme
 switch happens right away.

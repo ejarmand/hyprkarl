@@ -164,6 +164,7 @@ not in place.
 | Cursor | Each theme switch writes `~/.local/share/icons/default/index.theme` |
 | File chooser | Linked `xdg-desktop-portal-termfilechooser/config`, which opens Yazi in your terminal |
 | fastfetch | The theme's whole config, found through `XDG_CONFIG_DIRS`; your own `~/.config/fastfetch/config.jsonc` replaces it |
+| T3 Code | `hk-t3code-reload` copies the theme's `t3code.json` to `~/.t3/userdata/themes/hyprkarl.json` on each theme switch; select **Hyprkarl** in T3 Code once |
 | Starship | `hk-starship-reload` merges your `~/.config/starship.toml` with the theme's palette into `~/.local/state/hyprkarl/starship.toml`, where `STARSHIP_CONFIG` points |
 | btop | Linked `~/.config/btop/themes/current.theme`, selected by `color_theme = "current"` in `btop.conf` |
 | Neovim | Linked `~/.config/nvim/colors/hyprkarl.lua`, and `lua/plugins/colorscheme.lua`, which selects it for LazyVim |

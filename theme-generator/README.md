@@ -62,6 +62,7 @@ generator is not required in every desktop session.
 - Alacritty, Kitty, Ghostty, and foot
 - btop, wifitui, and yazi
 - fastfetch, its whole config and logo
+- T3 Code's theme file
 - Neovim
 - Qt 5/6 palettes
 - a palette-derived Colloid GTK 3/4 theme and recolored assets

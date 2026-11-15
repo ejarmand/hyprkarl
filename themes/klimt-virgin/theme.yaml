@@ -92,3 +92,7 @@ nvim:
   search_bg: '{{ui.selection_bg}}'
 yazi:
   progress_error_fg: '{{base.background}}'
+
+artwork:
+  wallpaper: 01-virgin-crop.jpg
+  crop: [0.25, 0, 0.5, 0.625]

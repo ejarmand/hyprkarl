@@ -92,3 +92,7 @@ nvim:
   search_bg: '{{ui.selection_bg}}'
 yazi:
   progress_error_fg: '{{base.background}}'
+
+artwork:
+  wallpaper: 01-lock-my-door-crop.jpg
+  crop: [0.2, 0.15, 0.48, 0.6]
